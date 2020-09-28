@@ -8,6 +8,12 @@
   border-bottom: 1px ridge;
   min-height: 400px;
 }
+.restaurant-row-header{
+  margin: 0px auto;
+  padding: 20px 0px;
+  border-bottom: 1px ridge;
+  min-height: 50px;
+}
 .footer {
   background-color: #D1C4E9;
   margin: 0px auto;
@@ -67,4 +73,26 @@ body {
 }
 header div div div img{
   border-radius: 50%;
+}
+
+.overlay {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1; 
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  font-size: 5px;
+  padding: 2px;
+  text-align: center;
+}
+.fig-container{
+  position: relative;
+  width: 50%;
+  max-width: 300px;
+}
+.fig-container:hover .overlay {
+  opacity: 1;
 }
