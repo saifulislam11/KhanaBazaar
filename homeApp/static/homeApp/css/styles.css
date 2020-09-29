@@ -4,16 +4,37 @@
 }
 .row-content {
   margin: 0px auto;
-  padding: 50px 0px;
+  padding: 20px 0px;
   border-bottom: 1px ridge;
   min-height: 400px;
+}
+.title{
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-variant-caps: petite-caps;
+  font-size: 65px;
+  color: rgb(21, 248, 135);
 }
 .restaurant-row-header{
   margin: 0px auto;
   padding: 20px 0px;
   border-bottom: 1px ridge;
   min-height: 50px;
+  background-color: #1e1633;
+  color: rgba(245, 218, 227, 0.637);
+  font-family: sans-serif;
+  font-variant-caps: petite-caps;
+  font-style: oblique;
+  font-size: 30px;
 }
+.restaurant-row-content{
+  margin: 0px auto;
+  padding: 5px 0px;
+  border-bottom: 1px ridge;
+  min-height: 7px;
+  border-style: solid;
+  border-width: thin;
+}
+
 .footer {
   background-color: #D1C4E9;
   margin: 0px auto;
@@ -21,8 +42,8 @@
 }
 .jumbotron {
   margin: 0px auto;
-  padding: 70px 30px;
-  background: #9575CD;
+  padding: 30px 20px;
+  background: #24173d;
   color: floralwhite;
 }
 address {
@@ -33,6 +54,9 @@ address {
 body {
   padding: 50px 0px 0px 0px;
   z-index: 0;
+}
+.background{
+  background: -webkit-linear-gradient(#330b581c,rgb(101, 158, 233));
 }
 .navbar-dark {
   background-color: #512DA8;
@@ -49,6 +73,7 @@ body {
 .carousel .carousel-item {
   height: 300px;
 }
+
 .carousel .carousel-item img {
   position: absolute;
   top: 0;

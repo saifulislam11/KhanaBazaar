@@ -18,8 +18,8 @@
      <!--endbuild-->
 </head>
 
-<body>
-    <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+<body class="background">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
         <div class="container">
             <!--responsive navbar-->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
@@ -144,13 +144,13 @@
         </div>
 
     </div>
-
     <header class="jumbotron">
         <div class="container">
-            <div class="row row-header">
+            <div class="row">
                 <div class="col-12 col-sm-6">
-                    <h1 class="ml-0
-                    ">KHANABAZAAR</h1>
+                    <div class="title">
+                        <h1 class="ml-0">KHANABAZAAR</h1>
+                    </div>
                     <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our lipsmacking creations will tickle your culinary senses!</p>
                 </div>
                 <div class="col-12 col-sm-3 mt-0">
@@ -224,7 +224,7 @@
                 <h3>Popular Restaurants</h3>
             </div>
         </div>
-        <div class="row row-content">
+        <div class="row restaurant-row-content">
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="fig-container">
                     <img src="{% static 'homeApp/img/rest1.png' %}" width="250px" alt="restaurant1">
@@ -245,25 +245,71 @@
             </div>
             <div class="col-12 col-sm-6 col-md-3">
                 <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest4.png' %}" width="250px" alt="restaurant1">
+                    <img src="{% static 'homeApp/img/rest4.png' %}" width="250px" height="169px" alt="restaurant1">
                     <div class="overlay"><h4>Deck 13</h4></div>
                 </div>
             </div>
         </div>
-            <div class="col col-sm col-md">
-                <!--use of media objects-->
-                <div class="media">
-                    <img class="d-flex mr-3 img-thumbnail align-self-center" src="{% static 'homeApp/img/uthappizza.png' %}" alt="pizza">
-                    <!--media body-->
-                    <div class="media-body">
-                        <!--use of badge-->
-                        <h2>Uthappizza<span class="badge badge-danger ml-2">HOT</span><span class="badge badge-pill badge-dark ml-2">$4.55</span></h2>
-                        <p>A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.</p>
 
-                    </div>
+        <!--2nd row restaurant names-->
+
+
+        <div class="row restaurant-row-content">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest5.png' %}" width="250px" alt="restaurant1">
+                    <div class="overlay"><h4>Medchef</h4></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest6.png' %}" width="250px" alt="restaurant1">
+                    <div class="overlay"><h4>Yum Cha</h4></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest7.png' %}" width="250px" height="169px" alt="restaurant1">
+                    <div class="overlay"><h4>NorthEnd</h4></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest8.png' %}" width="250px" height="169px" alt="restaurant1">
+                    <div class="overlay"><h4>Secret Recipe</h4></div>
                 </div>
             </div>
         </div>
+
+        <!--3rd row restaurant-->
+        
+
+            <div class="row restaurant-row-content">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="fig-container">
+                        <img src="{% static 'homeApp/img/rest9.png' %}" width="250px" alt="restaurant1">
+                        <div class="overlay"><h4>Thirty3</h4></div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="fig-container">
+                        <img src="{% static 'homeApp/img/rest10.png' %}" width="250px" alt="restaurant1">
+                        <div class="overlay"><h4>Sultan's Dine</h4></div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="fig-container">
+                        <img src="{% static 'homeApp/img/rest11.png' %}" width="250px" height="169px" alt="restaurant1">
+                        <div class="overlay"><h4>Pizza Inn</h4></div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="fig-container">
+                        <img src="{% static 'homeApp/img/rest12.png' %}" width="250px" height="169px" alt="restaurant1">
+                        <div class="overlay"><h4>PizzaHut</h4></div>
+                    </div>
+                </div>
+            </div>
 
 
         <div class="row row-content align-items-center">
@@ -387,8 +433,8 @@
      <script src="{% static 'homeApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
      <script src="{% static 'homeApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
      <script src="{% static 'homeApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-     <script src="js/scripts.js"></script>
-     <script src="js/form.js"></script>
+     <script src="{% static 'homeApp/js/scripts.js' %}"></script>
+     <script src="{% static 'homeApp/js/form.js' %}"></script>
      <!--endbuild-->
 
      <!--tootip function
