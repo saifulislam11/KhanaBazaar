@@ -1,0 +1,7 @@
+Oracle Service Identifier  (SID)        : orcl 
+Password (All)                          : 123 / 1234(saiful)
+Username                                : SYSTEM
+Link                                    : https://vodro:1158/em
+User					: KB
+Password				: 123
+Navicat queries				:C:\Users\chondrima\Documents\Navicat\Oracle\Servers\khanabazar@localhost\KB
