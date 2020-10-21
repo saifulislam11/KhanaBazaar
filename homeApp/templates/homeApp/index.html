@@ -15,6 +15,8 @@
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
      <link rel="stylesheet" href="{% static 'homeApp/css/styles.css' %}">
+     <!--flickity-->
+     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--endbuild-->
 </head>
 
@@ -29,9 +31,9 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./aboutus.html"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:aboutus' %}"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
                     <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="./contactus.html"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:contactus' %}"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
                 </ul>
                 <!--modal button-->
                 <span class="navbar-text">
@@ -149,7 +151,7 @@
             <div class="row">
                 <div class="col-12 col-sm-6">
                     <div class="title">
-                        <h1 class="ml-0">KHANABAZAAR</h1>
+                        <h1 class="ml-0">🅺🅷🅰🅽🅰🅱🅰🆉🅰🅰🆁</h1>
                     </div>
                     <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our lipsmacking creations will tickle your culinary senses!</p>
                 </div>
@@ -173,7 +175,7 @@
         <!--adding carousel-->
         <div class="row row-content">
             <div class="col-12 col-sm-12">
-                <div id="mycarousel" class="carousel slide" data-ride="carousel">
+                <div id="mycarousel" class="carousel slide" data-ride="carousel" >
                     <div class="carousel-inner" role="listbox">
                         <div class="carousel-item active">
                             <img class="d-block img-fluid"
@@ -219,39 +221,105 @@
                 </div>
              </div>
         </div>
+                
+        <div class="row restaurant-search-row-header">
+            <div class="d-flex justify-content-center h-100">
+                <div class="searchbar">
+                  <input class="search_input" type="text" name="" placeholder="Search...">
+                  <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
+                </div>
+              </div>
+        </div>
         <div class="row restaurant-row-header">
             <div class="col-12 col-sm-4 col-md-5">
                 <h3>Popular Restaurants</h3>
             </div>
         </div>
-        <div class="row restaurant-row-content">
-            <div class="col-12 col-sm-6 col-md-3">
+        <!--restaurant 1st row-->
+        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
+            <div class="carousel-cell ">
                 <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest1.png' %}" width="250px" alt="restaurant1">
-                    <div class="overlay"><h4>Manhattan</h4></div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-3">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest2.png' %}" width="250px" alt="restaurant1">
+                    <img src="{% static 'homeApp/img/rest1.png' %}" width="295px" height="190px" alt="restaurant1">
                     <div class="overlay"><h4>Dominos</h4></div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="carousel-cell">
                 <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest3.png' %}" width="250px" height="169px" alt="restaurant1">
+                    <img src="{% static 'homeApp/img/rest2.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>Manhattan</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest3.png' %}" width="295px" height="190px" alt="restaurant1">
                     <div class="overlay"><h4>Chillox</h4></div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-3">
+            <div class="carousel-cell">
                 <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest4.png' %}" width="250px" height="169px" alt="restaurant1">
+                    <img src="{% static 'homeApp/img/rest4.png' %}" width="295px" height="190px" alt="restaurant1">
                     <div class="overlay"><h4>Deck 13</h4></div>
                 </div>
             </div>
-        </div>
+          </div> 
+        <!-- restaurant 2nd row-->
+        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
+            <div class="carousel-cell ">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest5.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>MedChef</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest6.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>Yum CHA</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest7.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>Secret Recipe</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest8.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>The Old Street</h4></div>
+                </div>
+            </div>
+          </div> 
+           <!--restaurant 3rd row-->
+        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
+            <div class="carousel-cell ">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest9.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>Thirty3</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest10.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>Sultan's Dine</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest11.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>KFC</h4></div>
+                </div>
+            </div>
+            <div class="carousel-cell">
+                <div class="fig-container">
+                    <img src="{% static 'homeApp/img/rest12.png' %}" width="295px" height="190px" alt="restaurant1">
+                    <div class="overlay"><h4>Green Lounge</h4></div>
+                </div>
+            </div>
+          </div> 
+    
 
-        <!--2nd row restaurant names-->
+
+        <!--previous version
 
 
         <div class="row restaurant-row-content">
@@ -279,38 +347,7 @@
                     <div class="overlay"><h4>Secret Recipe</h4></div>
                 </div>
             </div>
-        </div>
-
-        <!--3rd row restaurant-->
-        
-
-            <div class="row restaurant-row-content">
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="fig-container">
-                        <img src="{% static 'homeApp/img/rest9.png' %}" width="250px" alt="restaurant1">
-                        <div class="overlay"><h4>Thirty3</h4></div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="fig-container">
-                        <img src="{% static 'homeApp/img/rest10.png' %}" width="250px" alt="restaurant1">
-                        <div class="overlay"><h4>Sultan's Dine</h4></div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="fig-container">
-                        <img src="{% static 'homeApp/img/rest11.png' %}" width="250px" height="169px" alt="restaurant1">
-                        <div class="overlay"><h4>Pizza Inn</h4></div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                    <div class="fig-container">
-                        <img src="{% static 'homeApp/img/rest12.png' %}" width="250px" height="169px" alt="restaurant1">
-                        <div class="overlay"><h4>PizzaHut</h4></div>
-                    </div>
-                </div>
-            </div>
-
+        </div>-->
 
         <div class="row row-content align-items-center">
             <div class="col-12 col-sm-4 col-md-3">
@@ -435,6 +472,7 @@
      <script src="{% static 'homeApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
      <script src="{% static 'homeApp/js/scripts.js' %}"></script>
      <script src="{% static 'homeApp/js/form.js' %}"></script>
+     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
      <!--endbuild-->
 
      <!--tootip function

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,37 +10,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     
-    <!--build:css css/main.css-->
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css">
-    <link href="css/styles.css" rel="stylesheet">
+     <!--build:css css/main.css-->
+     <link rel="stylesheet" href="{% static 'homeApp/modules/font-awesome/css/font-awesome.min.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap-social/bootstrap-social.css' %}">
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/css/styles.css' %}">
+     <!--endbuild-->
 </head>
 
-<body>
-    <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+<body class="background">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
         <div class="container">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+            <!--responsive navbar-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#"><img src="img/logo.png" alt="LOGO" width="41" height="30"></a>
-            <div class="collapse navbar-collapse" id="Navbar">
+            <a class="navbar-brand mr-auto" href="#"><img src="{% static 'homeApp/img/khanabazaar.png' %}" alt="LOGO" width="41" height="30"></a>
+            <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a class="nav-link" href="./index.html"><span class="fa fa-home fa-lg"></span> Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="./aboutus.html"><span class="fa fa-info fa-lg"></span> About</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
-                        <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
+                    <li class="nav-item "><a class="nav-link" href="{% url 'homeApp:index' %}"><span class="fa fa-home fa-lg"></span> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:aboutus' %}"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'homeApp:contactus' %}"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
                 </ul>
+                <!--modal button-->
+                <span class="navbar-text">
+                    <a role="button" id="login">
+                        <span class="fa fa-sign-in"></span>
+                        Sign In
+                    </a>
+
+                </span>
             </div>
+           
+
         </div>
+
     </nav>
 
     <header class="jumbotron">
         <div class="container">
             <div class="row row-header">
                 <div class="col-12 col-sm-2 align-self-center">
-                    <img src="img/logo.png" class="img-fluid">
+                    <img src="{% static 'homeApp/img/khanabazaar.png' %}" class="img-fluid">
                 </div>
                 <div class="col-12 col-sm-9 offset-sm-1">
                     <h1>Ristorante con Fusion</h1>
@@ -53,8 +67,8 @@
     <div class="container">
         <div class="row">
             <ol class="col-12 breadcrumb">
-                <li class="breadcrumb-item"><a href="./index.html">Home</a></li>
-                <li class="breadcrumb-item active">Contact Us</li>
+                <li class="breadcrumb-item"><a href="{% url 'homeApp:index' %}">Home</a></li>
+                <li class="breadcrumb-item active"><a href="{% url 'homeApp:contactus' %}">Contact Us</a></li>
             </ol>
             <div class="col-12">
                <h3>Contact Us</h3>
@@ -204,12 +218,13 @@
            </div>
         </div>
     </footer>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
-    <!--build:js js/main.js-->
-    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
-    <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
+     <!--build:js js/main.js-->
+     <script src="{% static 'homeApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+     <script src="{% static 'homeApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+     <script src="{% static 'homeApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+     <script src="{% static 'homeApp/js/scripts.js' %}"></script>
+     <script src="{% static 'homeApp/js/form.js' %}"></script>
+     <!--endbuild-->
 </body>
 
 </html>

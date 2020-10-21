@@ -12,7 +12,7 @@
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-variant-caps: petite-caps;
   font-size: 65px;
-  color: rgb(21, 248, 135);
+  /*color: rgb(21, 248, 135);*/
 }
 .restaurant-row-header{
   margin: 0px auto;
@@ -115,9 +115,102 @@ header div div div img{
 }
 .fig-container{
   position: relative;
-  width: 50%;
+  width: 35%;
   max-width: 300px;
 }
 .fig-container:hover .overlay {
   opacity: 1;
 }
+
+
+/*search*/
+.searchbar{
+  margin-bottom: auto;
+  margin-top: auto;
+  height: 60px;
+  background-color: #353b48;
+  border-radius: 30px;
+  padding: 10px;
+  }
+
+  .search_input{
+  color: white;
+  border: 0;
+  outline: 0;
+  background: none;
+  width: 0;
+  caret-color:transparent;
+  line-height: 40px;
+  transition: width 0.4s linear;
+  }
+
+  .searchbar:hover > .search_input{
+  padding: 0 10px;
+  width: 450px;
+  caret-color:red;
+  transition: width 0.4s linear;
+  }
+
+  .searchbar:hover > .search_icon{
+  background: white;
+  color: #e74c3c;
+  }
+
+  .search_icon{
+  height: 40px;
+  width: 40px;
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color:white;
+  text-decoration:none;
+  }
+  .restaurant-search-row-header{
+    margin: 0px auto;
+    padding: 20px 0px;
+    border-bottom: 1px ridge;
+    min-height: 50px;
+    font-style: oblique;
+    font-size: 20px;
+  }
+  .carousel-bg {
+    background: rgba(79, 226, 194, 0.452);
+  }
+  
+  .carousel-cell {
+    width: 27%;
+    height: 200px;
+    margin-top: 12px;
+  }
+  /* cell number */
+  .carousel-cell:before {
+    display: block;
+  }
+  /* smaller, dark, rounded square */
+.flickity-prev-next-button {
+  width:40px;
+  height: 40px;
+  border-radius: 2px;
+  background: rgb(0, 0, 0);
+}
+.flickity-prev-next-button:hover {
+  background: rgb(230, 36, 197);
+}
+/* arrow color */
+.flickity-prev-next-button .arrow {
+  fill: rgb(223, 32, 165);
+}
+.flickity-prev-next-button.no-svg {
+  color: rgb(201, 16, 207);
+  background-color: rgba(8, 71, 82, 0.281);
+}
+/* position outside */
+.flickity-prev-next-button.previous {
+  left: -40px;
+}
+.flickity-prev-next-button.next {
+  right: -40px;
+}
+  
