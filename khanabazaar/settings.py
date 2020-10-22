@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'khanabazaar.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'orcl',
+        'USER': 'KB',
+        'PASSWORD': '123',
+        'HOST': 'localhost',
+        'PORT': '1521',
     }
 }
 
@@ -119,3 +123,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS =[
+    os.path.join(BASE_DIR,'homeApp/static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR,'assets')
+
+MEDIA_URL ='/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')

@@ -120,6 +120,7 @@ header div div div img{
 }
 .fig-container:hover .overlay {
   opacity: 1;
+  width: 295px;
 }
 
 

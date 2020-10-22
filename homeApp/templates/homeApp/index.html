@@ -1,4 +1,5 @@
 {% load static %}
+{% static 'homeApp/img' as baseURL %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -237,7 +238,39 @@
         </div>
         <!--restaurant 1st row-->
         <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
-            <div class="carousel-cell ">
+            {% for restaurant in list1 %}
+                <div class="carousel-cell ">
+                    <div class="fig-container">
+                        <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        <div class="overlay"><h4>{{restaurant.name}}</h4></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div> 
+
+        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
+            {% for restaurant in list2 %}
+                <div class="carousel-cell ">
+                    <div class="fig-container">
+                        <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        <div class="overlay"><h4>{{restaurant.name}}</h4></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
+            {% for restaurant in list3 %}
+                <div class="carousel-cell ">
+                    <div class="fig-container">
+                        <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        <div class="overlay"><h4>{{restaurant.name}}</h4></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+            
+           <!-- <div class="carousel-cell ">
                 <div class="fig-container">
                     <img src="{% static 'homeApp/img/rest1.png' %}" width="295px" height="190px" alt="restaurant1">
                     <div class="overlay"><h4>Dominos</h4></div>
@@ -260,64 +293,9 @@
                     <img src="{% static 'homeApp/img/rest4.png' %}" width="295px" height="190px" alt="restaurant1">
                     <div class="overlay"><h4>Deck 13</h4></div>
                 </div>
-            </div>
-          </div> 
+            </div>-->
+        
         <!-- restaurant 2nd row-->
-        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
-            <div class="carousel-cell ">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest5.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>MedChef</h4></div>
-                </div>
-            </div>
-            <div class="carousel-cell">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest6.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>Yum CHA</h4></div>
-                </div>
-            </div>
-            <div class="carousel-cell">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest7.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>Secret Recipe</h4></div>
-                </div>
-            </div>
-            <div class="carousel-cell">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest8.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>The Old Street</h4></div>
-                </div>
-            </div>
-          </div> 
-           <!--restaurant 3rd row-->
-        <div class="carousel restaurant-row-content carousel-bg" data-flickity='{ "wrapAround": true }'>
-            <div class="carousel-cell ">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest9.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>Thirty3</h4></div>
-                </div>
-            </div>
-            <div class="carousel-cell">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest10.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>Sultan's Dine</h4></div>
-                </div>
-            </div>
-            <div class="carousel-cell">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest11.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>KFC</h4></div>
-                </div>
-            </div>
-            <div class="carousel-cell">
-                <div class="fig-container">
-                    <img src="{% static 'homeApp/img/rest12.png' %}" width="295px" height="190px" alt="restaurant1">
-                    <div class="overlay"><h4>Green Lounge</h4></div>
-                </div>
-            </div>
-          </div> 
-    
-
 
         <!--previous version
 
