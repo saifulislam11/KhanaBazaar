@@ -58,3 +58,5 @@ def aboutus(request):
     return render(request,'homeApp/aboutus.html')
 def contactus(request):
     return render(request,'homeApp/contactus.html')
+def restaurant(request):
+    return render(request,'homeApp/restaurant.html')
