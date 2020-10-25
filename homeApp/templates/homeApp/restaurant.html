@@ -52,54 +52,31 @@
         </div>
     <div>
     <div class="container-fluid background">
+        {% for type in all_types %}
         <div class="row restaurant-row-content">
             <div class="col-sm-12 mr-7 col-md-5">
-                <h2>BURGERS</h2>
+                <h2>{{type}}</h2>
             </div>
         </div>
         <div class="row restaurant-row-content">
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food1.png' %}"  alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
+            {% for food in foods %}
+                <div>
+                    {% if food.type == type %}
+                        <div class="fig-container">
+                        <img class="food-image" src="{{baseURL}}/{{food.path}}"  alt="restaurant1">
+                        <div class="overlay"><span>{{food.name}}<br>
+                        {{food.price}}tk</span>
+                                <button class="button">
+                                </button>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
-                
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food2.png' %}" alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food3.png' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food4.png' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        {% endfor %}
+
+        <!--previous static version
         <div class="row restaurant-row-content">
             <div class="col-12 col-sm-12">
                 <h2>BURGERS</h2>
@@ -117,148 +94,8 @@
                 </div>
                 
             </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food6.png' %}" alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food7.png' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food8.png' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food9.png' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row restaurant-row-content">
-            <div class="col-12 col-sm-12">
-                <h2>BURGERS</h2>
-            </div>
-        </div>
-        <div class="row restaurant-row-content">
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food10.png' %}"  alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/food11.png' %}" alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/rest5.jpg' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/rest5.jpg' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row restaurant-row-content">
-            <div class="col-12 col-sm-12">
-                <h2>BURGERS</h2>
-            </div>
-        </div>
-        <div class="row restaurant-row-content">
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/rest5.jpg' %}"  alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-                
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/rest5.jpg' %}" alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/rest5.jpg' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <div class="fig-container">
-                    <img class="food-image" src="{% static 'homeApp/img/rest5.jpg' %}"alt="restaurant1">
-                    <div class="overlay"><span>CHEEZ BURGER<br>
-                         BDT 500</span>
-                        <button class="button">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row restaurant-row-content">
-            <div class="col-12 col-sm-12">
-                <h2>BURGERS</h2>
-            </div>
-        </div>
+        </div>-->
+        <!--end of previous static version-->
     </div>
 
      <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
