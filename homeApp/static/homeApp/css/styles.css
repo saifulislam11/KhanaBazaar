@@ -7,7 +7,7 @@
   margin: 0px auto;
   padding: 20px 0px;
   border-bottom: 1px ridge;
-  min-height: 500px;
+  min-height: 400px;
 }
 /*---NAVIGATION--*/
 .navbar{
@@ -38,6 +38,16 @@
   font-size: 65px;
   /*color: rgb(21, 248, 135);*/
 }
+/*background layout*/
+.background{
+  background-image: url(../img/bg_home2.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border: 1px solid black;
+}
+/*end of bg layout*/
+
+/*restaurant layout*/
 .restaurant-row-header{
   margin: 0px auto;
   padding: 20px 0px;
@@ -58,11 +68,14 @@
   border-style: solid;
   border-width: thin;
 }
+/*end of restaurant layout*/
 
 .footer {
-  background-color: #D1C4E9;
+  background-color: #62abb81c;
   margin: 0px auto;
-  padding: 20px 0px;
+  padding: 5px 0px;
+  font-weight: 500;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 /*---header---*/
 .header-content{
@@ -75,6 +88,7 @@
   color: floralwhite;
 }
 /*---end of header---*/
+
 address {
   font-size: 80%;
   margin: 0px;
@@ -84,9 +98,7 @@ body {
   padding: 0px 0px 0px 0px;
   z-index: 0;
 }
-.background{
-  background: -webkit-linear-gradient(#330b581c,rgb(101, 158, 233));
-}
+
 .tab-content {
   border-left: 1px solid #ddd;
   border-right: 1px solid #ddd;
@@ -182,6 +194,14 @@ header div div div img{
   background: white;
   color: #e74c3c;
   }
+  .btn {
+    background-color: rgb(22, 38, 53); /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    padding: 12px 16px; /* Some padding */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+  }
 
   .search_icon{
   height: 40px;
@@ -196,8 +216,6 @@ header div div div img{
   }
   .restaurant-search-row-header{
     margin: 0px auto;
-    padding: 20px 0px;
-    border-bottom: 1px ridge;
     min-height: 50px;
     font-style: oblique;
     font-size: 20px;
