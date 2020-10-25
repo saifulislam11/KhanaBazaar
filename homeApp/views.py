@@ -47,6 +47,7 @@ def restaurant(request):
             #print(row[1])
             if str(row[1].lower()).find(str(query.lower()))!=-1:
                 results=row[3]
+                title=row[1]
                 id=row[0]
                 
                 #print(row[3])
@@ -82,4 +83,4 @@ def restaurant(request):
     
 
 
-    return render(request,'homeApp/restaurant.html',{'path':results,'foods':dict_result,'all_types':unique_types})
+    return render(request,'homeApp/restaurant.html',{'path':results,'title':title,'foods':dict_result,'all_types':unique_types})
