@@ -15,6 +15,9 @@ $(document).ready(function(){
     $('#reservetable').click(function(){
         $('#reserve').modal('toggle');
     });
+    function openModal(){
+        $('#reserve').modal('toggle');
+    } 
     $('#login').click(function(){
         $('#loginModal').modal('toggle');
     });
