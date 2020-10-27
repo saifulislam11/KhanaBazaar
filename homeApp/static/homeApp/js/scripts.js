@@ -18,5 +18,8 @@ $(document).ready(function(){
     $('#login').click(function(){
         $('#loginModal').modal('toggle');
     });
+    $('#add').click(function(){
+        $('#cart').modal('toggle');
+    });
     
 });

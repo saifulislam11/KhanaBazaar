@@ -43,44 +43,56 @@ def restaurant(request):
         query = request.POST.get('restaurant')
         
         print(query)
+        test=0
         for row in c:
             #print(row[1])
-            if str(row[1].lower()).find(str(query.lower()))!=-1:
+            if len(query)==0 or str(row[1].lower()).find(str(query.lower()))==-1:
+                test=0
+
+            elif str(row[1].lower()).find(str(query.lower()))!=-1:
                 results=row[3]
                 title=row[1]
                 id=row[0]
+                test=1
+                break
                 
                 #print(row[3])
-        print(type(id))
-        print(id)
-        sql="select * from FOOD_ITEM WHERE RESTAURANT_ID = %s" % id
-        c.execute(sql)
-        foods=c.fetchall()
-        
-        dict_result = []
-        types=[]
-        for row in foods:
-            id=row[0]
-            id=str(id)
-            sql="select * from FOOD_ITEM_PATH WHERE ID = %s" % id
+        print(test)
+        if test==0:
+            return render(request,'homeApp/restaurant.html',{'path':None})
+        else:
+            print(type(id))
+            print(id)
+            sql="select * from FOOD_ITEM WHERE RESTAURANT_ID = %s" % id
             c.execute(sql)
-            food_path=c.fetchall()
-            path=None
-            for r in food_path:
-                path=r[1]
-            name = row[2]
-            price=row[3]
-            food_type=row[7]
-            print(id+' '+name+' '+food_type+' '+path)
-            types.append(food_type)
-            dic = {'id':id,'name':name,'price':price,'type':food_type,'path':path}
-            dict_result.append(dic)
-        types_set=set(types)
-        unique_types= list(types_set)
+            foods=c.fetchall()
+            
+            dict_result = []
+            types=[]
+            for row in foods:
+                id=row[0]
+                id=str(id)
+                sql="select * from FOOD_ITEM_PATH WHERE ID = %s" % id
+                c.execute(sql)
+                food_path=c.fetchall()
+                path=None
+                for r in food_path:
+                    path=r[1]
+                name = row[2]
+                price=row[3]
+                food_type=row[7]
+                print(id+' '+name+' '+food_type+' '+path)
+                types.append(food_type)
+                dic = {'id':id,'name':name,'price':price,'type':food_type,'path':path}
+                dict_result.append(dic)
+            types_set=set(types)
+            unique_types= list(types_set)
+
+            return render(request,'homeApp/restaurant.html',{'path':results,'title':title,'foods':dict_result,'all_types':unique_types})
 
 
     
     
 
 
-    return render(request,'homeApp/restaurant.html',{'path':results,'title':title,'foods':dict_result,'all_types':unique_types})
+    
