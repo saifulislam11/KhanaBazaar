@@ -118,11 +118,12 @@
                     <div>
                         {% if food.type == type %}
                             <!--cart modal-->
-                            <div id="reserve" class="modal fade" role="dialog">
+                            <div id="reserve{{food.id}}" class="modal fade" role="dialog">
                                 <div class="modal-dialog modal-lg" role="content">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title">Reserve A Table</h3>
+                                            <h3 class="modal-title">{{food.name}}</h3>
+                                            <span class="modal-price">BDT {{food.price}}</span>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
                                         </div>
@@ -163,7 +164,8 @@
                                                 </div>
                                                 <div class="form-row">
                                                     <button type="button" class="btn btn-secondary btn-lg ml-auto" data-dismiss="modal">Cancel</button>
-                                                    <button type="submit" class="btn btn-primary btn-lg ml-1">Reserve</button>        
+                                                    
+                                                    <button class="btn btn-primary shop-item-button" type="submit">ADD TO CART</button>        
                                                 </div>
                                             </form>
 
@@ -179,15 +181,17 @@
                             <img class="food-image" src="{{baseURL}}/{{food.path}}"  alt="restaurant1">
                             <div class="overlay"><span>{{food.name}}<br>
                             {{food.price}}tk</span>
-                                    <button class="button" onclick="openModal()" href="#" role="button">
+                                    <button class="button" data-target="#reserve{{food.id}}" data-toggle="modal" role="button">
                                     </button>
                                     <!--script for modal-->
                                     <script type="text/javascript">
+                                        var id = "{{food.id}}";
 
                                         function openModal(){
-                                            $('#reserve h3').text("{{food.name}}");
+                                            
+                                            $('#reserve{{food.id}} h3').text(id);
                                         
-                                            $('#reserve').modal('toggle');
+                                            $('#reserve{{food.id}}').modal('toggle');
                                         }       
                                     </script>
                                     <!--end of modal script-->

@@ -10,3 +10,47 @@ CREATE TABLE RESTAURANT(
 		PASSWORD_HASH VARCHAR2(100) NOT NULL,
 		PRIMARY KEY (ID)
 );
+--insert
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000001','Yum CHA','dhanmondi 2','homeApp/img/rest1.png',4,'9am','10pm','yumcha12@gmail.com','1234');
+						
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000002','DECK 13','dhanmondi 3','homeApp/img/rest2.png',4,'9am','10pm','DECK1312@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000003','THIRTY3','BAILYROAD','homeApp/img/rest3.png',2,'9am','10pm','thirty312@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000004','DOMINOS','dhanmondi 2','homeApp/img/rest4.png',4,'9am','10pm','DOMINOS12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000005','PIZZAINN','dhanmondi 5','homeApp/img/rest5.png',4,'9am','10pm','PIZZAINN12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000006','The Old Street','dhanmondi 10','homeApp/img/rest6.png',4,'9am','10pm','theoldstreet12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000007','WoodHouse','dhanmondi 21','homeApp/img/rest7.png',5,'9am','10pm','woodhouse12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000008','SECRET RECIPE','dhanmondi 12','homeApp/img/rest8.png',5,'9am','10pm','secretrecipe12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000009','IZAKAYA','dhanmondi 20','homeApp/img/rest9.png',4,'9am','10pm','izakaya12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000010','SULTANS DINE','dhanmondi 13','homeApp/img/rest10.png',4,'9am','10pm','siltansdine12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000011','GREEN HOUSE','dhanmondi 22','homeApp/img/rest11.png',5,'9am','10pm','greenhouse12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000012','FOREST LOUNGE','dhanmondi 22','homeApp/img/rest12.png',5,'9am','10pm','forestlounge12@gmail.com','1234');
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000013','PIZZAHUT','dhanmondi 24','homeApp/img/rest13.png',3,'9am','10pm','pizzahut12@gmail.com','1234');
+						
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000014','PIZZABURG','dhanmondi 24','homeApp/img/rest14.jpg',3,'9am','10pm','pizzaburg12@gmail.com','1234');	
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000015','CILANTRO','dhanmondi 23','homeApp/img/rest15.jpg',4,'9am','10pm','cilantro12@gmail.com','1234');	
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000016','CHEEZ','dhanmondi 29','homeApp/img/rest16.jpg',3,'9am','10pm','cheez12@gmail.com','1234');	
+INSERT into RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH) 
+            VALUES('0000000017','Crimson CUP','dhanmondi 24','homeApp/img/rest17.jpg',3,'9am','10pm','crimson12@gmail.com','1234');			
+						
+						
+						
+						
+						
+						
+						

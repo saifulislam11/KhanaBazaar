@@ -234,14 +234,21 @@
     z-index: 1;
   }
   .modal-content .modal-header {
-    background: #512DA8;
+    background:rgba(0, 0, 0, 0.8);
     color: floralwhite ;
   }
   .modal-content .modal-header button {
     color: floralwhite ;
   }
+  .modal-header .modal-title{
+    background-color: rgba(0, 0, 0, 0.8);
+  }
   .modal-content .modal-body {
-    background: #9575CD;
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .modal-price{
+    margin-left: 130px;
+    color: rgba(0, 0, 0, 0.8);
   }
   header div div div img{
     border-radius: 50%;
