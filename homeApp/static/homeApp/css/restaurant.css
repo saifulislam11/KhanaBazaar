@@ -235,20 +235,24 @@
   }
   .modal-content .modal-header {
     background:rgba(0, 0, 0, 0.8);
-    color: floralwhite ;
+    color: rgb(56, 175, 64) ;
   }
   .modal-content .modal-header button {
     color: floralwhite ;
+
   }
   .modal-header .modal-title{
-    background-color: rgba(0, 0, 0, 0.8);
+
   }
   .modal-content .modal-body {
     background: rgba(0, 0, 0, 0.1);
   }
-  .modal-price{
-    margin-left: 130px;
-    color: rgba(0, 0, 0, 0.8);
+  .modal-content .modal-header .modal-price{
+    margin-left: 440px;
+    margin-top: 8px;
+    color: rgb(255, 255, 255);
+    font-style: italic;
+    font-weight: lighter;
   }
   header div div div img{
     border-radius: 50%;
