@@ -87,9 +87,14 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:aboutus' %}"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:contactus' %}"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
                         <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>
+                        <li class="nav-item">
+                            <a class="cart-btn cart-link" href="#">
+                            <span class="fa fa-cart-plus fa-2x "></span>
+                            <span class="cart-items">0</span>
+                            </a>
+                        </li>
                     </ul>
                     <!--modal button-->
 
@@ -125,7 +130,7 @@
                                 <div class="modal-dialog modal-lg" role="content">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title">{{food.name}}</h3>
+                                            <h3 class="modal-food">{{food.name}}</h3>
                                             <span class="modal-price">BDT {{food.price}}</span>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
@@ -163,7 +168,7 @@
                                                 <div class="form-row">
                                                     <button type="button" class="btn btn-secondary btn-lg ml-auto" data-dismiss="modal">Cancel</button>
                                                     
-                                                    <button class="btn btn-primary shop-item-button" type="submit">CONFIRM</button>        
+                                                    <button class="cart-submit btn btn-primary shop-item-button" type="button">CONFIRM</button>        
                                                 </div>
                                             </form>
 
@@ -175,24 +180,16 @@
                             </div>
                             
                             <!--end of cart modal-->
-                            <div class="fig-container">
-                            <img class="food-image" src="{{baseURL}}/{{food.path}}"  alt="restaurant1">
-                            <div class="overlay"><span>{{food.name}}<br>
-                            {{food.price}}tk</span>
+                            <div class="fig-container food-item">
+                                <img class="food-image" src="{{baseURL}}/{{food.path}}"  alt="restaurant1">
+                                <div class="overlay ">
+                                    <span class="food-name">{{food.name}}<br>
+                                    {{food.price}}tk
+                                    </span>
                                     <button class="button add_cart" data-target="#reserve{{food.id}}" data-toggle="modal" role="button">
                                     </button>
                                     <!--script for modal-->
                                     <script type="text/javascript">
-                                        var id = "{{food.id}}";
-                                        ///console.log(id);
-
-                                        function openModal(){
-                                            
-                                            $('#reserve{{food.id}} h3').text(id);
-                                        
-                                            $('#reserve{{food.id}}').modal('toggle');
-                                        }   
-                                               
                                     </script>
                                     <!--end of modal script-->
                                 </div>
@@ -202,6 +199,34 @@
                 {% endfor %}
             </div>
             {% endfor %}
+            <!--cart overlay-->
+            <div class="cart-overlay">
+                <div class="cart">
+                    <span class="close-cart">
+                        <i class="fa fa-window-close"></i>
+                    </span>
+                    <h2>Your Cart</h2>
+                    <div class="cart-content">
+                        <!--cart items-->
+                        <!--<div class="added-to-cart">
+                            
+
+                        </div>-->
+
+                    </div>
+                    <div class="cart-footer">
+                        <h3>Your Total : $
+                            <span class="cart-total">0
+                            </span>
+                        </h3>
+                        <button class="clear-cart banner-btn">Clear Cart</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!--end of cart overlay-->
 
             <!--previous static version
             <div class="row restaurant-row-content">
@@ -226,6 +251,7 @@
             <!--end of previous static version-->
         </div>
     {% endif %}
+
      <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
      <!--build:js js/main.js-->
      <script src="{% static 'homeApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
