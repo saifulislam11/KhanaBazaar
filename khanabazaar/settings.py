@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'homeApp',
+    'adminApp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -110,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -124,7 +125,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS =[
-    os.path.join(BASE_DIR,'homeApp/static')
+    os.path.join(BASE_DIR,'homeApp/static'),
+    os.path.join(BASE_DIR,'adminApp/static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 
