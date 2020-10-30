@@ -24,11 +24,12 @@
         <h1 class="row row-content">Please log In !!!</h1>
     </div>
     <div class="container align-items-center ">
-        <form>
+        <form action="" method="post">
+            {% csrf_token %}
             <div class="form-group row">
-                <label for="userName" class="col-md-2 col-form-label bg-info d-flex justify-content-center"> user name   </label>
+                <label for="email" class="col-md-2 col-form-label bg-info d-flex justify-content-center"> Email   </label>
                 <div >
-                    <input type = 'text' class="form-control offset-1" id = 'userName' name="userName" placeholder="user name">
+                    <input type = 'text' class="form-control offset-1" id = 'email' name="email" placeholder="email">
                 </div>
             </div>
             <div class="row form-group">

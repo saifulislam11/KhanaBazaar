@@ -10,7 +10,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
      <meta http-equiv="x-ua-compatible" content="ie=edge">
      <link rel="icon" type="image/png" href="{% static 'adminApp/img/khanabazaar.png' %}">
-     
+
      <!--build:css css/main.css-->
      <link rel="stylesheet" href="{% static 'adminApp/modules/font-awesome/css/font-awesome.min.css' %}">
      <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap-social/bootstrap-social.css' %}">
@@ -29,7 +29,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#"><img src="{% static 'adminApp/img/khanabazaar.png' %}" alt="LOGO" width="41" height="30">
+            <a class="navbar-brand" href="{% url 'adminApp:index' %}"><img src="{% static 'adminApp/img/khanabazaar.png' %}" alt="LOGO" width="41" height="30">
                 <span>KHANABAZAAR</span></a>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ml-auto">
@@ -41,7 +41,7 @@
                 </ul>
                 <!--modal button-->
             </div>
-           
+
 
         </div>
 
@@ -67,23 +67,32 @@
                     title="or call at<br> +01710100921" data-placement="bottom">Reserve Table</a>-->
                     <!--<a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button" id="reservetable" >Reserve Table</a>-->
 
-                    
-                </div>  
+
+                </div>
             </div>
         </div>
     </header>
 
     <div class="container background">
         <!--adding carousel-->
-        <a class="btn btn-block  btn-sm" role="button" id="addRestaurant" href="{% url 'adminApp:addRestaurant' %} ">Add Restaurant</a>
-        <a class="btn btn-block  btn-sm" role="button" id="editRestaurant" >Edit Restaurant</a>
-        <a class="btn btn-block  btn-sm" role="button" id="offerPromo" >Offer Promo to Customer</a>
-        <a class="btn btn-block  btn-sm" role="button" id="suspendCustomer" >Suspend Customer</a>
-        <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" >Add FoodMan</a>
-        <a class="btn btn-block  btn-sm" role="button" id="removeFoodMan" >Delete FoodMan</a>
+        <form action="addRestaurant" method="POST">
+            {% csrf_token %}
+            <div class="row form-group">
+                <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
+                <div>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="name">
+                </div>
+
+                <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
+                <div>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="name">
+                </div>
+            </div>
+
+        </form>
 
         </div>
-                
+
         <div class="row restaurant-search-row-header">
 
         </div>
@@ -94,15 +103,15 @@
 
 
 
-            
 
 
-        
+
+
 
 
     <footer class="footer" >
         <div class="container">
-            <div class="row justify-content-center">             
+            <div class="row justify-content-center">
                 <div class="col-4 col-sm-2">
                     <h5>Links</h5>
                     <ul class="list-unstyled">
@@ -135,7 +144,7 @@
                     </div>
                 </div>
            </div>
-           <div class="row">             
+           <div class="row">
                 <div class="col-auto">
                     <p>© Copyright 2018 Ristorante Con Fusion</p>
                 </div>
@@ -158,7 +167,7 @@
             $('[data-toggle="tooltip"]').tooltip()
           })
     </script>-->
-   
+
 </body>
 
 
