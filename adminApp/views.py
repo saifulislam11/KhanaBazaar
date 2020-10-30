@@ -38,4 +38,20 @@ def index(request):
 
 def addRestaurant(request):
     context = {}
+    global loggedIn
+    # if not loggedIn:
+    #     request.method = 'GET'
+    #     return index(request)
+
+    if request.method == 'POST':
+        print(request.FILES)
+        name = request.POST.get('name')
+        location = request.POST.get('location')
+        logo = request.FILES['restaurantLogo']
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        print(logo)
+        return redirect('adminApp:addRestaurant')
+
     return render(request, 'adminApp/addRestaurant.html', context)
