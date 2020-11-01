@@ -1,15 +1,17 @@
-
-
-def handle_uploaded_file(f, prefix,location, id = None, ):
+def handle_uploaded_file(f, file_name, location):
     """
+    we will save lod
     :param f: file itself
-    :param prefix: prefix of the file . like rest1.jpg here rest1 would be prefix
-    :param location: where to save. need suggestion
-    :param id: id for the element
+    :param file_name: fileName to be saved as
+    :param location: where to save or base directory. need suggestion
     :return: Boolean
     """
-    name = location + prefix + str(id)+ '.png'
+    name = location + file_name
     print(name)
-    with open(name, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+    try:
+        with open(name, 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+        return True
+    except:
+        return False
