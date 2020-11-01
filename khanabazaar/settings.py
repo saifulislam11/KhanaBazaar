@@ -49,12 +49,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Session in file
+# Session in file start 
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 SESSION_FILE_PATH = os.path.join(BASE_DIR, 'temp_sessions/')
-print(SESSION_FILE_PATH)
+# print(SESSION_FILE_PATH)
 if not os.path.exists(SESSION_FILE_PATH):
     os.mkdir(SESSION_FILE_PATH)
+# Session file end
 
 ROOT_URLCONF = 'khanabazaar.urls'
 
