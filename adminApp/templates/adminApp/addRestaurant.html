@@ -75,7 +75,7 @@
 
     <div class="container background">
         <h1 class="d-flex justify-content-center">Add  a New Restaurant</h1>
-        <form action="addRestaurant" method="POST" class="offset-1">
+        <form action="addRestaurant" method="POST" class="offset-1" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row form-group">
                 <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
@@ -94,7 +94,8 @@
             <div class="row form-group">
                 <label for="restaurantLogo" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Restaurant Image : </label>
                 <div>
-                    <input type="file" class="form-control" id="restaurantLogo" name="restaurantLogo" placeholder="choose image" >
+                    <input type="file" class="form-control" id="restaurantLogo"
+                           name="restaurantLogo" placeholder="choose image" accept="image/png, image/jpeg" enctype="multipart/form-data" >
                 </div>
 
             </div>
@@ -135,15 +136,18 @@
 
             <div class="form-group row">
                         <div class="offset-md-2 col-md-10">
-                            <button type="submit" class="btn btn-primary">
-                                Add restaurant
-                            </button>
+                            <input type="submit" class="btn btn-primary" placeholder="submit">
+
                         </div>
             </div>
 
 
         </form>
-
+        <div class="d-flex justify-content-center">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
         </div>
 
         <div class="row restaurant-search-row-header">
