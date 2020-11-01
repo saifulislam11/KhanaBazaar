@@ -1,7 +1,7 @@
 from cx_Oracle import connect
 
 
-def openConnection():
+def open_connection():
     """
     creates a connection
     :return: a connection object
@@ -15,7 +15,7 @@ def get_next_id():
 
     :return: the next possible ID for our ID columns
     """
-    con = openConnection()
+    con = open_connection()
     c = con.cursor()
     sql = 'Select ID_GENERATOR.NEXTVAL FROM DUAL'
     c.execute(sql)
