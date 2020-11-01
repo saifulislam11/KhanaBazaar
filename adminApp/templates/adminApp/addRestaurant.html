@@ -74,23 +74,80 @@
     </header>
 
     <div class="container background">
-        <!--adding carousel-->
-        <form action="addRestaurant" method="POST">
+        <h1 class="d-flex justify-content-center">Add  a New Restaurant</h1>
+        <form action="addRestaurant" method="POST" class="offset-1" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row form-group">
                 <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
                 <div>
                     <input type="text" class="form-control" id="name" name="name" placeholder="name">
                 </div>
+            </div>
 
-                <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
+            <div class="row form-group">
+                <label for="location" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Location : </label>
                 <div>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="name">
+                    <input type="text" class="form-control" id="location" name="location" placeholder="location">
                 </div>
             </div>
 
-        </form>
+            <div class="row form-group">
+                <label for="restaurantLogo" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Restaurant Image : </label>
+                <div>
+                    <input type="file" class="form-control" id="restaurantLogo"
+                           name="restaurantLogo" placeholder="choose image" accept="image/png, image/jpeg" enctype="multipart/form-data" >
+                </div>
 
+            </div>
+
+            <div class="row form-group">
+                <label for="openTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Open Time : </label>
+                <div>
+                    <input type="text" class="form-control" id="openTime" name="openTime" placeholder="openTime">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="closeTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Close Time : </label>
+                <div>
+                    <input type="text" class="form-control" id="closeTime" name="closeTime" placeholder="closeTime">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="email" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Email : </label>
+                <div>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="email">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="password1" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Password : </label>
+                <div>
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="****">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="password1" class="col-md-2 col-form-label bg-info d-flex justify-content-center"> Confirm Password : </label>
+                <div>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="****">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                        <div class="offset-md-2 col-md-10">
+                            <input type="submit" class="btn btn-primary" placeholder="submit">
+
+                        </div>
+            </div>
+
+
+        </form>
+        <div class="d-flex justify-content-center">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
         </div>
 
         <div class="row restaurant-search-row-header">
