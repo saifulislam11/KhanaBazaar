@@ -25,4 +25,5 @@ $(document).ready(function(){
         $('#cart').modal('toggle');
     });
     
+    
 });

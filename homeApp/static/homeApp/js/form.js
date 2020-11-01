@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded',function(){
         totalElement.innerText = total;
         console.log(total);
     }
+    
+   
+   
+
     //----update cart function-----//
     function updateCart(i,totalAmount,foodname,foodprice,foodcount){
         var priceElement = document.getElementsByClassName('modal-price')[i];
@@ -59,6 +63,7 @@ document.addEventListener('DOMContentLoaded',function(){
     const cartBTN = document.querySelector('.cart-btn');
     const closeCartBTN = document.querySelector('.close-cart');
     const clearCartBTN = document.querySelector('.clear-cart');
+    const orderBTN = document.querySelector('.order');
     const cartDOM = document.querySelector('.cart');
     const cartOverlay = document.querySelector('.cart-overlay');
     const cartItems = document.querySelector('.cart-items');
@@ -68,11 +73,29 @@ document.addEventListener('DOMContentLoaded',function(){
     const foodName= document.querySelector('.cart-heading');
     const perItemAmount = document.querySelector('.cart-price');
 
+    ///form variables
+    const formPrice = document.querySelector('.form-price');
+    const formFoods = document.querySelector('.form-food');
+    const formPrices = document.querySelector('.form-perprice');
+    const formCounts = document.querySelector('.form-count');
+    const Restaurant = document.querySelector('.id');
+    const formRestaurant = document.querySelector('.form-restaurant');
+    const formCount = document.querySelector('.form-items');
+    formRestaurant.value=Restaurant.innerText;  
+
+    //creating character values for payment page
+    var foods="";
+    var counts="";
+    var prices="";
+
+
     //carts
     var map = new Map();
     cart=[]
     var keys =['foodname','price','count']
+    //-----------getting modal elements----------------//
     const all_cart_submit = document.getElementsByClassName('cart-submit');
+    const all_modal_food = document.getElementsByClassName('modal-food');
     let totalAmount =0;
     let itemTotal=0;
     ///3 variables for cart items
@@ -90,24 +113,51 @@ document.addEventListener('DOMContentLoaded',function(){
     function setUP(){
         cartBTN.addEventListener('click',showCART);
         closeCartBTN.addEventListener('click',hideCART);
+        
     }
     setUP();
+    
     //cartlogic
     function clearCART(){
         //removing children one by one
         for(let i=0;i<all_cart_submit.length;i++){
             let button = all_cart_submit[i];
-            console.log(button);
+            //console.log(button);
             button.innerText="CONFIRM";
             button.disabled=false;
 
         }
+        //removing from DOM one by one
         while(cartContent.children.length>0){
-            cartContent.removeChild(cartContent.children[0])
+            
+            cartContent.removeChild(cartContent.children[0]);
+            
+
 
         }
 
     }
+    ///find char for payment
+    function findCharacters(){
+        
+        for(let x = 0;x<cartContent.children.length;x++){
+            foods  = foods.concat(cartContent.children[x].childNodes[0].innerText,"#");
+            prices=prices.concat(cartContent.children[x].childNodes[2].childNodes[1].innerText.replace('$',''),"#");
+            counts=counts.concat(cartContent.children[x].childNodes[4].childNodes[3].innerText,"#");
+            
+            //console.log(cartContent.children);
+            //cartContent.children.length
+
+
+        }
+        //assigning values
+        formFoods.value=foods;
+        formCounts.value=counts;
+        formPrices.value=prices; 
+        formCount.value=cartContent.children.length;
+        
+    }
+    
     
     function cartLogic(){
 
@@ -120,8 +170,13 @@ document.addEventListener('DOMContentLoaded',function(){
             cartItems.innerText=itemTotal;
             cartTotal.innerText=0;
             event.target.disabled=true;
+            formPrice.value=totalAmount;
             //making all cart available again
 
+        })
+        //order
+        orderBTN.addEventListener('click',event=>{
+            findCharacters();
         })
         //other functionalities
         
@@ -140,6 +195,8 @@ document.addEventListener('DOMContentLoaded',function(){
                 totalAmount=totalAmount-price;
                 cartItems.innerText=itemTotal;
                 cartTotal.innerText=totalAmount;
+                formPrice.value=totalAmount;
+               
                 for(let i=0;i<all_cart_submit.length;i++){
                     button=all_cart_submit[i];
                     let fetch_name=all_cart_submit[i].parentElement.parentElement.parentElement.parentElement.childNodes[1].childNodes[1].innerText;
@@ -165,6 +222,7 @@ document.addEventListener('DOMContentLoaded',function(){
                 //updating totalamount
                 totalAmount=totalAmount-price+(price/count)*(count+1);
                 cartTotal.innerText=totalAmount;
+                formPrice.value=totalAmount;
 
             }
             else if(event.target.classList.contains('fa-chevron-down')){
@@ -180,6 +238,7 @@ document.addEventListener('DOMContentLoaded',function(){
                     event.target.parentElement.parentElement.children[1].childNodes[1].innerText='$'+ '\n'+(price/count);
                     
                     cartTotal.innerText=totalAmount;
+                    formPrice.value=totalAmount;
                 }
                 else{
                     event.target.parentElement.childNodes[3].innerText=count-1;
@@ -187,6 +246,7 @@ document.addEventListener('DOMContentLoaded',function(){
                     //updating totalamount
                     totalAmount=totalAmount-price+(price/count)*(count-1);
                     cartTotal.innerText=totalAmount;
+                    formPrice.value=totalAmount;
 
                 }
                 
@@ -197,6 +257,7 @@ document.addEventListener('DOMContentLoaded',function(){
     }
     //call cartLogic
     cartLogic();
+    
     
     for(let i=0;i<all_cart_submit.length;i++)
     {
@@ -227,6 +288,9 @@ document.addEventListener('DOMContentLoaded',function(){
             console.log(nameOfFood);
             cartTotal.innerText=totalAmount;
             cartItems.innerText=itemTotal;
+            formPrice.value=totalAmount;
+            
+            
             values=[foodname,foodprice,foodcount]
             //------------end of updates---------//
 
@@ -234,6 +298,7 @@ document.addEventListener('DOMContentLoaded',function(){
             const div = document.createElement('div');
             div.classList.add('added-to-cart');
             div.innerHTML=`<h1 class="cart-heading">${foodname}</h1>
+            
             <div>
                 <h5 class="cart-price">$ ${foodprice}</h5>
                 <span class="remove-item">remove</span>
@@ -243,6 +308,9 @@ document.addEventListener('DOMContentLoaded',function(){
                 <h6 class="item-amount">${foodcount}</h6>
                 <i class="fa fa-chevron-down"></i>
             </div>`
+            
+            // formFood.value=foodname;
+            //console.log(formFood.value);
             cartContent.appendChild(div);
             console.log(cartContent);
             //step 5--------show cart-------//
@@ -252,9 +320,10 @@ document.addEventListener('DOMContentLoaded',function(){
         })
 
     }
-    //console.log(all_buttons);
+    
 
 
+    
 
     /*var all_buttons = document.getElementsByClassName('add_cart');
     console.log(all_buttons);
@@ -292,4 +361,5 @@ document.addEventListener('DOMContentLoaded',function(){
         }
        
     }
+    
 })

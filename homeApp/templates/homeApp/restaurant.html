@@ -111,6 +111,7 @@
                 <div style="background-image: url('{{baseURL}}/{{path}}');" class="top">
                     <span class="welcome">Welcome to</span>
                     <span class="title">{{title}}</span>
+                    <span hidden class="id">{{ID}}</span>
                 </div>
             </div>
         <div>
@@ -202,6 +203,8 @@
             <!--cart overlay-->
             <div class="cart-overlay">
                 <div class="cart">
+                    <form action="{% url 'homeApp:payment' %}" class="form-inline" method="POST">
+                    {% csrf_token %}
                     <span class="close-cart">
                         <i class="fa fa-window-close"></i>
                     </span>
@@ -215,12 +218,21 @@
 
                     </div>
                     <div class="cart-footer">
-                        <h3>Your Total : $
+                        <h3 >Your Total : $
                             <span class="cart-total">0
                             </span>
                         </h3>
                         <button class="clear-cart banner-btn">Clear Cart</button>
+                        <input hidden name="price" class="form-price">
+                        <input hidden name="foods" class="form-food">
+                        <input hidden name="counts" class="form-count">
+                        <input hidden name="prices" class="form-perprice">
+                        <input hidden name="restaurant" class="form-restaurant">
+                        <input hidden name="items" class="form-items">
+                        <button class="order order-btn" type="submit">Order now</button>
+                        
                     </div>
+                    </form>
 
                 </div>
 
