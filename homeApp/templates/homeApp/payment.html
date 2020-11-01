@@ -87,7 +87,7 @@
                         <li class="nav-item">
                             <a class="Pcart-btn cart-link" href="#">
                             <span class="fa fa-cart-plus fa-2x "></span>
-                            <span class="Pcart-items">0</span>
+                            <span class="Pcart-items">{{items}}</span>
                             </a>
                         </li>
                     </ul>
@@ -100,7 +100,134 @@
             </div>
 
         </nav>
-        <h1>{{price}}</h1>
+        <!--restaurant image-->
+        <div class="landing">
+            <div class="home-wrap">
+                <div style="background-image: url('{{baseURL}}/{{restaurant.path}}');" class="top">
+                    <span class="welcome">Welcome to</span>
+                    <span class="title">{{restaurant.name}}</span>
+                </div>
+            </div>
+        <div>   
+        <!--cart summary-->
+        <div class="background">
+        <div class="container">
+            <div class="row row-content">
+                <div class="col-12 col-sm-7">
+                    <h2>Cart Summary</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-dark table-bordered">
+                            <thead class="theader">
+                                <tr>
+                                    <th>Food Item</th>
+                                    <th>No of Items</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart %}
+                                <tr>
+                                    <th>{{item.food}}</th>
+                                    <td>{{item.count}}</td>
+                                    <td>{{item.price}}</td>   
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-3">
+                    <div class="total-amount">
+                        <h1 class="typing" >Your Total is {{price}}TK</h1>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="row row-content">
+                <div class="col-12 col-sm-12">
+                    <h2>Fill up the form below</h2>
+                    <form class="order-submit-form">
+                        <!--first name-->
+                        <div class="form-group row">
+                            <label for="firstname" class="col-md-2 col-form-label ">First Name</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control form-box" id="firstname" name="firstname" placeholder="First Name">
+                            </div>
+                        </div>
+
+                        <!--lastname-->
+                        <div class="form-group row">
+                            <label for="lastname" class="col-md-2 col-form-label">Last Name</label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control form-box" id="lastname" name="firstname" placeholder="Last Name">
+                            </div>
+
+                        </div>
+                            
+                        <!--address row-->
+                        <div class="form-group row">
+                            <label for="address" class="col-12 col-md-2 col-form-label">Address</label>
+                            <div class="col-12 col-md-8">
+                                <input type="address" class="form-control form-box" id="address" name="address" placeholder="Address">
+                            </div>
+                        </div>
+                        <!--telno,email row-->
+                        <div class="form-group row">
+                            <label for="telno" class="col-md-2 col-form-label">Tel. No</label>
+                            <div class="col-12 col-md-3">
+                                <input type="tel" class="form-control form-box" id="telno" name="telno" placeholder="Tel No.">
+                            </div>
+                            <label for="email" class="col-md-2">E-mail</label>
+                            <div class="col-md-3 form_pad">
+                                <input type="mail" class="form-control form-box" id="email" name="email" placeholder="E-mail">
+                            </div>
+
+                        </div>
+                            
+                        <!--payment row-->
+                        <div class="form-group row">
+                            <label for="payment_method" class="col-md-2 col-from-label">Payment Method</label>   
+                            <div class="col-12 col-md-3">
+                                <select>
+                                    <option>Bkash</option>
+                                    <option>Rocket</option>
+                                    <option>Credit Card</option>
+                                    <option>On Cash</option>
+                                </select>
+                            </div> 
+                            <label for="note" class="col-md-2 ">Emergency Note</label>
+                            <div class="col-md-3 form_pad">
+                                <textarea class="form-control form-box" id="note" name="note" rows="1"></textarea>
+                            </div> 
+                        </div>
+                        <!--feedback row-->
+                        <div class="form-group row">
+                            <label for="feedback" class="col-md-2 col-form-label ">Your Feedback</label>
+                            <div class="col-md-8 form_pad">
+                                <textarea class="form-control form-box" id="feedback" name="feedback" rows="10" ></textarea>
+                            </div>
+                        </div>
+                        <!--submit-->
+                        <div class="form-group row">
+                            <div class="col-12 col-md-6 offset-md-2">
+                                <button class="btn btn-danger" type="submit">Confirm Order</button>
+                            </div>
+    
+                        </div>
+    
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+            </div>
+        </div>
+        </div>
+        <!--end of cart summary-->
+
         <!--cart overlay-->
         <div class="Pcart-overlay">
             <div class="Pcart">
@@ -110,17 +237,27 @@
                 <h2>Your Cart</h2>
                 <div class="Pcart-content">
                     <!--cart items-->
-                    <!--<div class="added-to-cart">
-                        
-
-                    </div>-->
+                    {% for item in cart %}
+                    <div class="Padded-to-cart">
+                        <h1 class="Pcart-heading">{{item.food}}</h1>
+                        <div>
+                            <h5 class="Pcart-price">$ {{item.price}}</h5>
+                        </div>
+                        <div>
+                            <i class="fa fa-chevron-up"></i>
+                            <h6 class="item-amount">{{item.count}}</h6>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>  
+                    </div>
+                    {% endfor %}
 
                 </div>
                 <div class="Pcart-footer">
                     <h3 >Your Total : $
-                        <span class="Pcart-total">0
+                        <span class="Pcart-total">{{price}}
                         </span>
                     </h3>
+                    <h4>Thanks for the Order</h4>
                     
                 </div>
                 </form>

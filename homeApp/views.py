@@ -75,9 +75,17 @@ def payment(request):
         rest_dic={'id':id,'name':name,'path':path}
         
     print(rest_dic)
+    cart_dic=[]
+    for i in range(len(all_food)):
+        food=all_food[i]
+        amount=all_price[i]
+        count=all_count[i]
+        dic={'food':food,'price':amount,'count':count}
+        cart_dic.append(dic)
+    print(cart_dic)
 
     
-    return render(request,'homeApp/payment.html',{'price':price,'restaurant':rest_dic,'foods':all_food,'prices':all_price,'counts':all_count})
+    return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic})
 def restaurant(request):
     c.execute('select * from RESTAURANT')
     query=None
