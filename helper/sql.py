@@ -1,4 +1,5 @@
 from cx_Oracle import connect
+from django.db import connection
 
 
 def open_connection():
@@ -8,6 +9,14 @@ def open_connection():
     """
     con = connect("KB", "123", "localhost/orcl")
     return con
+
+
+def create_cursor():
+    """
+    creates a new cursor using django's database engine
+    :return: a cursor object
+    """
+    return connection.cursor()
 
 
 def get_next_id():
@@ -22,5 +31,5 @@ def get_next_id():
     id = c.fetchone()
     id = str(id[0])
     con.close()
-    #print(id)
+    # print(id)
     return str(id)
