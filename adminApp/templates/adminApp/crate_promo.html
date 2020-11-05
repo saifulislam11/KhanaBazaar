@@ -10,7 +10,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
      <meta http-equiv="x-ua-compatible" content="ie=edge">
      <link rel="icon" type="image/png" href="{% static 'adminApp/img/khanabazaar.png' %}">
-     
+
      <!--build:css css/main.css-->
      <link rel="stylesheet" href="{% static 'adminApp/modules/font-awesome/css/font-awesome.min.css' %}">
      <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap-social/bootstrap-social.css' %}">
@@ -29,7 +29,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="#"><img src="{% static 'adminApp/img/khanabazaar.png' %}" alt="LOGO" width="41" height="30">
+            <a class="navbar-brand" href="{% url 'adminApp:index' %}"><img src="{% static 'adminApp/img/khanabazaar.png' %}" alt="LOGO" width="41" height="30">
                 <span>KHANABAZAAR</span></a>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ml-auto">
@@ -41,7 +41,7 @@
                 </ul>
                 <!--modal button-->
             </div>
-           
+
 
         </div>
 
@@ -67,27 +67,77 @@
                     title="or call at<br> +01710100921" data-placement="bottom">Reserve Table</a>-->
                     <!--<a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button" id="reservetable" >Reserve Table</a>-->
 
-                    
-                </div>  
+
+                </div>
             </div>
         </div>
     </header>
 
     <div class="container background">
-        <!--adding carousel-->
-        <a class="btn btn-block  btn-sm" role="button" id="add_restaurant" href="{% url 'adminApp:add_restaurant' %} ">Add Restaurant</a>
-        <a class="btn btn-block  btn-sm" role="button" id="edit_restaurant" >Edit Restaurant</a>
-        <div>
-            <a class="btn btn-block  btn-sm" role="button" id="create_promo" href="{% url 'adminApp:create_promo' %}">Create Promo</a>
+        <h1 class="d-flex justify-content-center">Create a new Promo</h1>
+        <form action="create_promo" method="POST" class="offset-1" >
+            {% csrf_token %}
+            <div class="row form-group">
+                <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
+                <div>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="name" required>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="row form-group">
+                <label for="percent" class="col-md-2 col-form-label bg-info d-flex justify-content-center">percent: </label>
+                <div>
+                    <input type="text" class="form-control" id="percent" name="percent" placeholder="**%">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="fixed_amount" class="col-md-2 col-form-label bg-info d-flex justify-content-center">fixed amount :</label>
+                <div>
+                    <input type="text" class="form-control" id="fixed_amount" name="fixed_amount" placeholder="50 BDT" >
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="promo_limit" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Promo Limit : </label>
+                <div>
+                    <input type="text" class="form-control" id="promo_limit" name="promo_limit" placeholder="5">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="min_order_value" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Minimum order amount : </label>
+                <div>
+                    <input type="password" class="form-control" id="min_order_value" name="min_order_value" placeholder="100 BDT">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="max_discount_amount" class="col-md-2 col-form-label bg-info d-flex justify-content-center"> Max Discount Amount : </label>
+                <div>
+                    <input type="password" class="form-control" id="max_discount_amount" name="max_discount_amount" placeholder="200">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                        <div class="offset-md-2 col-md-10">
+                            <input type="submit" class="btn btn-primary" placeholder="submit">
+
+                        </div>
+            </div>
+
+
+        </form>
+        <div class="d-flex justify-content-center">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
         </div>
 
-        <a class="btn btn-block  btn-sm" role="button" id="offerPromo" >Offer Promo to Customer</a>
-        <a class="btn btn-block  btn-sm" role="button" id="suspendCustomer" >Suspend Customer</a>
-        <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" >Add FoodMan</a>
-        <a class="btn btn-block  btn-sm" role="button" id="removeFoodMan" >Delete FoodMan</a>
-
-        </div>
-                
         <div class="row restaurant-search-row-header">
 
         </div>
@@ -98,15 +148,15 @@
 
 
 
-            
 
 
-        
+
+
 
 
     <footer class="footer" >
         <div class="container">
-            <div class="row justify-content-center">             
+            <div class="row justify-content-center">
                 <div class="col-4 col-sm-2">
                     <h5>Links</h5>
                     <ul class="list-unstyled">
@@ -139,7 +189,7 @@
                     </div>
                 </div>
            </div>
-           <div class="row">             
+           <div class="row">
                 <div class="col-auto">
                     <p>© Copyright 2018 Ristorante Con Fusion</p>
                 </div>
@@ -162,7 +212,7 @@
             $('[data-toggle="tooltip"]').tooltip()
           })
     </script>-->
-   
+
 </body>
 
 
