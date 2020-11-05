@@ -18,5 +18,10 @@ def get_hashed_value(password):
     :return: hashed value of password
     """
     salt = 'saifulBoss'
-    password = salt+password
+    password = salt + password
     return md5(password.encode('utf-8')).hexdigest()
+
+
+if __name__ == '__main__':
+    print(get_hashed_value('123'))
+    pass
