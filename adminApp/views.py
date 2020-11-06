@@ -1,5 +1,6 @@
 from django.contrib import auth, messages
 from django.contrib.auth.models import User
+from django.db import connection
 from django.http import HttpResponseRedirect
 
 from khanabazaar.settings import MEDIA_URL, MEDIA_ROOT, STATIC_ROOT
@@ -111,7 +112,116 @@ def add_food_man(request):
     :param request:
     :return:
     """
-    pass
+    context = {}
+    if request.session.is_empty():
+        messages.info(request, 'Please sign in first')
+        return redirect(request, '/admin', context)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone1 = request.POST.get('phone1')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password1')
+        password1 = get_hashed_value(password1)
+        password2 = request.POST.get('password2')
+        password2 = get_hashed_value(password2)
+        vehicle_type = request.POST.get('vehicle_type')
+        reg_no = request.POST.get('reg_no')
+        salary = request.POST.get('salary')
+        duration = request.POST.get('duration')  # in months
+        init_rating = request.POST.get('init_rating')
+        if init_rating is None:
+            init_rating = 4.00
+        profile_img = request.FILES.get('profile_img')
+        profile_img_path = None
+        foodman_id = get_next_id()
+        contract_id = get_next_id()
+        vehicle_id = get_next_id()
+        if profile_img is not None:
+            profile_img_path = 'foodman' + foodman_id + '.' + 'png'
+            handle_uploaded_file(profile_img, profile_img_path, STATIC_ROOT + '/img/')
+        else:
+            profile_img_path = 'foodman0.png'
+
+        cursor = sql.create_cursor()
+
+        try:
+            # add to foodman table
+            to_execute = "INSERT INTO FOODMAN(ID, NAME, EMAIL, PASSWORD_HASH, RATING, IMAGE_PATH) " \
+                         " VALUES({id}, {name}, {email},{password}, {rating},{profile_img_path})"
+            to_execute = to_execute.format(
+                id=wrap_with_in_single_quote(foodman_id),
+                name=wrap_with_in_single_quote(name),
+                email=wrap_with_in_single_quote(email),
+                password=wrap_with_in_single_quote(password1),
+                rating=wrap_with_in_single_quote(init_rating),
+                profile_img_path=wrap_with_in_single_quote(profile_img_path)
+            )
+            print(to_execute)
+            cursor.execute(to_execute)
+            # add phone no
+            to_execute = "INSERT INTO FOODMAN_PHONE(ID,PHONE_NO) " \
+                         " VALUES({foodman_id},{phone})"
+            to_execute = to_execute.format(
+                foodman_id=wrap_with_in_single_quote(foodman_id),
+                phone=wrap_with_in_single_quote(phone1)
+            )
+            print(to_execute)
+            cursor.execute(to_execute)
+
+            # Insert into vehicle table
+            to_execute = "INSERT INTO VEHICLE(ID, REG_NO, TYPE) " \
+                         " VALUES({vehicle_id}, {reg_no}, {type})"
+            to_execute = to_execute.format(
+                vehicle_id=wrap_with_in_single_quote(vehicle_id),
+                reg_no=wrap_with_in_single_quote(reg_no),
+                type=wrap_with_in_single_quote(vehicle_type)
+            )
+            print(to_execute)
+            cursor.execute(to_execute)
+            # Insert into DELIVERS_BY table
+            to_execute = "INSERT INTO DELIVERS_BY(FOODMAN_ID, VEHICLE_ID) " \
+                         " VALUES({foodman_id}, {vehicle_id})"
+            to_execute = to_execute.format(
+                foodman_id=wrap_with_in_single_quote(foodman_id),
+                vehicle_id=wrap_with_in_single_quote(vehicle_id)
+            )
+            print(to_execute)
+            cursor.execute(to_execute)
+            # Insert into CONTRACT table
+            to_execute = "INSERT INTO CONTRACT(ID,DURATION, SALARY, INIT_RATING, DATE_OF_CONTRACT) " \
+                         " VALUES({contract_id},{duration}, {salary},{init_rating}, SYSDATE)"
+            to_execute = to_execute.format(
+                contract_id=wrap_with_in_single_quote(contract_id),
+                duration=wrap_with_in_single_quote(duration),
+                salary=wrap_with_in_single_quote(salary),
+                init_rating=init_rating
+            )
+            cursor.execute(to_execute)
+
+            # Insert into APPOINTS table
+            to_execute = "INSERT INTO APPOINTS(FOODMAN_ID, ADMIN_ID, CONTRACT_ID) " \
+                         " VALUES({foodman_id}, {admin_id}, {contract_id})"
+            to_execute = to_execute.format(
+                foodman_id=wrap_with_in_single_quote(foodman_id),
+                admin_id=wrap_with_in_single_quote(request.session.get('id')),
+                contract_id=wrap_with_in_single_quote(contract_id)
+            )
+            print(to_execute)
+            cursor.execute(to_execute)
+            messages.info(request, "adding of foodman was successfull")
+
+        except:
+            print("Something is not right. And why rollback is not working.")
+            sql.rollback()
+            messages.info(request, "adding of foodman was unsuccessfull")
+
+        finally:
+            cursor.close()
+            sql.commit()
+
+        return redirect('/admin/add_foodman', context)
+
+    return render(request, 'adminApp/add_foodman.html', context)
 
 
 def create_promo(request):

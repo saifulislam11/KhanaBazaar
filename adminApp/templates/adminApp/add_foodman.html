@@ -74,8 +74,8 @@
     </header>
 
     <div class="container background">
-        <h1 class="d-flex justify-content-center">Add  a New Restaurant</h1>
-        <form action="add_restaurant" method="POST" class="offset-1" enctype="multipart/form-data">
+        <h1 class="d-flex justify-content-center">Add  a New FoodMan</h1>
+        <form action="add_foodman" method="POST" class="offset-1" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row form-group">
                 <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
@@ -85,31 +85,18 @@
             </div>
 
             <div class="row form-group">
-                <label for="location" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Location : </label>
+                <label for="profile_img" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Image: </label>
                 <div>
-                    <input type="text" class="form-control" id="location" name="location" placeholder="location" >
-                </div>
-            </div>
-
-            <div class="row form-group">
-                <label for="restaurantLogo" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Restaurant Image : </label>
-                <div>
-                    <input type="file" class="form-control" id="restaurantLogo"
-                           name="restaurantLogo" placeholder="choose image" accept="image/png, image/jpeg" enctype="multipart/form-data" >
+                    <input type="file" class="form-control" id="profile_img"
+                           name="profile_img" placeholder="choose image" accept="image/png, image/jpeg" enctype="multipart/form-data" >
                 </div>
 
             </div>
 
             <div class="row form-group">
-                <label for="openTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Open Time : </label>
+                <label for="phone1" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Phone no : </label>
                 <div>
-                    <input type="text" class="form-control" id="openTime" name="openTime" placeholder="openTime">
-                </div>
-            </div>
-            <div class="row form-group">
-                <label for="closeTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Close Time : </label>
-                <div>
-                    <input type="text" class="form-control" id="closeTime" name="closeTime" placeholder="closeTime">
+                    <input type="text" class="form-control" id="phone1" name="phone1" placeholder="010...">
                 </div>
             </div>
 
@@ -131,6 +118,38 @@
                 <label for="password2" class="col-md-2 col-form-label bg-info d-flex justify-content-center"> Confirm Password : </label>
                 <div>
                     <input type="password" class="form-control" id="password2" name="password2" placeholder="****">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="vehicle_type" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Vehicle Type : </label>
+                <div>
+                    <input type="text" class="form-control" id="vehicle_type" name="vehicle_type" placeholder="Cycle">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="reg_no" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Reg. No of vehicle : </label>
+                <div>
+                    <input type="text" class="form-control" id="reg_no" name="reg_no" placeholder="1111">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="salary" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Salary(monthly) : </label>
+                <div>
+                    <input type="text" class="form-control" id="salary" name="salary" placeholder="BDT">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="duration" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Duration : </label>
+                <div>
+                    <input type="text" class="form-control" id="duration" name="duration" placeholder="month">
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label for="init_rating" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Init Rating : </label>
+                <div>
+                    <input type="text" class="form-control" id="init_rating" name="init_rating" placeholder="">
                 </div>
             </div>
 
