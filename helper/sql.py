@@ -35,6 +35,20 @@ def get_next_id():
     return str(id)
 
 
+def execute(sql):
+    """
+    create a cursor
+    executes the sql
+    closes the cursor
+    :param sql: sql to execute
+    :return:
+    """
+    c = create_cursor()
+    c.execute(sql)
+    c.close()
+    return
+
+
 if __name__ == '__main__':
     email = 'vodro@khanabazaar.com'
     password = '77d9ec7c7b405cd2be7f2276dc500f5e'
