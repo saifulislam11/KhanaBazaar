@@ -150,33 +150,33 @@
                     <form class="order-submit-form">
                         <!--first name-->
                         <div class="form-group row">
-                            <label for="firstname" class="col-md-2 col-form-label ">First Name</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control form-box" id="firstname" name="firstname" placeholder="First Name">
+                            <label for="firstname" style="margin-top: 30px;" class="col-md-2 col-form-label ">First Name*</label>
+                            <div class="col-md-5" style="margin-top: 30px;">
+                                <input type="text" class="form-control form-box" id="firstname" name="firstname" placeholder="First Name" required>
                             </div>
                         </div>
 
                         <!--lastname-->
                         <div class="form-group row">
-                            <label for="lastname" class="col-md-2 col-form-label">Last Name</label>
+                            <label for="lastname" class="col-md-2 col-form-label">Last Name*</label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control form-box" id="lastname" name="firstname" placeholder="Last Name">
+                                <input type="text" class="form-control form-box" id="lastname" name="firstname" placeholder="Last Name" required>
                             </div>
 
                         </div>
                             
                         <!--address row-->
                         <div class="form-group row">
-                            <label for="address" class="col-12 col-md-2 col-form-label">Address</label>
+                            <label for="address" class="col-12 col-md-2 col-form-label">Address*</label>
                             <div class="col-12 col-md-8">
-                                <input type="address" class="form-control form-box" id="address" name="address" placeholder="Address">
+                                <input type="address" class="form-control form-box" id="address" name="address" placeholder="Address" required>
                             </div>
                         </div>
                         <!--telno,email row-->
                         <div class="form-group row">
-                            <label for="telno" class="col-md-2 col-form-label">Tel. No</label>
+                            <label for="telno" class="col-md-2 col-form-label">Tel. No*</label>
                             <div class="col-12 col-md-3">
-                                <input type="tel" class="form-control form-box" id="telno" name="telno" placeholder="Tel No.">
+                                <input type="tel" class="form-control form-box" id="telno" name="telno" placeholder="Tel No." required>
                             </div>
                             <label for="email" class="col-md-2">E-mail</label>
                             <div class="col-md-3 form_pad">
@@ -187,18 +187,18 @@
                             
                         <!--payment row-->
                         <div class="form-group row">
-                            <label for="payment_method" class="col-md-2 col-from-label">Payment Method</label>   
+                            <label for="payment_method" style="padding-left: 80px;" class="col-md-2 col-from-label" required>Payment Method*</label>   
                             <div class="col-12 col-md-3">
-                                <select>
+                                <select required>
                                     <option>Bkash</option>
                                     <option>Rocket</option>
                                     <option>Credit Card</option>
                                     <option>On Cash</option>
                                 </select>
                             </div> 
-                            <label for="note" class="col-md-2 ">Emergency Note</label>
+                            <label for="note" class="col-md-2 ">Your Total</label>
                             <div class="col-md-3 form_pad">
-                                <textarea class="form-control form-box" id="note" name="note" rows="1"></textarea>
+                                <input class="form-control" type="text" id="total" name="total" value="{{price}}" readonly style="background-color: rgb(250, 11, 11); color:cornsilk;font-size:x-large;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
                             </div> 
                         </div>
                         <!--feedback row-->
@@ -208,10 +208,25 @@
                                 <textarea class="form-control form-box" id="feedback" name="feedback" rows="10" ></textarea>
                             </div>
                         </div>
+                        <!--review star-->
+                        <div class="form-group row">
+                            <label for="feedback" style="top:4px;" class="col-md-2 col-form-label ">Image Review</label>
+                            <div class="col-md-3 ">
+                                <input style="margin-top: 16px;" type="file" id="imagefile" name="imagefile" title="choose file" >
+                            </div>
+                            <label for="rating" style="top:10px;" class="col-md-1 col-form-label ">Review</label>
+                            <div class="col-md-3 rating">
+                                <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
+                                <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
+                                <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+                                <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
+                                <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+                            </div>
+                        </div>
                         <!--submit-->
                         <div class="form-group row">
                             <div class="col-12 col-md-6 offset-md-2">
-                                <button class="btn btn-danger" type="submit">Confirm Order</button>
+                                <button class="btn btn-danger" type="submit" style="margin-bottom: 30px;">Confirm Order</button>
                             </div>
     
                         </div>
