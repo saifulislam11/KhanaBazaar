@@ -103,7 +103,8 @@ def homepage(request):
             return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
         if lastname == None :
             #---------------------sign up--------------------#
-
+            c.close()
+            connect = sql.create_cursor()
             email = request.POST['email']
             password = request.POST['password']
             password = get_hashed_value(password)
@@ -114,9 +115,11 @@ def homepage(request):
                 email=wrap_with_in_single_quote(email),
                 password=wrap_with_in_single_quote(password)
             )
-            print(to_execute)
-            sql.execute(to_execute)
-            customer = c.fetchall()
+            connect.execute(to_execute)
+            customer = connect.fetchone()
+            connect.close()
+            customer = list(customer)
+            print(customer)
             
 
             if customer is None:
@@ -131,10 +134,10 @@ def homepage(request):
                 request.session['last_name'] = last_name
                 request.session['first_name'] = first_name
                 request.session['email'] = email
-                info = id + ' ' +firstname +' '+lastname+' '+email_log
-                customer_info= info.split(' ')
+                #info = id + ' ' +firstname +' '+lastname+' '+email
+                #customer_info= info.split(' ')
 
-                return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
+                return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer,'customer_name':customer[2]})
         else:
             return redirect('/homepage')
     else:
