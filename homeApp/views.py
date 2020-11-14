@@ -1,5 +1,16 @@
 from django.shortcuts import render
 import cx_Oracle
+from django.contrib import auth, messages
+from django.contrib.auth.models import User
+from django.db import connection
+from django.http import HttpResponseRedirect
+
+from khanabazaar.settings import MEDIA_URL, MEDIA_ROOT, STATIC_ROOT
+from django.shortcuts import render, redirect
+from helper.read_write_to_file import handle_uploaded_file
+from helper.sql import get_next_id
+from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
+from helper import sql
 con = cx_Oracle.connect("KB", "123", "localhost/orcl")
 print("Connected!")
 c = con.cursor()
@@ -28,8 +39,156 @@ def index(request):
 
 	# connection.commit()
 	# cursor.close()
-	
     return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3})
+
+#--------------------------after sign in --------------------------#
+def homepage(request):
+    c.execute('select * from RESTAURANT')
+    dict_result = []
+    for row in c:
+        id=row[0]
+        name = row[1]
+        path=row[3]
+        dic = {'id':id,'name':name,'path':path}
+        dict_result.append(dic)
+    list1=[]
+    list2=[]
+    list3=[]
+    brk=int(len(dict_result)/3)
+    for i in range(len(dict_result)):
+        if(int(i/brk) == 0):
+            list1.append(dict_result[i])
+        elif(int(i/brk) == 1):
+            list2.append(dict_result[i])
+        else:
+            list3.append(dict_result[i])
+    
+
+	# connection.commit()
+	# cursor.close()
+    #----------------sign in----------------#
+    if not request.session.is_empty():
+        print('dunno')
+        return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3})
+    if request.method == 'POST':
+        #------------------sign up-------------#
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        email_log = request.POST.get('email')
+        password1 = request.POST.get('password')
+        password1 = get_hashed_value(password1)
+        password2 = request.POST.get('confirmpassword')
+        address = request.POST.get('address')
+        id = get_next_id()
+        #print(firstname+lastname+address)
+        if (firstname != None and lastname!=None and email_log!=None) :
+            to_execute = "INSERT INTO CUSTOMER(ID,LAST_NAME,FIRST_NAME,EMAIL,PASSWORD_HASH,ADDRESS)" \
+                        " VALUES({id}, {lastname}, {firstname}, {email}, {password_hash}, {address}) "
+            to_execute = to_execute.format(
+                id=wrap_with_in_single_quote(id),
+                firstname=wrap_with_in_single_quote(firstname),
+                lastname=wrap_with_in_single_quote(lastname),
+                email=wrap_with_in_single_quote(email_log),
+                password_hash=wrap_with_in_single_quote(password1),
+                address=wrap_with_in_single_quote(address)
+            )
+            
+            info = id + ' ' +firstname +' '+lastname+' '+email_log
+            customer_info= info.split(' ')
+            print(customer_info)
+
+            #print(firstname+lastname+address)
+            print(to_execute)
+            sql.execute(to_execute)
+            return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
+        if lastname == None :
+            #---------------------sign up--------------------#
+
+            email = request.POST['email']
+            password = request.POST['password']
+            password = get_hashed_value(password)
+            print(email, password)
+            to_execute = "Select * From CUSTOMER Where EMAIL = {email} " \
+                        "and PASSWORD_HASH = {password}"
+            to_execute = to_execute.format(
+                email=wrap_with_in_single_quote(email),
+                password=wrap_with_in_single_quote(password)
+            )
+            print(to_execute)
+            sql.execute(to_execute)
+            customer = c.fetchall()
+            
+
+            if customer is None:
+                print('no customer found')
+                return render(request, 'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3})
+            else:
+                print('We need to do something')
+                id = customer[0]
+                last_name = customer[1]
+                first_name = customer[2]
+                request.session['id'] = id
+                request.session['last_name'] = last_name
+                request.session['first_name'] = first_name
+                request.session['email'] = email
+                info = id + ' ' +firstname +' '+lastname+' '+email_log
+                customer_info= info.split(' ')
+
+                return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
+        else:
+            return redirect('/homepage')
+    else:
+        print('couldnt fetch post method')
+        return render(request, 'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3})
+    #c.close()
+    #---------------------end of sign in ------------------#
+
+
+        
+    
+
+#--------------------customer register-------------------#
+'''def add_customer(request):
+    context = {}
+
+    if request.session.is_empty():
+        messages.info(request, 'YOU ARE NOT LOGGED IN ')
+        return redirect('/')
+    if request.method == 'POST':
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+        email = request.POST.get('email')
+        password1 = request.POST.get('password')
+        password1 = get_hashed_value(password1)
+        password2 = request.POST.get('confirmpassword')
+        address = request.POST.get('address')
+        id = get_next_id()
+        print(firstname+lastname+address)
+        to_execute = "INSERT INTO CUSTOMER(ID,LAST_NAME,FIRST_NAME,EMAIL,PASSWORD_HASH,ADDRESS)" \
+                     "VALUES({id}, {lastname}, {firstname}, {email}, {password_hash}, {address} "
+        to_execute = to_execute.format(
+            id=wrap_with_in_single_quote(id),
+            firstname=wrap_with_in_single_quote(firstname),
+            lastname=wrap_with_in_single_quote(lastname),
+            email=wrap_with_in_single_quote(email),
+            password_hash=wrap_with_in_single_quote(password1),
+            address=wrap_with_in_single_quote(address)
+        )
+        print(firstname+lastname+address)
+        print(to_execute)
+        c.execute(to_execute)
+
+        # Now adding into relation manages
+        to_execute = "INSERT INTO MANAGES(RESTAURANT_ID, ADMIN_ID) " \
+                     "VALUES({restaurant_ID}, {admin_ID})"
+        to_execute = to_execute.format(
+            restaurant_ID=wrap_with_in_single_quote(id),
+            admin_ID=wrap_with_in_single_quote(request.session.get('id')))
+        # print(to_execute)
+        sql.execute(to_execute)
+        messages.info(request, 'Adding Done')
+        return redirect('/homepage')
+    return render(request, 'homeApp/index.html', context)'''
 
 def aboutus(request):
     return render(request,'homeApp/aboutus.html')
@@ -86,6 +245,7 @@ def payment(request):
 
     
     return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic})
+
 def restaurant(request):
     c.execute('select * from RESTAURANT')
     query=None

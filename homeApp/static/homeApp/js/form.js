@@ -351,9 +351,9 @@ document.addEventListener('DOMContentLoaded',function(){
     //default submit button disabled
     document.querySelector('#submit').disabled = true;
     //onkeyup handler
-    document.querySelector('#exampleInputPassword3').onkeyup = () =>{
+    document.querySelector('#password').onkeyup = () =>{
         //checking if password is typed or not 
-        if (document.querySelector('#exampleInputPassword3').value.length > 0){
+        if (document.querySelector('#password').value.length > 0){
             document.querySelector('#submit').disabled = false;
         } 
         else{
