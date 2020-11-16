@@ -129,14 +129,15 @@ body {
   z-index: 1;
 }
 .modal-content .modal-header {
-  background: #512DA8;
-  color: floralwhite ;
+  background: #ffee03;
+  color: rgb(8, 8, 7) ;
 }
 .modal-content .modal-header button {
   color: floralwhite ;
 }
 .modal-content .modal-body {
-  background: #9575CD;
+  background: #ffffff;
+  color: #0b0b38;
 }
 header div div div img{
   border-radius: 50%;

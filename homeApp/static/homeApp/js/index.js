@@ -28,5 +28,18 @@ confirmpassword.onkeyup = validatePassword;*/
         }
        
     }
+    document.querySelector('#register').disabled = true;
+    //onkeyup handler
+    document.querySelector('#address').onkeyup = () =>{
+        console.log('pressed');
+        //checking if password is typed or not 
+        if (document.querySelector('#password1').value != document.querySelector('#confirmpassword').value){
+            document.querySelector('#submit').disabled = false;
+        } 
+        else{
+            document.querySelector('#register').disabled = true;
+        }
+       
+    }
     
 })

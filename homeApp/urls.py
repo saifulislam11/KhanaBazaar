@@ -11,6 +11,8 @@ urlpatterns = [
     path("contactus",views.contactus,name="contactus"),
     path("restaurant",views.restaurant,name="restaurant"),
     path("payment",views.payment,name="payment"),
-    path("homepage",views.homepage,name="homepage")
+    path("homepage",views.homepage,name="homepage"),
+    path("restaurant_log_in",views.restaurant,name="restaurant_log_in")
+
     
 ]

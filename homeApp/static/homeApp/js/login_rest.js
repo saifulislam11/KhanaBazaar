@@ -1,6 +1,6 @@
 //loading the DOM
 document.addEventListener('DOMContentLoaded',function(){
-    /*document.querySelector('#submit').disabled = true;
+    document.querySelector('#submit').disabled = true;
     //onkeyup handler
     document.querySelector('#password').onkeyup = () =>{
         console.log('pressed');
@@ -12,7 +12,62 @@ document.addEventListener('DOMContentLoaded',function(){
             document.querySelector('#submit').disabled = true;
         }
        
-    }*/
+    }
+    document.querySelector('#submit_pop').disabled = true;
+    document.querySelector('#password_pop').onkeyup = () =>{
+        console.log('pressed');
+        //checking if password is typed or not 
+        if (document.querySelector('#password_pop').value.length > 0){
+            document.querySelector('#submit_pop').disabled = false;
+        } 
+        else{
+            document.querySelector('#submit_pop').disabled = true;
+        }
+       
+    }
+    //----------------------------login popup----------------------
+    const loginPopup = document.querySelector(".login-popup");
+    const close = document.querySelector(".close");
+    const login_pop_button = document.getElementsByClassName('add_cart');
+    for(let i=0;i<login_pop_button.length;i++)
+    {
+        button = login_pop_button[i];
+        button.addEventListener("click",function(){
+            showPopup();
+        })
+    }
+    
+
+
+    window.addEventListener("load",function(){
+    
+    showPopup();
+    // setTimeout(function(){
+    //   loginPopup.classList.add("show");
+    // },5000)
+
+    })
+
+    function showPopup(){
+            const timeLimit = 1 // seconds;
+            let i=0;
+            const timer = setInterval(function(){
+            i++;
+            if(i == timeLimit){
+            clearInterval(timer);
+            loginPopup.classList.add("show");
+            } 
+            console.log(i)
+            },1000);
+    }
+
+
+    close.addEventListener("click",function(){
+        loginPopup.classList.remove("show");
+    })
+
+
+    //----------------------end of login popup------------------------
     //cart modal jqueries
     function updateAmount(i){
         //console.log(i);

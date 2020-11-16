@@ -17,14 +17,49 @@
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
      <link rel="stylesheet" href="{% static 'homeApp/css/restaurant.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/css/login_popup.css' %}">
      <!--flickity-->
      <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
-     <script  type = "text/javascript" src="{% static 'homeApp/js/form.js' %}" async></script>
+     <script  type = "text/javascript" src="{% static 'homeApp/js/login_rest.js' %}" async></script>
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
      <!--endbuild-->
 </head>
 
 <body data-spy="scroll">
+    <!--login popup-->
+    <div class="login-popup">
+        <div class="box">
+             <div class="img-area">
+                 <div class="img">
+                 </div>
+                 <!--<h1>Your Logo</h1>-->
+             </div>
+             <div class="form">
+                 <div class="close">&times;</div>
+                 <h1>Log In</h1>
+                 <form action="{% url 'homeApp:restaurant' %}" method="POST">
+                     {% csrf_token %}
+                     <div class="form-group">
+                        <input type="text" name="restaurant" class="form-control" id="restaurant_pop" value="{{title}}" readonly>
+                     </div>
+                     <div class="form-group">
+                        <input type="email" name="email" class="form-control" id="loginemail_pop" placeholder="Enter email">
+                     </div>
+                     <div class="form-group">
+                        <input type="password" name="password" class="form-control" id="password_pop" placeholder="Password">
+                     </div>
+                     <div class="form-group">
+                         <label><input type="checkbox">
+                             Remember Me
+                         </label>
+                     </div>
+                     <button type="submit" id="submit_pop" class="btn">Log In</button>
+                 </form>
+             </div>
+        </div>
+   </div>
+    <!--end of login popup-->
     <!--login modal-->
     <div id="loginModal" class="modal fade" role="dialog" >
         <div class="modal-dialog modal-md" role="content">
@@ -36,15 +71,17 @@
                 </div>
                 <div class="modal-body">
                     <!--modal form-->
-                    <form>
+                    <form action="{% url 'homeApp:restaurant' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="restaurant" class="form-control" id="restaurant_modal" value="{{title}}" hidden>
                         <div class="form-row">
                             <div class="form-group col-sm-4">
                                     <label class="sr-only" for="exampleInputEmail3">Email address</label>
-                                    <input type="email" class="form-control form-control-sm mr-1" id="exampleInputEmail3" placeholder="Enter email">
+                                    <input type="email" name="email" class="form-control form-control-sm mr-1" id="loginemail" placeholder="Enter email">
                             </div>
                             <div class="form-group col-sm-4">
-                                <label class="sr-only" for="exampleInputPassword3">Password</label>
-                                <input type="password" class="form-control form-control-sm mr-1" id="password" placeholder="Password">
+                                <label class="sr-only" for="password">Password</label>
+                                <input type="password" name="password" class="form-control form-control-sm mr-1" id="password" placeholder="Password">
                             </div>
                             <div class="col-sm-auto">
                                 <div class="form-check">
@@ -88,8 +125,7 @@
                         <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:aboutus' %}"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:contactus' %}"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:index' %}?action=logout" role="button" id="login"><span class="fa fa-sign-in"></span> Sign out</a></li>
-                        <li class="nav-item"><a class="nav-link" id="customer_name"><i class="fa fa-user"></i> {{customer_name}}</a></li>
+                        <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign in</a></li>
                         <li class="nav-item">
                             <a class="cart-btn cart-link" href="#">
                             <span class="fa fa-cart-plus fa-2x "></span>
@@ -188,7 +224,8 @@
                                     <span class="food-name">{{food.name}}<br>
                                     {{food.price}}tk
                                     </span>
-                                    <button class="button add_cart" data-target="#reserve{{food.id}}" data-toggle="modal" role="button">
+                                    <!--<button class="button add_cart" data-target="#loginModal" data-toggle="modal" role="button">-->
+                                    <button class="button add_cart" role="button">
                                     </button>
                                     <!--script for modal-->
                                     <script type="text/javascript">

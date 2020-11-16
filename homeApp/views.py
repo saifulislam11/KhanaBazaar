@@ -16,6 +16,7 @@ print("Connected!")
 c = con.cursor()
 # Create your views here.
 def index(request):
+    c = con.cursor()
     c.execute('select * from RESTAURANT')
     dict_result = []
     for row in c:
@@ -35,14 +36,33 @@ def index(request):
             list2.append(dict_result[i])
         else:
             list3.append(dict_result[i])
+    c.close()
     
+
+    #-------------logout--------------#
+    if request.method =='GET':
+        print('get method')
+        if 'action' in request.GET:
+            action = request.GET.get('action')
+            if action == 'logout':
+                print('action logout')
+                if request.session.has_key('first_name'):
+                    print('has key in session')
+                    request.session.flush()
+                    return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':'None'})
+    if not request.session.is_empty():
+        print('has session while in index')
+        if 'first_name' in request.session:
+            first_name = request.session['first_name']
+        return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer_name':first_name})
 
 	# connection.commit()
 	# cursor.close()
-    return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3})
+    return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':'None'})
 
 #--------------------------after sign in --------------------------#
 def homepage(request):
+    c = con.cursor()
     c.execute('select * from RESTAURANT')
     dict_result = []
     for row in c:
@@ -68,8 +88,10 @@ def homepage(request):
 	# cursor.close()
     #----------------sign in----------------#
     if not request.session.is_empty():
-        print('dunno')
-        return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3})
+        print('has session')
+        if 'first_name' in request.session:
+            first_name = request.session['first_name']
+        return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer_name':first_name})
     if request.method == 'POST':
         #------------------sign up-------------#
         firstname = request.POST.get('firstname')
@@ -99,8 +121,22 @@ def homepage(request):
 
             #print(firstname+lastname+address)
             print(to_execute)
-            sql.execute(to_execute)
-            return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
+            try:
+                sql.execute(to_execute)
+                contex = 'registered successfully'
+                return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':contex})
+            
+            except:
+                print("Something is not right. And why rollback is not working.")
+                sql.rollback()
+                #messages.info(request, "adding of foodman was unsuccessfull")
+                return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':'something went wrong.try again'})
+
+            finally:
+                c.close()
+                sql.commit()
+                
+            #return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
         if lastname == None :
             #---------------------sign up--------------------#
             c.close()
@@ -124,7 +160,7 @@ def homepage(request):
 
             if customer is None:
                 print('no customer found')
-                return render(request, 'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3})
+                return render(request, 'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':'None'})
             else:
                 print('We need to do something')
                 id = customer[0]
@@ -142,8 +178,8 @@ def homepage(request):
             return redirect('/homepage')
     else:
         print('couldnt fetch post method')
-        return render(request, 'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3})
-    #c.close()
+        return render(request, 'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':'None'})
+    c.close()
     #---------------------end of sign in ------------------#
 
 
@@ -199,6 +235,7 @@ def contactus(request):
     return render(request,'homeApp/contactus.html')
 #payment method
 def payment(request):
+    c = con.cursor()
     price=request.POST.get('price')
     foods = request.POST.get('foods')
     prices = request.POST.get('prices')
@@ -245,16 +282,23 @@ def payment(request):
         dic={'food':food,'price':amount,'count':count}
         cart_dic.append(dic)
     print(cart_dic)
+    c.close()
 
     
     return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic})
 
 def restaurant(request):
+    c = con.cursor()
     c.execute('select * from RESTAURANT')
     query=None
     results=None
+    email = None
+    password = None
     if request.method == 'POST':
         query = request.POST.get('restaurant')
+        email = request.POST['email']
+        password = request.POST['password']
+        print('chole')
         
         print(query)
         test=0
@@ -274,12 +318,13 @@ def restaurant(request):
                 #print(row[3])
         print(test)
         if test==0:
+            c.close()
             return render(request,'homeApp/restaurant.html',{'path':None})
         else:
             print(type(id))
             print(id)
-            sql="select * from FOOD_ITEM WHERE RESTAURANT_ID = %s" % id
-            c.execute(sql)
+            command="select * from FOOD_ITEM WHERE RESTAURANT_ID = %s" % id
+            c.execute(command)
             foods=c.fetchall()
             
             dict_result = []
@@ -287,8 +332,8 @@ def restaurant(request):
             for row in foods:
                 id=row[0]
                 id=str(id)
-                sql="select * from FOOD_ITEM_PATH WHERE ID = %s" % id
-                c.execute(sql)
+                command="select * from FOOD_ITEM_PATH WHERE ID = %s" % id
+                c.execute(command)
                 food_path=c.fetchall()
                 path=None
                 for r in food_path:
@@ -302,8 +347,52 @@ def restaurant(request):
                 dict_result.append(dic)
             types_set=set(types)
             unique_types= list(types_set)
+            c.close()
+            if not request.session.is_empty():
+                print('has session')
+                if 'first_name' in request.session:
+                    first_name = request.session['first_name']
+                return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name})
+            elif email =="None" or password == "None" :
+                return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+            else:
+                print(email+' '+password)
+                #c.close()
+                connect = sql.create_cursor()
+                password = get_hashed_value(password)
+                print(email, password)
+                to_execute = "Select * From CUSTOMER Where EMAIL = {email} " \
+                            "and PASSWORD_HASH = {password}"
+                to_execute = to_execute.format(
+                    email=wrap_with_in_single_quote(email),
+                    password=wrap_with_in_single_quote(password)
+                )
+                connect.execute(to_execute)
+                customer = connect.fetchone()
+                connect.close()
+                '''customer = list(customer)
+                print(customer)'''
+                
 
-            return render(request,'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types})
+                if customer is None:
+                    print('no customer found')
+                    return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+                else:
+                    print('We need to do something')
+                    id = customer[0]
+                    last_name = customer[1]
+                    first_name = customer[2]
+                    request.session['id'] = id
+                    request.session['last_name'] = last_name
+                    request.session['first_name'] = first_name
+                    request.session['email'] = email
+                    #info = id + ' ' +firstname +' '+lastname+' '+email
+                    #customer_info= info.split(' ')
+
+                    return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name})
+                #return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+
+
 
 
     

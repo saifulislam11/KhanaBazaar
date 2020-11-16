@@ -33,11 +33,10 @@
                 <span>KHANABAZAAR</span></a>
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'homeApp:homepage' %}"><span class="fa fa-home fa-lg"></span> Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:aboutus' %}"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:contactus' %}"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign out</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:index' %}?action=logout" role="button" id="login"><span class="fa fa-sign-in"></span> Sign out</a></li>
                     <li class="nav-item"><a class="nav-link" id="customer_name"><i class="fa fa-user"></i> {{customer_name}}</a></li>
                 </ul>
                 <!--modal button-->
@@ -175,6 +174,8 @@
         <div class="row restaurant-search-row-header">
             <form action="{% url 'homeApp:restaurant' %}" class="form-inline" method="POST">
                 {% csrf_token %}
+                <input type="text" name="email" class="form-control" id="" value="None" hidden>
+                <input type="text" name="password" class="form-control" id="" value="None" hidden>
                 <div class="d-flex justify-content-center h-100">
                     <div class="searchbar">
                     <input class="search_input" type="text" name="restaurant" id="" placeholder="Search...">
