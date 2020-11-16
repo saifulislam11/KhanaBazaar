@@ -59,10 +59,10 @@
 }
 @keyframes zoomInOut{
 	0%,100%{
-		transform: scale(0.9);
+		transform: scale(0.92);
 	}
 	50%{
-		transform: scale(1.02);
+		transform: scale(1);
 	}
 }
 .login-popup .box .form{

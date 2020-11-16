@@ -283,9 +283,16 @@ def payment(request):
         cart_dic.append(dic)
     print(cart_dic)
     c.close()
+    #info from session
+    if 'first_name' in request.session:
+        first_name = request.session['first_name']
+    if 'id' in request.session:
+        customer_id = request.session['id']
+    
+
 
     
-    return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic})
+    return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic,'customer_name':first_name})
 
 def restaurant(request):
     c = con.cursor()

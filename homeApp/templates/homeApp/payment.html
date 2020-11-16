@@ -83,7 +83,8 @@
                         <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:aboutus' %}"><span class="fa fa-info fa-lg"></span> AboutUs</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:contactus' %}"><span class="fa fa-address-card fa-lg"></span> Contact</a></li>
-                        <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'homeApp:index' %}?action=logout" role="button" id="login"><span class="fa fa-sign-in"></span> Sign out</a></li>
+                        <li class="nav-item"><a class="nav-link" id="customer_name"><i class="fa fa-user"></i> {{customer_name}}</a></li>
                         <li class="nav-item">
                             <a class="Pcart-btn cart-link" href="#">
                             <span class="fa fa-cart-plus fa-2x "></span>
