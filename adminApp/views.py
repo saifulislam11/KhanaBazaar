@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.http import HttpResponseRedirect
 
-from khanabazaar.settings import IMAGE_PATH
+from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT
 from django.shortcuts import render, redirect
 from cx_Oracle import connect
 from helper.read_write_to_file import handle_uploaded_file
@@ -87,6 +87,7 @@ def add_restaurant(request):
         if logo is not None:
             logo_path = 'rest' + id + '.' + 'jpg'
             handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
+            handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
             #collectstatic()
         else:
             logo_path = 'rest0.jpg'  # we will use rest0 as a default restaurant pic
@@ -154,6 +155,7 @@ def add_food_man(request):
         if profile_img is not None:
             profile_img_path = 'foodman' + foodman_id + '.' + 'jpg'
             handle_uploaded_file(profile_img, profile_img_path, IMAGE_PATH + '/img/')
+            handle_uploaded_file(profile_img, profile_img_path, STATIC_ROOT + '/img/')
         else:
             profile_img_path = 'foodman0.jpg'
 
