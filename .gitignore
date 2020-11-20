@@ -1,4 +1,4 @@
 
-temp_sessions
-**/.idea
-**/__pycache__
+temp_sessions/
+**/.idea/
+**/__pycache__/
