@@ -22,7 +22,7 @@ def index(request):
         email = request.POST['email']
         password = request.POST['password']
         password = get_hashed_value(password)
-        print(email, password)
+        #print(email, password)
         c = sql.create_cursor()
         to_execute = "Select * From ADMIN Where EMAIL = {email} " \
                      "and PASSWORD_HASH = {password}"
@@ -35,7 +35,7 @@ def index(request):
         c.close()
 
         if admin is None:
-            return render(request, 'adminApp/signIn.html', context)
+            return render(request, 'adminApp/sign_in.html', context)
         else:
             # print('We need to do something')
             id = admin[0]
@@ -58,12 +58,12 @@ def index(request):
             if not request.session.is_empty():
                 request.session.flush()
                 print('logout ing')
-                return render(request, 'adminApp/signIn.html', context)
+                return render(request, 'adminApp/sign_in.html', context)
         if not request.session.is_empty():
             context['user_name'] = request.session.get('last_name')
             return render(request, 'adminApp/index.html', context)
         else:
-            return render(request, 'adminApp/signIn.html', context)
+            return render(request, 'adminApp/sign_in.html', context)
 
 
 def add_restaurant(request):
@@ -105,8 +105,8 @@ def add_restaurant(request):
             email=wrap_with_in_single_quote(email),
             password_hash=wrap_with_in_single_quote(password1)
         )
-        print(wrap_with_in_single_quote(email))
-        print(to_execute)
+        #print(wrap_with_in_single_quote(email))
+        #print(to_execute)
         sql.execute(to_execute)
 
         # Now adding into relation manages
