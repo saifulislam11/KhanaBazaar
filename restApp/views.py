@@ -23,12 +23,38 @@ def index(request):
             password=wrap_with_in_single_quote(password)
         )
         c.execute(to_execute)
-        foodman = c.fetchone()
+        rest = c.fetchone()
         c.close()
-        if foodman is None:
+        if rest is None:
             messages.info(request, 'Please provide correct information')
             return render(request, 'restApp/sign_in.html', context)
         else:
-            pass
+            id = rest[0]
+            name = rest[1]
+            email = rest[7]
+            # password = rest[8]
+            request.session['id'] = id
+            request.session['user_name'] = name
+            request.session['email'] = email
+            context['user_name'] = request.session.get('user_name')
+            return render(request, 'restApp/index.html', context)
 
+    elif request.method == 'GET':
+        action = request.GET.get('action')
+        if action == 'logout':
+            request.session.flush()
+            print('log out ing')
+            return render(request, 'restApp/sign_in.html', context)
+        return render(request, 'restApp/sign_in.html', context)
+
+    return render(request, 'restApp/sign_in.html', context)
+
+
+def add_food(request):
+    context = {}
+    return render(request, 'restApp/sign_in.html', context)
+
+
+def edit_food(request):
+    context = {}
     return render(request, 'restApp/sign_in.html', context)
