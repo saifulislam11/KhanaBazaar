@@ -23,6 +23,6 @@ urlpatterns = [
     path('admin/', include("adminApp.urls")),
     path('', include("homeApp.urls")),
     path('rest/', include("restApp.urls")),
-    path('foodman', include("foodmanApp")),
+    path('foodman/', include("foodmanApp.urls")),
 ]
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
