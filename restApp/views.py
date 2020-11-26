@@ -164,7 +164,29 @@ def update_time(request):
                                        close_time=wrap_with_in_single_quote(close_time))
         sql.execute(to_execute)
         rest = fetch_all.restaurant(rest_id)
-        print(rest)
+        # print(rest)
         context.update(rest)
         messages.info(request, 'Update Done !!!')
         return render(request, 'restApp/update_time.html', context)
+
+
+def update_logo(request):
+    context = {}
+    if request.session.is_empty():
+        return render(request, 'restApp/sign_in.html', context)
+    rest_id = request.session.get('id')
+    if request.method == 'GET':
+        rest = fetch_all.restaurant(rest_id)
+        context.update(rest)
+        return render(request, 'restApp/update_logo.html', context)
+    elif request.method == 'POST':
+        logo = request.FILES.get('restaurantLogo')
+        if logo is not None:
+            logo_path = 'rest' + rest_id + '.' + 'jpg'
+            handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
+            handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
+        rest = fetch_all.restaurant(rest_id)
+        print(rest)
+        context.update(rest)
+        messages.info(request, 'Succcessfully updated LOGO !!!')
+        return render(request, 'restApp/update_logo.html', context)
