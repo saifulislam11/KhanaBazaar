@@ -81,6 +81,31 @@ def food_item_path(food_id):
     return ret_val
 
 
+def restaurant(rest_id):
+    '''
+    returns all details about a restaurant
+    except email or password
+    :param rest_id:
+    :return:
+    '''
+    cursor = sql.create_cursor()
+    to_execute = "SELECT * FROM RESTAURANT WHERE ID = {id}"
+    to_execute = to_execute.format(id=wrap_with_in_single_quote(rest_id))
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    cursor.close()
+    rest = {}
+    rest['id'] = rest_id  # or may be row[0]
+    rest['name'] = row[1]
+    rest['location'] = row[2]
+    rest['logo_path'] = row[3]
+    rest['rating'] = row[4]
+    rest['open_time'] = row[5]
+    rest['close_time'] = row[6]
+
+    return rest
+
+
 if __name__ == '__main__':
     foods = food_item_all('1000000152')
     print(foods)
