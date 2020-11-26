@@ -634,4 +634,9 @@
   .flickity-prev-next-button.next {
     right: -40px;
   }
+  /*-----------------------payment pop up-----------------------*/
+  .payment-heading
+  {
+    margin-left: 100px;
+  }
     

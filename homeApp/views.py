@@ -287,12 +287,17 @@ def payment(request):
     if 'first_name' in request.session:
         first_name = request.session['first_name']
     if 'id' in request.session:
-        customer_id = request.session['id']
+        id = request.session['id']
+    if 'last_name' in request.session:
+        last_name = request.session['last_name']
+    if 'email' in request.session:
+        email = request.session['email']
+
     
 
 
     
-    return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic,'customer_name':first_name})
+    return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic,'customer_name':first_name,'last_name':last_name,'email':email})
 
 def restaurant(request):
     c = con.cursor()
@@ -359,7 +364,15 @@ def restaurant(request):
                 print('has session')
                 if 'first_name' in request.session:
                     first_name = request.session['first_name']
-                return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name})
+                if 'id' in request.session:
+                    id = request.session['id']
+                if 'last_name' in request.session:
+                    last_name = request.session['last_name']
+                if 'email' in request.session:
+                    email = request.session['email']
+                customer_dict = {'id':id,'last_name':last_name,'first_name':first_name,'email':email}
+                print(customer_dict)
+                return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name,'customer_dic':customer_dict})
             elif email =="None" or password == "None" :
                 return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
             else:
@@ -389,6 +402,10 @@ def restaurant(request):
                     id = customer[0]
                     last_name = customer[1]
                     first_name = customer[2]
+                    email = customer[3]
+                    address = customer[5]
+                    customer_dict = {'id':id,'last_name':last_name,'first_name':first_name,'email':email,'address':address}
+                    print(customer_dict)
                     request.session['id'] = id
                     request.session['last_name'] = last_name
                     request.session['first_name'] = first_name
@@ -396,8 +413,20 @@ def restaurant(request):
                     #info = id + ' ' +firstname +' '+lastname+' '+email
                     #customer_info= info.split(' ')
 
-                    return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name})
+                    return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name,'customer_dic':customer_dict})
                 #return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+
+def confirm_payment(request):
+    if 'first_name' in request.session:
+        first_name = request.session['first_name']
+    if 'id' in request.session:
+        id = request.session['id']
+    if 'last_name' in request.session:
+        last_name = request.session['last_name']
+    if 'email' in request.session:
+        email = request.session['email']
+    return render(request,'homeApp/confirm_payment.html',{'customer_name':first_name})
+
 
 
 

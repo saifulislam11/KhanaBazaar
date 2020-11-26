@@ -1,0 +1,62 @@
+{% load static %}
+{% static 'homeApp/img' as baseURL %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>KHANABAZAAR/{{title}}</title>
+     <!-- Required meta tags always come first -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+     <meta http-equiv="x-ua-compatible" content="ie=edge">
+     <link rel="icon" type="image/png" href="{% static 'homeApp/img/khanabazaar.png' %}">
+     
+     <!--build:css css/main.css-->
+     <link rel="stylesheet" href="{% static 'homeApp/modules/font-awesome/css/font-awesome.min.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap-social/bootstrap-social.css' %}">
+     <!-- Bootstrap CSS -->
+     <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/css/confirm_pay.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/css/styles.css' %}">
+     <!--flickity-->
+     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+     <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
+     <script src="{% static 'homeApp/js/confirm_pay.js' %}" type="module" async></script>
+     <!--endbuild-->
+</head>
+
+<body data-spy="scroll" >
+      
+    
+    <div class="bg"></div>
+    <!--login popup-->
+    <div class="login-popup bg">
+        <div class="box">
+             <!--<div class="img-area">
+                 <div class="img">
+                 </div>
+                 -<h1>Your Logo</h1>
+             </div>-->
+             <div class="form">
+                 <h1>Thanks for the Order</h1>
+                 <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
+                 <a href="{% url 'homeApp:homepage' %}" role="button" class="btn">Go back to homepage</a>
+             </div>
+        </div>
+   </div>
+    <!--end of login popup-->
+    <!--end of login popup--> 
+        
+
+        
+
+        <!--end of cart overlay-->
+<!-- jQuery first, then Popper.js, then Bootstrap JS. -->
+     <!--build:js js/main.js-->
+     <script src="{% static 'homeApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+     <script src="{% static 'homeApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+     <script src="{% static 'homeApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+     <!--endbuild-->
+</body>
+</html>
