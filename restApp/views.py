@@ -143,6 +143,31 @@ def edit_particular_food(request):
             context = fetch_all.food_item(food_id=food_id, rest_id=rest_id)
 
             return render(request, 'restApp/edit_particular_food.html', context)
+    if request.method == 'POST':
+        food_id = request.POST.get('id')
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        offer = request.POST.get('offer')
+        description = request.POST.get('description')
+        Type = request.POST.get('type')
+
+        to_execute = "UPDATE FOOD_ITEM SET NAME={name},PRICE={price},OFFER={offer},DESCRIPTION={description},TYPE={type} " \
+                     "WHERE ID = {id} and RESTAURANT_ID ={rest_id}"
+        to_execute = to_execute.format(
+            name=wrap_with_in_single_quote(name),
+            price=price,
+            offer=offer,
+            description=wrap_with_in_single_quote(description),
+            type=wrap_with_in_single_quote(Type),
+            id=wrap_with_in_single_quote(food_id),
+            rest_id=wrap_with_in_single_quote(rest_id)
+        )
+        sql.execute(to_execute)
+        #print(to_execute)
+        rest = fetch_all.food_item(food_id, rest_id)
+        context.update(rest)
+        messages.info(request, "Successfully Updated")
+        return render(request, "restApp/edit_particular_food.html", context)
 
 
 def update_time(request):
@@ -159,9 +184,12 @@ def update_time(request):
         open_time = request.POST.get('openTime')
         close_time = request.POST.get('closeTime')
         cursor = sql.create_cursor()
-        to_execute = "UPDATE RESTAURANT SET OPEN_TIME = {open_time}, CLOSE_TIME= {close_time}"
-        to_execute = to_execute.format(open_time=wrap_with_in_single_quote(open_time),
-                                       close_time=wrap_with_in_single_quote(close_time))
+        to_execute = "UPDATE RESTAURANT SET OPEN_TIME = {open_time}, CLOSE_TIME= {close_time} WHERE ID ={id}"
+        to_execute = to_execute.format(
+            open_time=wrap_with_in_single_quote(open_time),
+            close_time=wrap_with_in_single_quote(close_time),
+            id=wrap_with_in_single_quote(rest_id)
+        )
         sql.execute(to_execute)
         rest = fetch_all.restaurant(rest_id)
         # print(rest)
