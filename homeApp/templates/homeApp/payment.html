@@ -17,6 +17,7 @@
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
      <link rel="stylesheet" href="{% static 'homeApp/css/payment.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/css/login_popup_pay.css' %}">
      <!--flickity-->
      <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
@@ -25,6 +26,41 @@
 </head>
 
 <body data-spy="scroll">
+    <!--login popup-->
+    <div class="login-popup">
+        <div class="box">
+             <div class="form">
+                 <div class="close">&times;</div>
+                 <form action="{% url 'homeApp:confirm_payment' %}" method="POST">
+                     {% csrf_token %}
+                     <h3 class="payment-heading">Payment</h3>
+                     <div class="img_pay">
+
+                     </div>
+                     <div class="gateway">
+
+                     </div>
+                     <!--<div class="form-group">
+                        <input type="text" name="restaurant" class="form-control" id="restaurant_pop" value="{{title}}" readonly>
+                     </div>
+                     <div class="form-group">
+                        <input type="email" name="email" class="form-control" id="loginemail_pop" placeholder="Enter email">
+                     </div>
+                     <div class="form-group">
+                        <input type="password" name="password" class="form-control" id="password_pop" placeholder="Password">
+                     </div>
+                     <div class="form-group">
+                         <label><input type="checkbox">
+                             Remember Me
+                         </label>
+                     </div>
+                     <button type="submit" id="submit_pop" class="btn">Log In</button>-->
+                    <button type="submit" id="submit_pop" class="btn">Confirm Checkout & Continue</button>
+                 </form>
+             </div>
+        </div>
+   </div>
+    <!--end of login popup-->
     <!--login modal-->
     <div id="loginModal" class="modal fade" role="dialog" >
         <div class="modal-dialog modal-md" role="content">
@@ -153,7 +189,7 @@
                         <div class="form-group row">
                             <label for="firstname" style="margin-top: 30px;" class="col-md-2 col-form-label ">First Name*</label>
                             <div class="col-md-5" style="margin-top: 30px;">
-                                <input type="text" class="form-control form-box" id="firstname" name="firstname" placeholder="First Name" required>
+                                <input type="text" class="form-control" id="firstname" name="firstname" value="{{customer_name}}" readonly>
                             </div>
                         </div>
 
@@ -161,7 +197,7 @@
                         <div class="form-group row">
                             <label for="lastname" class="col-md-2 col-form-label">Last Name*</label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control form-box" id="lastname" name="firstname" placeholder="Last Name" required>
+                                <input type="text" class="form-control " id="lastname" name="firstname" value="{{last_name}}" readonly >
                             </div>
 
                         </div>
@@ -181,20 +217,20 @@
                             </div>
                             <label for="email" class="col-md-2">E-mail</label>
                             <div class="col-md-3 form_pad">
-                                <input type="mail" class="form-control form-box" id="email" name="email" placeholder="E-mail">
+                                <input type="mail" class="form-control" id="email" name="email" value="{{email}}" readonly>
                             </div>
 
                         </div>
                             
                         <!--payment row-->
                         <div class="form-group row">
-                            <label for="payment_method" style="padding-left: 80px;" class="col-md-2 col-from-label" required>Payment Method*</label>   
+                            <label for="payment_method" style="padding-left: 80px;" class="col-md-2 col-from-label " required>Payment Method*</label>   
                             <div class="col-12 col-md-3">
-                                <select required>
-                                    <option>Bkash</option>
-                                    <option>Rocket</option>
-                                    <option>Credit Card</option>
-                                    <option>On Cash</option>
+                                <select required class="payment-method ">
+                                    <option value="Bkash">Bkash</option>
+                                    <option value="Rocket">Rocket</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="On cash">On Cash</option>
                                 </select>
                             </div> 
                             <label for="note" class="col-md-2 ">Your Total</label>
@@ -202,14 +238,14 @@
                                 <input class="form-control" type="text" id="total" name="total" value="{{price}}" readonly style="background-color: rgb(250, 11, 11); color:cornsilk;font-size:x-large;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
                             </div> 
                         </div>
-                        <!--feedback row-->
+                        <!--feedback row
                         <div class="form-group row">
                             <label for="feedback" class="col-md-2 col-form-label ">Your Feedback</label>
                             <div class="col-md-8 form_pad">
                                 <textarea class="form-control form-box" id="feedback" name="feedback" rows="10" ></textarea>
                             </div>
-                        </div>
-                        <!--review star-->
+                        </div>-->
+                        <!--review star
                         <div class="form-group row">
                             <label for="feedback" style="top:4px;" class="col-md-2 col-form-label ">Image Review</label>
                             <div class="col-md-3 ">
@@ -223,11 +259,11 @@
                                 <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
                                 <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
                             </div>
-                        </div>
+                        </div>-->
                         <!--submit-->
                         <div class="form-group row">
                             <div class="col-12 col-md-6 offset-md-2">
-                                <button class="btn btn-danger" type="submit" style="margin-bottom: 30px;">Confirm Order</button>
+                                <button class="btn btn-danger" role="button" type="button" id="confirm_order" style="margin-bottom: 30px;">Confirm Order</button>
                             </div>
     
                         </div>

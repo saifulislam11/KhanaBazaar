@@ -12,7 +12,8 @@ urlpatterns = [
     path("restaurant",views.restaurant,name="restaurant"),
     path("payment",views.payment,name="payment"),
     path("homepage",views.homepage,name="homepage"),
-    path("restaurant_log_in",views.restaurant,name="restaurant_log_in")
+    path("restaurant_log_in",views.restaurant,name="restaurant_log_in"),
+    path("confirm_payment",views.confirm_payment,name="confirm_payment")
 
     
 ]
