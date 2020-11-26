@@ -139,7 +139,32 @@ def edit_particular_food(request):
     if request.method == 'GET':
         food_id = request.GET.get('rest')
         if food_id is not None:
-            print('one is ', food_id)
+            # print('one is ', food_id)
             context = fetch_all.food_item(food_id=food_id, rest_id=rest_id)
 
             return render(request, 'restApp/edit_particular_food.html', context)
+
+
+def update_time(request):
+    context = {}
+    if request.session.is_empty():
+        return render(request, 'restApp/sign_in.html', context)
+    rest_id = request.session.get('id')
+    if request.method == 'GET':
+        rest = fetch_all.restaurant(rest_id)
+        print(rest)
+        context.update(rest)
+        return render(request, 'restApp/update_time.html', context)
+    elif request.method == 'POST':
+        open_time = request.POST.get('openTime')
+        close_time = request.POST.get('closeTime')
+        cursor = sql.create_cursor()
+        to_execute = "UPDATE RESTAURANT SET OPEN_TIME = {open_time}, CLOSE_TIME= {close_time}"
+        to_execute = to_execute.format(open_time=wrap_with_in_single_quote(open_time),
+                                       close_time=wrap_with_in_single_quote(close_time))
+        sql.execute(to_execute)
+        rest = fetch_all.restaurant(rest_id)
+        print(rest)
+        context.update(rest)
+        messages.info(request, 'Update Done !!!')
+        return render(request, 'restApp/update_time.html', context)

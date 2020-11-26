@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>KHANABAZAAR</title>
+    <title>KHANABAZAAR rest</title>
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -29,8 +29,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="{% static 'restApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
-                                              height="30">
+        <a class="navbar-brand" href="{% url 'restApp:index' %}"><img src="{% static 'restApp/img/khanabazaar.png' %}"
+                                                                      alt="LOGO" width="41" height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -41,15 +41,8 @@
                 <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
                 </li>
-
-                {#                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>#}
-                <li class="nav-item"><a class="nav-link" id="user_name"><i class="fa fa-user"></i> {{ user_name }}</a>
-                </li>
-
-                <li class="nav-item"><a class="nav-link" role="button" id="logout" type="submit"
-                                        href="{% url 'restApp:index' %}?action=logout"><span
-                        class="fa fa-sign-out"></span> Log out </a></li>
-
+                <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span>
+                    Sign In</a></li>
             </ul>
             <!--modal button-->
         </div>
@@ -86,28 +79,45 @@
     </div>
 </header>
 
-<div class="container  text-light bg-dark background">
-    <!--adding carousel-->
-    <a class="btn btn-block  btn-sm" role="button" id="add_food" href="{% url 'restApp:add_food' %} ">Add
-        Food</a>
-    <a class="btn btn-block  btn-sm" role="button" id="edit_food" href="{% url 'restApp:edit_food' %}">Edit
-        Food</a>
 
+<div class="container background">
+    {#    <div class="row row-content">#}
+    <h1 class="d-flex justify-content-center col-12">
+        Hello {{ name }} !!!
+        Wanna Edit time !!!
+    </h1>
+    <form action="." method="POST" class="offset-1" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row form-group">
+            <label for="openTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Open Time
+                : </label>
+            <div>
+                <input type="text" class="form-control" id="openTime" name="openTime" placeholder="openTime"
+                       value="{{ open_time }}">
+            </div>
+        </div>
+        <div class="row form-group">
+            <label for="closeTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Close Time
+                : </label>
+            <div>
+                <input type="text" class="form-control" id="closeTime" name="closeTime" placeholder="closeTime"
+                       value="{{ close_time }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" class="btn btn-primary" placeholder="submit">
 
-    <a class="btn btn-block  btn-sm" role="button" id="update_opening_closing" href="{% url 'restApp:update_time' %}">Update
-        opening and closing time</a>
-    <a class="btn btn-block  btn-sm" role="button" id="update_location">Update location </a>
-
-    <a class="btn btn-block  btn-sm" role="button" id="change_logo">Change Logo</a>
-
+            </div>
+        </div>
+    </form>
+    <div class="d-flex justify-content-center">
+        {% for message in messages %}
+            <h1>{{ message }}</h1>
+        {% endfor %}
+    </div>
 </div>
-
-<div class="row restaurant-search-row-header">
-    <div> request element incoming</div>
-    {#                {% for i in  request.session %}#}
-    {#                    <div> {{ i }}</div>#}
-    {#                {% endfor %}#}
-</div>
+{#</div>#}
 <!--restaurant 1st row-->
 
 
