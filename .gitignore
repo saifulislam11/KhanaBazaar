@@ -1,4 +1,8 @@
-
-temp_sessions
-**/.idea
-**/__pycache__
+static/
+assets/
+img/img/
+media/
+temp_sessions/
+**/.idea/
+**/__pycache__/
+**/migrations

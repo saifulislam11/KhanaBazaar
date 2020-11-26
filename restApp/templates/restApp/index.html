@@ -1,5 +1,5 @@
 {% load static %}
-{% static 'adminApp/img' as baseURL %}
+{% static 'img' as baseURL %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,14 +9,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{% static 'adminApp/img/khanabazaar.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'restApp/img/khanabazaar.png' %}">
 
     <!--build:css css/main.css-->
-    <link rel="stylesheet" href="{% static 'adminApp/modules/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap-social/bootstrap-social.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap-social/bootstrap-social.css' %}">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'adminApp/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/css/styles.css' %}">
     <!--flickity-->
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
@@ -29,7 +29,7 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="{% static 'adminApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
+        <a class="navbar-brand" href="#"><img src="{% static 'restApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
                                               height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
@@ -47,7 +47,7 @@
                 </li>
 
                 <li class="nav-item"><a class="nav-link" role="button" id="logout" type="submit"
-                                        href="{% url 'adminApp:index' %}?action=logout"><span
+                                        href="{% url 'restApp:index' %}?action=logout"><span
                         class="fa fa-sign-out"></span> Log out </a></li>
 
             </ul>
@@ -71,7 +71,7 @@
                     lipsmacking creations will tickle your culinary senses!</p>
             </div>
             <div class="col-12 col-sm-3 mt-0">
-                <img src="{% static 'adminApp/img/khanabazaar.png' %}" class="img-fluid">
+                <img src="{% static 'restApp/img/khanabazaar.png' %}" class="img-fluid">
             </div>
             <div class="col-12 col-sm-3 align-self-center">
                 <!--adding tooltip
@@ -88,19 +88,16 @@
 
 <div class="container  text-light bg-dark background">
     <!--adding carousel-->
-    <a class="btn btn-block  btn-sm" role="button" id="add_restaurant" href="{% url 'adminApp:add_restaurant' %} ">Add
-        Restaurant</a>
-    <a class="btn btn-block  btn-sm" role="button" id="edit_restaurant" href="{% url 'adminApp:edit_restaurant' %}">Edit Restaurant</a>
-    <div>
-        <a class="btn btn-block  btn-sm" role="button" id="create_promo" href="{% url 'adminApp:create_promo' %}">Create
-            Promo</a>
-    </div>
+    <a class="btn btn-block  btn-sm" role="button" id="add_food" href="{% url 'restApp:add_food' %} ">Add
+        Food</a>
+    <a class="btn btn-block  btn-sm" role="button" id="edit_food" href="{% url 'restApp:edit_food' %}">Edit
+        Food</a>
 
-    <a class="btn btn-block  btn-sm" role="button" id="offerPromo">Offer Promo to Customer</a>
-    <a class="btn btn-block  btn-sm" role="button" id="suspendCustomer">Suspend Customer</a>
-    <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" href="{% url 'adminApp:add_foodman' %}">Add
-        FoodMan</a>
-    <a class="btn btn-block  btn-sm" role="button" id="removeFoodMan">Delete FoodMan</a>
+
+    <a class="btn btn-block  btn-sm" role="button" id="update_opening_closing">Update opening and closing time</a>
+    <a class="btn btn-block  btn-sm" role="button" id="update_location">Update location </a>
+
+    <a class="btn btn-block  btn-sm" role="button" id="change_logo">Change Logo</a>
 
 </div>
 
@@ -163,11 +160,11 @@
 </footer>
 <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
 <!--build:js js/main.js-->
-<script src="{% static 'adminApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
-<script src="{% static 'adminApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
-<script src="{% static 'adminApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'adminApp/js/scripts.js' %}"></script>
-<script src="{% static 'adminApp/js/form.js' %}"></script>
+<script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'restApp/js/scripts.js' %}"></script>
+<script src="{% static 'restApp/js/form.js' %}"></script>
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 
