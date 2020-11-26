@@ -94,6 +94,12 @@ body, html {
 	margin:0 0 30px;
 	padding-left: 260px;
 }
+.login-popup .box .form h2{
+	color:#000000;
+	font-size: 30px;
+	margin:0 0 20px;
+	padding-left: 140px;
+}
 .login-popup .box .form .tick{
 	padding-left: 360px;
 	color: #E91E63;

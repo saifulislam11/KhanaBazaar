@@ -9,6 +9,8 @@ def wrap_with_in_single_quote(s):
     :return: the desired single quoted version
     """
     return "'{}'".format(s)
+def wrap_with_in_null_quote(s):
+    return "{}".format(s)
 
 
 def get_hashed_value(password):

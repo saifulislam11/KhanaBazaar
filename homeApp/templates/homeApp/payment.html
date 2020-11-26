@@ -56,6 +56,9 @@
                      </div>
                      <button type="submit" id="submit_pop" class="btn">Log In</button>-->
                     <button type="submit" id="submit_pop" class="btn">Confirm Checkout & Continue</button>
+                    <input class="form-control" type="text" id="order_price" name="order_price" value="{{price}}" hidden>
+                    <input class="form-control" type="text" id="delivery_type" name="delivery_type" hidden>
+                    <input class="form-control" type="text" id="delivery_address" name="delivery_address" hidden>
                  </form>
              </div>
         </div>
@@ -206,7 +209,7 @@
                         <div class="form-group row">
                             <label for="address" class="col-12 col-md-2 col-form-label">Address*</label>
                             <div class="col-12 col-md-8">
-                                <input type="address" class="form-control form-box" id="address" name="address" placeholder="Address" required>
+                                <input type="address" class="form-control form-box del-address" id="address" name="address" placeholder="Address" required>
                             </div>
                         </div>
                         <!--telno,email row-->

@@ -11,6 +11,7 @@ from helper.read_write_to_file import handle_uploaded_file
 from helper.sql import get_next_id
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
 from helper import sql
+from datetime import datetime,timedelta
 con = cx_Oracle.connect("KB", "123", "localhost/orcl")
 print("Connected!")
 c = con.cursor()
@@ -97,6 +98,7 @@ def homepage(request):
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
         email_log = request.POST.get('email')
+        phone = request.POST.get('phone')
         password1 = request.POST.get('password')
         password1 = get_hashed_value(password1)
         password2 = request.POST.get('confirmpassword')
@@ -106,6 +108,12 @@ def homepage(request):
         if (firstname != None and lastname!=None and email_log!=None) :
             to_execute = "INSERT INTO CUSTOMER(ID,LAST_NAME,FIRST_NAME,EMAIL,PASSWORD_HASH,ADDRESS)" \
                         " VALUES({id}, {lastname}, {firstname}, {email}, {password_hash}, {address}) "
+            to_execute_phone = "INSERT INTO CUSTOMER_PHONE(CUSTOMER_ID,PHONE_NO)" \
+                        " VALUES({id}, {phone}) "
+            to_execute_phone = to_execute_phone.format(
+                id=wrap_with_in_single_quote(id),
+                phone = wrap_with_in_single_quote(phone)
+            )
             to_execute = to_execute.format(
                 id=wrap_with_in_single_quote(id),
                 firstname=wrap_with_in_single_quote(firstname),
@@ -123,6 +131,7 @@ def homepage(request):
             print(to_execute)
             try:
                 sql.execute(to_execute)
+                sql.execute(to_execute_phone)
                 contex = 'registered successfully'
                 return render(request,'homeApp/index.html',{'list1':list1,'list2':list2,'list3':list3,'contex':contex})
             
@@ -417,6 +426,7 @@ def restaurant(request):
                 #return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
 
 def confirm_payment(request):
+    c = con.cursor()
     if 'first_name' in request.session:
         first_name = request.session['first_name']
     if 'id' in request.session:
@@ -425,6 +435,50 @@ def confirm_payment(request):
         last_name = request.session['last_name']
     if 'email' in request.session:
         email = request.session['email']
+    if request.method == 'POST':
+        order_price = request.POST.get('order_price')
+        delivery_type = request.POST.get('delivery_type')
+        delivery_location = request.POST.get('delivery_address')
+        print(order_price+' '+delivery_location+' '+delivery_type)
+        now = datetime.now()
+        order_time = now.strftime("%d/%m/%Y %H:%M:%S")
+        print(order_time)
+        delivery_time = now + timedelta(hours=2)
+        delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
+        print(delivery_time)
+        id = get_next_id()
+        table_name ='"' + "ORDER"+ '"'
+        print(table_name)
+        to_execute = "INSERT INTO {table_name}(ID,ORDER_TIME,DELIVERY_TIME,DELIVERY_LOCATION)" \
+                        " VALUES({id}, to_date({order_time},'DD/MM/YYYY HH:MI:SS'), to_date({delivery_time},'DD/MM/YYYY HH:MI:SS'), {delivery_location}) "
+        to_execute = to_execute.format(
+            table_name = "{}".format(table_name),
+            id=wrap_with_in_single_quote(id),
+            order_time=wrap_with_in_single_quote(order_time),
+            delivery_time=wrap_with_in_single_quote(delivery_time),
+            delivery_location=wrap_with_in_single_quote(delivery_location)
+        )
+        
+        info = id + ' ' +delivery_time +' '+order_time+' '+delivery_location
+        order_info= info.split(' ')
+        print(order_info)
+
+        #print(firstname+lastname+address)
+        print(to_execute)
+        try:
+            sql.execute(to_execute)
+            contex = 'ordered successfully'
+            return render(request,'homeApp/confirm_payment.html',{'customer_name':first_name})
+        
+        except:
+            print("Something is not right. And why rollback is not working.")
+            sql.rollback()
+            #messages.info(request, "adding of foodman was unsuccessfull")
+            return render(request,'homeApp/confirm_payment.html',{'customer_name':first_name})
+
+        finally:
+            c.close()
+            sql.commit()
     return render(request,'homeApp/confirm_payment.html',{'customer_name':first_name})
 
 
