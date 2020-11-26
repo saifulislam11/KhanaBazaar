@@ -1,0 +1,162 @@
+{% load static %}
+{% static 'img' as baseURL %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>KHANABAZAAR rest</title>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="{% static 'restApp/img/khanabazaar.png' %}">
+
+    <!--build:css css/main.css-->
+    <link rel="stylesheet" href="{% static 'restApp/modules/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap-social/bootstrap-social.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/css/styles.css' %}">
+    <!--flickity-->
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <!--endbuild-->
+</head>
+
+<body class="background" data-spy="scroll">
+<nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
+    <div class="container">
+        <!--responsive navbar-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'restApp:index' %}"><img src="{% static 'restApp/img/khanabazaar.png' %}"
+                                                                      alt="LOGO" width="41" height="30">
+            <span>KHANABAZAAR</span></a>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span>
+                    Sign In</a></li>
+            </ul>
+            <!--modal button-->
+        </div>
+
+
+    </div>
+
+</nav>
+
+
+<header class="jumbotron">
+    <div class="container header-content">
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <div class="title">
+                    <h1 class="ml-0">🅺🅷🅰🅽🅰🅱🅰🆉🅰🅰🆁</h1>
+                </div>
+                <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our
+                    lipsmacking creations will tickle your culinary senses!</p>
+            </div>
+            <div class="col-12 col-sm-3 mt-0">
+                <img src="{% static 'restApp/img/khanabazaar.png' %}" class="img-fluid">
+            </div>
+            <div class="col-12 col-sm-3 align-self-center">
+                <!--adding tooltip
+                <a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button"
+                data-toggle="tooltip" data-html="true"
+                title="or call at<br> +01710100921" data-placement="bottom">Reserve Table</a>-->
+                <!--<a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button" id="reservetable" >Reserve Table</a>-->
+
+
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<div class="container background">
+    <div class="row row-content">
+        <h1 class="col-12">
+            Edit {{ name }} !!!
+        </h1>
+        <div>Construction is being done...</div>
+    </div>
+</div>
+<!--restaurant 1st row-->
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-4 col-sm-2">
+                <h5>Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Menu</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-7 col-sm-5">
+                <h5>Our Address</h5>
+                <address>
+                    121, Clear Water Bay Road<br>
+                    Clear Water Bay, Kowloon<br>
+                    HONG KONG<br>
+                    <i class="fa fa-phone fa-lg"></i> Tel.: +852 1234 5678<br>
+                    <i class="fa fa-fax fa-lg"></i> Fax: +852 8765 4321<br>
+                    <i class="fa fa-envelope fa-lg"></i> Email: <a
+                        href="mailto:confusion@food.net">confusion@food.net</a>
+                </address>
+            </div>
+            <!--col aligning vertically center-->
+            <div class="col-12 col-sm-4 align-self-center">
+                <div>
+                    <a class="btn btn-social-icon btn-google" href="http://google.com/+"><i
+                            class="fa fa-google fa-lg"></i> Google+</a>
+                    <a class="btn btn-social-icon btn-facebook" href="http://www.facebook.com/profile.php?id="><i
+                            class="fa fa-facebook fa-lg"></i> Facebook</a>
+                    <a class="btn btn-social-icon btn-linkedin" href="http://www.linkedin.com/in/"><i
+                            class="fa fa-linkedin fa-lg"></i> LinkedIn</a>
+                    <a class="btn btn-social-icon btn-twitter" href="http://twitter.com/"><i
+                            class="fa fa-twitter fa-lg"></i> Twitter</a>
+                    <a class="btn btn-social-icon btn-google" href="http://youtube.com/"><i
+                            class="fa fa-youtube fa-lg"></i> YouTube</a>
+                    <a class="btn btn-social-icon" href="mailto:"><i class="fa fa-envelope-o fa-lg"></i> Mail</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-auto">
+                <p>© Copyright 2018 Ristorante Con Fusion</p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- jQuery first, then Popper.js, then Bootstrap JS. -->
+<!--build:js js/main.js-->
+<script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'restApp/js/scripts.js' %}"></script>
+<script src="{% static 'restApp/js/form.js' %}"></script>
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<!--endbuild-->
+
+<!--tootip function
+<script>
+   $(function () {
+       $('[data-toggle="tooltip"]').tooltip()
+     })
+</script>-->
+
+</body>
+
+
+</html>

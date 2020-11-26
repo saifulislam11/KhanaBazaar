@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render
 
-from helper import sql
+from helper import sql, fetch_all
 from helper.read_write_to_file import handle_uploaded_file
 from helper.wrap_and_encode import get_hashed_value, wrap_with_in_single_quote
 # Create your views here.
@@ -121,4 +121,25 @@ def add_food(request):
 
 def edit_food(request):
     context = {}
-    return render(request, 'restApp/sign_in.html', context)
+    if request.method == 'GET':
+
+        if not request.session.is_empty():
+            rest_id = request.session.get('id')
+            context['foods'] = fetch_all.food_item_all(rest_id)
+            return render(request, 'restApp/edit_food.html', context)
+
+    return render(request, 'restApp/edit_food.html', context)
+
+
+def edit_particular_food(request):
+    context = {}
+    if request.session.is_empty():
+        return render(request, 'restApp/sign_in.html', context)
+    rest_id = request.session.get('id')
+    if request.method == 'GET':
+        food_id = request.GET.get('rest')
+        if food_id is not None:
+            print('one is ', food_id)
+            context = fetch_all.food_item(food_id=food_id, rest_id=rest_id)
+
+            return render(request, 'restApp/edit_particular_food.html', context)
