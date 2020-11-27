@@ -1,22 +1,22 @@
 {% load static %}
-{% static 'adminApp/img' as baseURL %}
+{% static 'img' as baseURL %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>KHANABAZAAR</title>
+    <title>KHANABAZAAR rest</title>
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{% static 'adminApp/img/khanabazaar.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'restApp/img/khanabazaar.png' %}">
 
     <!--build:css css/main.css-->
-    <link rel="stylesheet" href="{% static 'adminApp/modules/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap-social/bootstrap-social.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap-social/bootstrap-social.css' %}">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'adminApp/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/css/styles.css' %}">
     <!--flickity-->
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
@@ -29,8 +29,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="{% static 'adminApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
-                                              height="30">
+        <a class="navbar-brand" href="{% url 'restApp:index' %}"><img src="{% static 'restApp/img/khanabazaar.png' %}"
+                                                                      alt="LOGO" width="41" height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -41,15 +41,8 @@
                 <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
                 </li>
-
-                {#                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>#}
-                <li class="nav-item"><a class="nav-link" id="user_name"><i class="fa fa-user"></i> {{ user_name }}</a>
-                </li>
-
-                <li class="nav-item"><a class="nav-link" role="button" id="logout" type="submit"
-                                        href="{% url 'adminApp:index' %}?action=logout"><span
-                        class="fa fa-sign-out"></span> Log out </a></li>
-
+                <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span>
+                    Sign In</a></li>
             </ul>
             <!--modal button-->
         </div>
@@ -71,7 +64,7 @@
                     lipsmacking creations will tickle your culinary senses!</p>
             </div>
             <div class="col-12 col-sm-3 mt-0">
-                <img src="{% static 'adminApp/img/khanabazaar.png' %}" class="img-fluid">
+                <img src="{% static 'restApp/img/khanabazaar.png' %}" class="img-fluid">
             </div>
             <div class="col-12 col-sm-3 align-self-center">
                 <!--adding tooltip
@@ -86,30 +79,100 @@
     </div>
 </header>
 
-<div class="container  text-light bg-dark background">
-    <!--adding carousel-->
-    <a class="btn btn-block  btn-sm" role="button" id="add_restaurant" href="{% url 'adminApp:add_restaurant' %} ">Add
-        Restaurant</a>
-    <a class="btn btn-block  btn-sm" role="button" id="edit_restaurant" href="{% url 'adminApp:edit_restaurant' %}">Edit Restaurant</a>
-    <div>
-        <a class="btn btn-block  btn-sm" role="button" id="create_promo" href="{% url 'adminApp:create_promo' %}">Create
-            Promo</a>
+
+{#<div class="container background">#}
+{#    <div class="row row-content">#}
+{#        <h1 class="col-12">#}
+{#            Edit {{ name }} !!!#}
+{#        </h1>#}
+{#        <div>Construction is being done...</div>#}
+{#    </div>#}
+{#</div>#}
+
+<div class="container background">
+    <h1 class="d-flex justify-content-center">Edit {{ name }}</h1>
+    <form action="." method="POST" class="offset-1" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row form-group">
+            <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
+            <div>
+                <input type="text" class="form-control" id="name" name="name" placeholder="name" value="{{ name }}">
+            </div>
+        </div>
+
+        <div class="row form-group d-none">
+            <label for="id" class="col-md-2 col-form-label bg-info d-flex justify-content-center">id : </label>
+            <div>
+                <input type="text" class="form-control" id="id" name="id" placeholder="id" value="{{ id }}">
+            </div>
+        </div>
+
+
+        {#        <div class="row form-group">#}
+        {#            <label for="food_image" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Restaurant#}
+        {#                Image : </label>#}
+        {#            <div>#}
+        {#                <input type="file" class="form-control" id="food_image"#}
+        {#                       name="food_image" placeholder="choose image" accept="image/png, image/jpg, image/jpeg"#}
+        {#                       enctype="multipart/form-data">#}
+        {#            </div>#}
+        {##}
+        {#        </div>#}
+
+
+        <div class="row form-group">
+            <label for="price" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Price
+                : </label>
+            <div>
+                <input type="text" class="form-control" id="price" name="price" placeholder="price" value="{{ price }}">
+            </div>
+        </div>
+
+
+        <div class="row form-group">
+            <label for="offer" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Offer
+                : </label>
+            <div>
+                <input type="text" class="form-control" id="offer" name="offer" placeholder="price" value="{{ offer }}">
+            </div>
+
+        </div>
+
+        <h3> Availibility radio button deoya hobe </h3>
+
+        <div class="row form-group">
+            <label for="type" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Type
+                : </label>
+            <div>
+                <input type="text" class="form-control" id="type" name="type" placeholder="burger" value="{{ type }}">
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label for="description" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Description
+                : </label>
+            <div>
+                <input type="text" class="form-control" id="description" name="description" placeholder="description"
+                       value="{{ description }}">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
+                <input type="submit" class="btn btn-primary" placeholder="submit">
+
+            </div>
+        </div>
+
+
+    </form>
+    <div class="d-flex justify-content-center">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
     </div>
-
-    <a class="btn btn-block  btn-sm" role="button" id="offerPromo">Offer Promo to Customer</a>
-    <a class="btn btn-block  btn-sm" role="button" id="suspendCustomer">Suspend Customer</a>
-    <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" href="{% url 'adminApp:add_foodman' %}">Add
-        FoodMan</a>
-    <a class="btn btn-block  btn-sm" role="button" id="removeFoodMan">Delete FoodMan</a>
-
 </div>
 
-<div class="row restaurant-search-row-header">
-    <div> request element incoming</div>
-    {#                {% for i in  request.session %}#}
-    {#                    <div> {{ i }}</div>#}
-    {#                {% endfor %}#}
-</div>
 <!--restaurant 1st row-->
 
 
@@ -163,11 +226,11 @@
 </footer>
 <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
 <!--build:js js/main.js-->
-<script src="{% static 'adminApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
-<script src="{% static 'adminApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
-<script src="{% static 'adminApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'adminApp/js/scripts.js' %}"></script>
-<script src="{% static 'adminApp/js/form.js' %}"></script>
+<script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'restApp/js/scripts.js' %}"></script>
+<script src="{% static 'restApp/js/form.js' %}"></script>
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 

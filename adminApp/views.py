@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.http import HttpResponseRedirect
 
-from khanabazaar.settings import MEDIA_URL, MEDIA_ROOT, STATIC_ROOT
+from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT
 from django.shortcuts import render, redirect
 from cx_Oracle import connect
 from helper.read_write_to_file import handle_uploaded_file
@@ -16,13 +16,13 @@ from helper import sql
 
 def index(request):
     context = {}
-    if not request.session.is_empty():
-        return render(request, 'adminApp/index.html', context)
+    return_value = None
+
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
         password = get_hashed_value(password)
-        print(email, password)
+        #print(email, password)
         c = sql.create_cursor()
         to_execute = "Select * From ADMIN Where EMAIL = {email} " \
                      "and PASSWORD_HASH = {password}"
@@ -35,9 +35,9 @@ def index(request):
         c.close()
 
         if admin is None:
-            return render(request, 'adminApp/signIn.html', context)
+            return render(request, 'adminApp/sign_in.html', context)
         else:
-            print('We need to do something')
+            # print('We need to do something')
             id = admin[0]
             last_name = admin[1]
             first_name = admin[2]
@@ -45,10 +45,25 @@ def index(request):
             request.session['last_name'] = last_name
             request.session['first_name'] = first_name
             request.session['email'] = email
-
+            context['user_name'] = last_name
             return render(request, 'adminApp/index.html', context)
-    else:
-        return render(request, 'adminApp/signIn.html', context)
+
+    elif request.method == 'GET':
+        action = request.GET.get('action')
+        #print('action is ' + str(action))
+        # if action is not None:
+        # request.GET.pop('action')
+
+        if action == 'logout':
+            if not request.session.is_empty():
+                request.session.flush()
+                print('logout ing')
+                return render(request, 'adminApp/sign_in.html', context)
+        if not request.session.is_empty():
+            context['user_name'] = request.session.get('last_name')
+            return render(request, 'adminApp/index.html', context)
+        else:
+            return render(request, 'adminApp/sign_in.html', context)
 
 
 def add_restaurant(request):
@@ -70,11 +85,12 @@ def add_restaurant(request):
         logo_path = None
         id = get_next_id()
         if logo is not None:
-            logo_path = 'rest' + id + '.' + 'png'
-            print(STATIC_ROOT + '/img/', logo_path)
+            logo_path = 'rest' + id + '.' + 'jpg'
+            handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
             handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
+            #collectstatic()
         else:
-            logo_path = 'rest0.png'  # we will use rest0 as a default restaurant pic
+            logo_path = 'rest0.jpg'  # we will use rest0 as a default restaurant pic
         to_execute = "INSERT INTO RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH)" \
                      "VALUES({id}, {name}, {location}, {logo_path}, {rating}, {open_time}, {close_time}, {email}, " \
                      "{password_hash}) "
@@ -89,8 +105,8 @@ def add_restaurant(request):
             email=wrap_with_in_single_quote(email),
             password_hash=wrap_with_in_single_quote(password1)
         )
-        print(wrap_with_in_single_quote(email))
-        print(to_execute)
+        #print(wrap_with_in_single_quote(email))
+        #print(to_execute)
         sql.execute(to_execute)
 
         # Now adding into relation manages
@@ -137,10 +153,11 @@ def add_food_man(request):
         contract_id = get_next_id()
         vehicle_id = get_next_id()
         if profile_img is not None:
-            profile_img_path = 'foodman' + foodman_id + '.' + 'png'
+            profile_img_path = 'foodman' + foodman_id + '.' + 'jpg'
+            handle_uploaded_file(profile_img, profile_img_path, IMAGE_PATH + '/img/')
             handle_uploaded_file(profile_img, profile_img_path, STATIC_ROOT + '/img/')
         else:
-            profile_img_path = 'foodman0.png'
+            profile_img_path = 'foodman0.jpg'
 
         cursor = sql.create_cursor()
 
@@ -262,6 +279,11 @@ def create_promo(request):
         messages.info(request, 'Creation of promo is successful')
         return redirect('/admin/create_promo', context)
     return render(request, 'adminApp/create_promo.html', context)
+
+
+def edit_restaurant(request):
+    context = {}
+    return render(request, 'adminApp/edit_restaurant.html', context)
 
 
 if __name__ == '__main__':
