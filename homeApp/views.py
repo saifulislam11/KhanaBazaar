@@ -1,16 +1,11 @@
-from django.shortcuts import render
-import cx_Oracle
-from django.contrib import auth, messages
-from django.contrib.auth.models import User
-from django.db import connection
-from django.http import HttpResponseRedirect
+from datetime import datetime, timedelta
 
-from khanabazaar.settings import MEDIA_URL, MEDIA_ROOT, STATIC_ROOT
+import cx_Oracle
 from django.shortcuts import render, redirect
-from helper.read_write_to_file import handle_uploaded_file
+
+from helper import sql
 from helper.sql import get_next_id
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
-from helper import sql
 
 con = cx_Oracle.connect("KB", "123", "localhost/orcl")
 print("Connected!")
@@ -102,6 +97,7 @@ def homepage(request):
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
         email_log = request.POST.get('email')
+        phone = request.POST.get('phone')
         password1 = request.POST.get('password')
         password1 = get_hashed_value(password1)
         password2 = request.POST.get('confirmpassword')
@@ -111,6 +107,12 @@ def homepage(request):
         if (firstname != None and lastname != None and email_log != None):
             to_execute = "INSERT INTO CUSTOMER(ID,LAST_NAME,FIRST_NAME,EMAIL,PASSWORD_HASH,ADDRESS)" \
                          " VALUES({id}, {lastname}, {firstname}, {email}, {password_hash}, {address}) "
+            to_execute_phone = "INSERT INTO CUSTOMER_PHONE(CUSTOMER_ID,PHONE_NO)" \
+                               " VALUES({id}, {phone}) "
+            to_execute_phone = to_execute_phone.format(
+                id=wrap_with_in_single_quote(id),
+                phone=wrap_with_in_single_quote(phone)
+            )
             to_execute = to_execute.format(
                 id=wrap_with_in_single_quote(id),
                 firstname=wrap_with_in_single_quote(firstname),
@@ -128,6 +130,7 @@ def homepage(request):
             print(to_execute)
             try:
                 sql.execute(to_execute)
+                sql.execute(to_execute_phone)
                 contex = 'registered successfully'
                 return render(request, 'homeApp/index.html',
                               {'list1': list1, 'list2': list2, 'list3': list3, 'contex': contex})
@@ -296,27 +299,20 @@ def payment(request):
     if 'first_name' in request.session:
         first_name = request.session['first_name']
     if 'id' in request.session:
-<<<<<<< HEAD
         id = request.session['id']
     if 'last_name' in request.session:
         last_name = request.session['last_name']
     if 'email' in request.session:
         email = request.session['email']
 
-    
-=======
-        customer_id = request.session['id']
->>>>>>> 54a70e897a0319e0a83c4dc51f560c524664e1f1
-
     return render(request, 'homeApp/payment.html',
                   {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
                    'customer_name': first_name})
 
-<<<<<<< HEAD
-    
-    return render(request,'homeApp/payment.html',{'price':price,'items':len(cart_dic),'restaurant':rest_dic,'cart':cart_dic,'customer_name':first_name,'last_name':last_name,'email':email})
-=======
->>>>>>> 54a70e897a0319e0a83c4dc51f560c524664e1f1
+    return render(request, 'homeApp/payment.html',
+                  {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
+                   'customer_name': first_name, 'last_name': last_name, 'email': email})
+
 
 def restaurant(request):
     c = con.cursor()
@@ -383,27 +379,21 @@ def restaurant(request):
                 print('has session')
                 if 'first_name' in request.session:
                     first_name = request.session['first_name']
-<<<<<<< HEAD
                 if 'id' in request.session:
                     id = request.session['id']
                 if 'last_name' in request.session:
                     last_name = request.session['last_name']
                 if 'email' in request.session:
                     email = request.session['email']
-                customer_dict = {'id':id,'last_name':last_name,'first_name':first_name,'email':email}
+                customer_dict = {'id': id, 'last_name': last_name, 'first_name': first_name, 'email': email}
                 print(customer_dict)
-                return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name,'customer_dic':customer_dict})
-            elif email =="None" or password == "None" :
-                return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
-=======
                 return render(request, 'homeApp/restaurant.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                               'all_types': unique_types, 'customer_name': first_name})
+                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict})
             elif email == "None" or password == "None":
                 return render(request, 'homeApp/restaurant_log_in.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                'all_types': unique_types, 'customer_name': 'none'})
->>>>>>> 54a70e897a0319e0a83c4dc51f560c524664e1f1
             else:
                 print(email + ' ' + password)
                 # c.close()
@@ -434,20 +424,29 @@ def restaurant(request):
                     first_name = customer[2]
                     email = customer[3]
                     address = customer[5]
-                    customer_dict = {'id':id,'last_name':last_name,'first_name':first_name,'email':email,'address':address}
+                    customer_dict = {'id': id, 'last_name': last_name, 'first_name': first_name, 'email': email,
+                                     'address': address}
                     print(customer_dict)
                     request.session['id'] = id
                     request.session['last_name'] = last_name
                     request.session['first_name'] = first_name
                     request.session['email'] = email
-<<<<<<< HEAD
-                    #info = id + ' ' +firstname +' '+lastname+' '+email
-                    #customer_info= info.split(' ')
+                    # info = id + ' ' +firstname +' '+lastname+' '+email
+                    # customer_info= info.split(' ')
 
-                    return render(request, 'homeApp/restaurant.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':first_name,'customer_dic':customer_dict})
-                #return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+                    return render(request, 'homeApp/restaurant.html',
+                                  {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                                   'all_types': unique_types, 'customer_name': first_name,
+                                   'customer_dic': customer_dict})
+                # return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+                '''return render(request, 'homeApp/restaurant.html',
+                                  {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                                   'all_types': unique_types, 'customer_name': first_name})
+                # return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})'''
+
 
 def confirm_payment(request):
+    c = con.cursor()
     if 'first_name' in request.session:
         first_name = request.session['first_name']
     if 'id' in request.session:
@@ -456,21 +455,48 @@ def confirm_payment(request):
         last_name = request.session['last_name']
     if 'email' in request.session:
         email = request.session['email']
-    return render(request,'homeApp/confirm_payment.html',{'customer_name':first_name})
+    if request.method == 'POST':
+        order_price = request.POST.get('order_price')
+        delivery_type = request.POST.get('delivery_type')
+        delivery_location = request.POST.get('delivery_address')
+        print(order_price + ' ' + delivery_location + ' ' + delivery_type)
+        now = datetime.now()
+        order_time = now.strftime("%d/%m/%Y %H:%M:%S")
+        print(order_time)
+        delivery_time = now + timedelta(hours=2)
+        delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
+        print(delivery_time)
+        id = get_next_id()
+        table_name = '"' + "ORDER" + '"'
+        print(table_name)
+        to_execute = "INSERT INTO {table_name}(ID,ORDER_TIME,DELIVERY_TIME,DELIVERY_LOCATION)" \
+                     " VALUES({id}, to_date({order_time},'DD/MM/YYYY HH:MI:SS'), to_date({delivery_time},'DD/MM/YYYY HH:MI:SS'), {delivery_location}) "
+        to_execute = to_execute.format(
+            table_name="{}".format(table_name),
+            id=wrap_with_in_single_quote(id),
+            order_time=wrap_with_in_single_quote(order_time),
+            delivery_time=wrap_with_in_single_quote(delivery_time),
+            delivery_location=wrap_with_in_single_quote(delivery_location)
+        )
 
+        info = id + ' ' + delivery_time + ' ' + order_time + ' ' + delivery_location
+        order_info = info.split(' ')
+        print(order_info)
 
+        # print(firstname+lastname+address)
+        print(to_execute)
+        try:
+            sql.execute(to_execute)
+            contex = 'ordered successfully'
+            return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
 
+        except:
+            print("Something is not right. And why rollback is not working.")
+            sql.rollback()
+            # messages.info(request, "adding of foodman was unsuccessfull")
+            return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
 
-
-    
-    
-
-=======
-                    # info = id + ' ' +firstname +' '+lastname+' '+email
-                    # customer_info= info.split(' ')
->>>>>>> 54a70e897a0319e0a83c4dc51f560c524664e1f1
-
-                    return render(request, 'homeApp/restaurant.html',
-                                  {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                                   'all_types': unique_types, 'customer_name': first_name})
-                # return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
+        finally:
+            c.close()
+            sql.commit()
+    return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
