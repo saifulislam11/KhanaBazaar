@@ -74,8 +74,12 @@
                         </div>
                         <div class="form-group row">
                             <label for="email" class="col-md-2 col-form-label">Email</label>
-                            <div class="col-md-10">
+                            <div class="col-md-6">
                                 <input type="mail" class="form-control" id="email" name="email" placeholder="E-mail" required>
+                            </div>
+                            <label for="phone" class="col-md-1 col-form-label">Phone</label>
+                            <div class="col-md-3">
+                                <input type="phone" class="form-control" id="phone" name="phone" placeholder="Phone No" required>
                             </div>          
                         </div>
                         <div class="form-group row">
@@ -269,6 +273,7 @@
                 <div class="carousel-cell ">
                     <div class="fig-container">
                         <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        
                         <div class="overlay"><h4>{{restaurant.name}}</h4></div>
                     </div>
                 </div>
@@ -291,6 +296,9 @@
                 <div class="carousel-cell ">
                     <div class="fig-container">
                         <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        {% if restaurant.path == 'rest1000000135.jpg' %}
+                        <h1>{{baseURL}}/{{restaurant.path}}</h1>
+                        {% endif %}
                         <div class="overlay"><h4>{{restaurant.name}}</h4></div>
                     </div>
                 </div>

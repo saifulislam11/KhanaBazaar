@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded',function(){
     //showPopup();
     setTimeout(function(){
       loginPopup.classList.add("show");
-     },1000)
+     },0000)
 
     })
 
@@ -15,12 +15,12 @@ document.addEventListener('DOMContentLoaded',function(){
             const timeLimit = 0 // seconds;
             let i=0;
             const timer = setInterval(function(){
-            i++;
             if(i == timeLimit){
             clearInterval(timer);
             loginPopup.classList.add("show");
-            } 
+            }
+            i++; 
             console.log(i)
-            },1000);
+            },0000);
     }
 })

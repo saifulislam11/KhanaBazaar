@@ -14,4 +14,5 @@ def handle_uploaded_file(f, file_name, location):
                 destination.write(chunk)
         return True
     except:
+        print("hello world")
         return False

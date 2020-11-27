@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
      //----------------------------login popup----------------------
      const loginPopup = document.querySelector(".login-popup");
+     const order_type = document.querySelector("#delivery_type");
+     const delivery_address = document.querySelector("#delivery_address");
+     const del_address = document.querySelector(".del-address");
      const close = document.querySelector(".close");
      const order_pop_button = document.querySelector('#confirm_order');
      order_pop_button.addEventListener("click",function(){
@@ -162,6 +165,9 @@ close.addEventListener("click",function(){
        
     // get selected option in sel (reference obtained above)
     orderBTN.addEventListener("click",function(){
+        delivery_address.value = del_address.value;
+        order_type.value = selected_method.innerHTML;
+        console.log(delivery_address.value);
         console.log(selected_method.innerHTML);
         if(selected_method.innerHTML == 'Bkash')
         {
