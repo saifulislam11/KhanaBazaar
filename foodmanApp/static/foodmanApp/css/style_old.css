@@ -1,0 +1,73 @@
+.row-header{
+    margin: 0px auto;
+    padding: 0px auto;
+}
+.row-content{
+    background-color: #4e42f5;
+    margin: 5px 0px 5px 0px;
+    min-height: 300px;
+}
+.footer{
+    background-color: khaki;
+    padding: 20px 0px 20px 0px;
+}
+.jumbotron{
+    color: lightcyan;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: blueviolet;
+    /*background-image: url('drawable/jum.jpg');*/
+    
+    
+}
+body{
+    padding: 50px 0px 0px 0px;
+    z-index: 0px;
+}
+.navbar-dark{
+    background-color: #512DAB;
+}
+.form_pad{
+    margin: 10px 0px 0px 0px;
+}
+.card-form{
+    padding-left: 27px;
+}
+/*bouncing class*/
+.bounce {
+      -webkit-animation:bounce 1s infinite;
+    }
+    
+    @-webkit-keyframes bounce {
+      0%       { bottom:5px; }
+      25%, 75% { bottom:15px; }
+      50%      { bottom:20px; }
+      100%     {bottom:0;}
+    }
+header div{
+    height: 100px;
+}
+.tab-content {
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    padding: 10px;
+}
+.carousel {
+    background:#512DA8;
+}
+
+.carousel-item {
+  height: 300px;
+}
+
+.carousel-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 300px;
+}
+#carouselButton{
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+}
