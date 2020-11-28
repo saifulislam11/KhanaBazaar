@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded',function(){
     const close = document.querySelector(".close");
     window.addEventListener("load",function(){
     
-    //showPopup();
+    showPopup();
     setTimeout(function(){
       loginPopup.classList.add("show");
-     },0000)
+     },1000)
 
     })
 
@@ -21,6 +21,6 @@ document.addEventListener('DOMContentLoaded',function(){
             }
             i++; 
             console.log(i)
-            },0000);
+            },1000);
     }
 })

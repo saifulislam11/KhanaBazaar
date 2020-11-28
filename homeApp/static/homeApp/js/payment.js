@@ -159,7 +159,7 @@ close.addEventListener("click",function(){
     </div>
     <label for="pin">confirm location</label>
     <div class="form-group">
-        <input type="text" id="location" name="location" placeholder="location" required>
+        <input type="text" class="form-control form-box del-address" id="location" name="location" placeholder="location" required>
     </div>`
 
        

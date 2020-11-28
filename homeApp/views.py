@@ -304,14 +304,13 @@ def payment(request):
         last_name = request.session['last_name']
     if 'email' in request.session:
         email = request.session['email']
+    print(email + last_name)
+
+    
 
     return render(request, 'homeApp/payment.html',
                   {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
-                   'customer_name': first_name})
-
-    return render(request, 'homeApp/payment.html',
-                  {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
-                   'customer_name': first_name, 'last_name': last_name, 'email': email})
+                   'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods})
 
 
 def restaurant(request):
@@ -450,7 +449,7 @@ def confirm_payment(request):
     if 'first_name' in request.session:
         first_name = request.session['first_name']
     if 'id' in request.session:
-        id = request.session['id']
+        cust_id = request.session['id']
     if 'last_name' in request.session:
         last_name = request.session['last_name']
     if 'email' in request.session:
@@ -459,27 +458,61 @@ def confirm_payment(request):
         order_price = request.POST.get('order_price')
         delivery_type = request.POST.get('delivery_type')
         delivery_location = request.POST.get('delivery_address')
-        print(order_price + ' ' + delivery_location + ' ' + delivery_type)
+        foods = request.POST.get('ordered_foods')
+        restaurant_id = request.POST.get('restaurant_name')
+        order_id = get_next_id()
+        print(order_price + ' ' + delivery_location + ' ' + delivery_type+' '+foods)
+        #-------------getting foods-----------#
+        food_collections = foods.split("#")
+        all_food = []
+        for i in range(len(food_collections) - 1):
+            all_food.append(food_collections[i])
+        #---------end of foods------------#
+        
+
+        #----------getting current date--------#
         now = datetime.now()
         order_time = now.strftime("%d/%m/%Y %H:%M:%S")
         print(order_time)
         delivery_time = now + timedelta(hours=2)
         delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
         print(delivery_time)
-        id = get_next_id()
+        #---------------end of getting current date-----------#
+        
         table_name = '"' + "ORDER" + '"'
         print(table_name)
         to_execute = "INSERT INTO {table_name}(ID,ORDER_TIME,DELIVERY_TIME,DELIVERY_LOCATION)" \
-                     " VALUES({id}, to_date({order_time},'DD/MM/YYYY HH:MI:SS'), to_date({delivery_time},'DD/MM/YYYY HH:MI:SS'), {delivery_location}) "
+                     " VALUES({order_id}, to_date({order_time},'DD/MM/YYYY HH24:MI:SS'), to_date({delivery_time},'DD/MM/YYYY HH24:MI:SS'), {delivery_location}) "
         to_execute = to_execute.format(
             table_name="{}".format(table_name),
-            id=wrap_with_in_single_quote(id),
+            order_id=wrap_with_in_single_quote(order_id),
             order_time=wrap_with_in_single_quote(order_time),
             delivery_time=wrap_with_in_single_quote(delivery_time),
             delivery_location=wrap_with_in_single_quote(delivery_location)
         )
+        payment_id = get_next_id()
+        to_execute_payment = "INSERT INTO PAYMENT(ID,PAYING_AMOUNT,PAYMENT_TYPE,DATE_TIME)" \
+                     " VALUES({payment_id},{order_price},{delivery_type}, to_date({order_time},'DD/MM/YYYY HH24:MI:SS')) "
+        to_execute_payment = to_execute_payment.format(
+            payment_id=wrap_with_in_single_quote(payment_id),
+            order_price=wrap_with_in_single_quote(order_price),
+            delivery_type=wrap_with_in_single_quote(delivery_type),
+            order_time=wrap_with_in_single_quote(order_time)
+        )
+        to_execute_chooses = "INSERT INTO CHOOSES(ORDER_ID,CUSTOMER_ID)" \
+                     " VALUES({order_id},{cust_id}) "
+        to_execute_chooses = to_execute_chooses.format(
+            order_id=wrap_with_in_single_quote(order_id),
+            cust_id = wrap_with_in_single_quote(cust_id)
+        )
+        to_execute_pays = "INSERT INTO PAYS(ORDER_ID,PAY_ID)" \
+                     " VALUES({order_id},{payment_id}) "
+        to_execute_pays = to_execute_pays.format(
+            order_id=wrap_with_in_single_quote(order_id),
+            payment_id = wrap_with_in_single_quote(payment_id)
+        )
 
-        info = id + ' ' + delivery_time + ' ' + order_time + ' ' + delivery_location
+        info = order_id + ' ' + delivery_time + ' ' + order_time + ' ' + delivery_location
         order_info = info.split(' ')
         print(order_info)
 
@@ -487,16 +520,53 @@ def confirm_payment(request):
         print(to_execute)
         try:
             sql.execute(to_execute)
+            sql.execute(to_execute_chooses)
+            sql.execute(to_execute_payment)
+            sql.execute(to_execute_pays)
             contex = 'ordered successfully'
-            return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
 
         except:
             print("Something is not right. And why rollback is not working.")
             sql.rollback()
             # messages.info(request, "adding of foodman was unsuccessfull")
-            return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
 
         finally:
-            c.close()
             sql.commit()
+
+        #------------------selected-------------#
+        for i in range(len(all_food)):
+            food = all_food[i]
+            to_execute = "Select * From FOOD_ITEM Where NAME = {food} " \
+                             "and RESTAURANT_ID = {restaurant_id}"
+            to_execute = to_execute.format(
+                    food=wrap_with_in_single_quote(food),
+                    restaurant_id=wrap_with_in_single_quote(restaurant_id)
+                )
+            c.execute(to_execute)
+            food_tbl = c.fetchall()
+            for r in food_tbl:
+                food_id = r[0]
+                print(food_id)
+                to_execute = "INSERT INTO SELECTED(ORDER_ID,FOOD_ID)" \
+                     " VALUES({order_id},{food_id}) "
+                to_execute = to_execute.format(
+                    order_id=wrap_with_in_single_quote(order_id),
+                    food_id=wrap_with_in_single_quote(food_id)
+                )
+                print(to_execute)
+                try:
+                    sql.execute(to_execute)
+                    contex = 'selected successfully'
+                    print(contex)
+
+                except:
+                    print("Something is not right. And why rollback is not working.")
+                    sql.rollback()
+                    # messages.info(request, "adding of foodman was unsuccessfull")
+
+                finally:
+                    sql.commit()
+        c.close()
+            
+        #----------------end of selected------------#
     return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
