@@ -99,9 +99,9 @@
         {% csrf_token %}
         <div class="row form-group">
 
-            <div class="d-none justify-content-center">
+            <div class="d-flex justify-content-center" readonly>
                 <input type="text" class="form-control" id="location" name="location" placeholder="location"
-                       value="{{ location }}">
+                       value="{{ location }}" readonly>
             </div>
             <div class="form-group row d-flex justify-content-center">
                 <div class="offset-md-6 col-md-10">
