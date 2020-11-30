@@ -17,6 +17,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'restApp/css/styles.css' %}">
+
     <!--flickity-->
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
@@ -58,13 +59,12 @@
         <div class="row">
             <div class="col-12 col-sm-6">
                 <div class="title">
-                    <h1 class="ml-0">🅺🅷🅰🅽🅰🅱🅰🆉🅰🅰🆁</h1>
+                    <h1 class="ml-0">{{ name }}</h1>
                 </div>
-                <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our
-                    lipsmacking creations will tickle your culinary senses!</p>
+                <p>Your rating : {{ rating }} / 5</p>
             </div>
             <div class="col-12 col-sm-3 mt-0">
-                <img src="{% static 'restApp/img/khanabazaar.png' %}" class="img-fluid">
+                <img src="{{ baseURL }}/{{ logo_path }}" class="img-fluid">
             </div>
             <div class="col-12 col-sm-3 align-self-center">
                 <!--adding tooltip
@@ -83,8 +83,7 @@
 <div class="container background">
     {#    <div class="row row-content">#}
     <h1 class="d-flex justify-content-center col-12">
-        Hello {{ name }} !!!
-        Wanna Edit time !!!
+        Edit your business hours
     </h1>
     <form action="." method="POST" class="offset-1" enctype="multipart/form-data">
         {% csrf_token %}
