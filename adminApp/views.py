@@ -1,28 +1,28 @@
-from django.contrib import auth, messages
-from django.contrib.auth.models import User
-from django.db import connection
-from django.http import HttpResponseRedirect
-
-from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT
+from django.contrib import messages
 from django.shortcuts import render, redirect
-from cx_Oracle import connect
+
+from adminApp.urls import app_name
+from helper import sql
 from helper.read_write_to_file import handle_uploaded_file
+from helper.session import not_this_season
 from helper.sql import get_next_id
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
-from helper import sql
+from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT
 
+
+# app_name = 'homeApp'
 
 # Create your views here.
 
 def index(request):
     context = {}
     return_value = None
-
+    not_this_season(request, app_name)
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
         password = get_hashed_value(password)
-        #print(email, password)
+        # print(email, password)
         c = sql.create_cursor()
         to_execute = "Select * From ADMIN Where EMAIL = {email} " \
                      "and PASSWORD_HASH = {password}"
@@ -45,12 +45,14 @@ def index(request):
             request.session['last_name'] = last_name
             request.session['first_name'] = first_name
             request.session['email'] = email
+            request.session['app_name'] = app_name
             context['user_name'] = last_name
             return render(request, 'adminApp/index.html', context)
 
     elif request.method == 'GET':
+
         action = request.GET.get('action')
-        #print('action is ' + str(action))
+        # print('action is ' + str(action))
         # if action is not None:
         # request.GET.pop('action')
 
@@ -69,7 +71,7 @@ def index(request):
 def add_restaurant(request):
     context = {}
 
-    if request.session.is_empty():
+    if not_this_season(request, app_name):
         messages.info(request, 'YOU ARE NOT LOGGED IN ')
         return redirect('/admin')
     if request.method == 'POST':
@@ -88,7 +90,7 @@ def add_restaurant(request):
             logo_path = 'rest' + id + '.' + 'jpg'
             handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
             handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
-            #collectstatic()
+            # collectstatic()
         else:
             logo_path = 'rest0.jpg'  # we will use rest0 as a default restaurant pic
         to_execute = "INSERT INTO RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH)" \
@@ -105,8 +107,8 @@ def add_restaurant(request):
             email=wrap_with_in_single_quote(email),
             password_hash=wrap_with_in_single_quote(password1)
         )
-        #print(wrap_with_in_single_quote(email))
-        #print(to_execute)
+        # print(wrap_with_in_single_quote(email))
+        # print(to_execute)
         sql.execute(to_execute)
 
         # Now adding into relation manages
@@ -129,7 +131,7 @@ def add_food_man(request):
     :return:
     """
     context = {}
-    if request.session.is_empty():
+    if not_this_season(request, app_name):
         messages.info(request, 'Please sign in first')
         return redirect(request, '/admin', context)
     if request.method == 'POST':
@@ -250,7 +252,7 @@ def create_promo(request):
     context = {}
     # for r in request.session.items():
     #     print(r)
-    if request.session.is_empty():
+    if not_this_season():
         messages.info(request, "Something went wrong. Please Log in again")
         return redirect('/admin')
     if request.method == 'POST':
@@ -287,4 +289,6 @@ def edit_restaurant(request):
 
 
 if __name__ == '__main__':
+    # havershine js plus leaflet js
+    print(app_name)
     pass
