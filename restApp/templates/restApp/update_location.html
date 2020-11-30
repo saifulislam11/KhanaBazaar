@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>KHANABAZAAR</title>
+    <title>KHANABAZAAR rest</title>
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,6 +20,10 @@
     <!--flickity-->
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
+    <!--leaflet-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
 </head>
 
 <body class="background" data-spy="scroll">
@@ -29,8 +33,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="{% static 'restApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
-                                              height="30">
+        <a class="navbar-brand" href="{% url 'restApp:index' %}"><img src="{% static 'restApp/img/khanabazaar.png' %}"
+                                                                      alt="LOGO" width="41" height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -41,15 +45,8 @@
                 <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
                 </li>
-
-                {#                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>#}
-                <li class="nav-item"><a class="nav-link" id="user_name"><i class="fa fa-user"></i> {{ user_name }}</a>
-                </li>
-
-                <li class="nav-item"><a class="nav-link" role="button" id="logout" type="submit"
-                                        href="{% url 'restApp:index' %}?action=logout"><span
-                        class="fa fa-sign-out"></span> Log out </a></li>
-
+                <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span>
+                    Sign In</a></li>
             </ul>
             <!--modal button-->
         </div>
@@ -86,30 +83,42 @@
     </div>
 </header>
 
-<div class="container  text-light bg-dark background">
-    <!--adding carousel-->
-    <a class="btn btn-block  btn-sm" role="button" id="add_food" href="{% url 'restApp:add_food' %} ">Add
-        Food</a>
-    <a class="btn btn-block  btn-sm" role="button" id="edit_food" href="{% url 'restApp:edit_food' %}">Edit
-        Food</a>
 
+<div class="container background">
+    {#    <div class="row row-content">#}
+    <h1 class="d-flex justify-content-center col-12">
+        Hello {{ name }} !!!
+        Wanna Edit location !!!
+    </h1>
+    {#    <div class="row row-content">#}
+    <div class="" style="height: 400px;" id="map">
 
-    <a class="btn btn-block  btn-sm" role="button" id="update_opening_closing" href="{% url 'restApp:update_time' %}">Update
-        opening and closing time</a>
-    <a class="btn btn-block  btn-sm" role="button" id="update_location" href="{% url 'restApp:update_location' %}">Update
-        location </a>
+    </div>
+    {#    </div>#}
+    <form action="." method="POST" class="offset-1" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row form-group">
 
-    <a class="btn btn-block  btn-sm" role="button" id="change_logo" href="{% url 'restApp:update_logo' %} ">Change
-        Logo</a>
+            <div class="d-none justify-content-center">
+                <input type="text" class="form-control" id="location" name="location" placeholder="location"
+                       value="{{ location }}">
+            </div>
+            <div class="form-group row d-flex justify-content-center">
+                <div class="offset-md-6 col-md-10">
+                    <input type="submit" class="btn btn-primary" placeholder="submit">
 
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="d-flex justify-content-center">
+        {% for message in messages %}
+            <h1>{{ message }}</h1>
+        {% endfor %}
+    </div>
 </div>
-
-<div class="row restaurant-search-row-header">
-    <div> request element incoming</div>
-    {#                {% for i in  request.session %}#}
-    {#                    <div> {{ i }}</div>#}
-    {#                {% endfor %}#}
-</div>
+{#</div>#}
 <!--restaurant 1st row-->
 
 
@@ -166,17 +175,23 @@
 <script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
 <script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
 <script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
 <script src="{% static 'restApp/js/scripts.js' %}"></script>
-{#<script src="{% static 'restApp/js/form.js' %}"></script>#}
+<script src="{% static 'restApp/js/update_location.js' %}"></script>
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 
-<!--tootip function
+< !--tootip function
 <script>
-   $(function () {
-       $('[data-toggle="tooltip"]').tooltip()
-     })
-</script>-->
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+-->
 
 </body>
 

@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from helper import sql, fetch_all
+from helper.location import valid_location, buet_location
 from helper.read_write_to_file import handle_uploaded_file
 from helper.session import not_this_season
 from helper.wrap_and_encode import get_hashed_value, wrap_with_in_single_quote
@@ -33,11 +34,16 @@ def index(request):
         else:
             id = rest[0]
             name = rest[1]
+            location = rest[2]
+            if not valid_location(location):
+                location = buet_location
+
             email = rest[7]
             # password = rest[8]
             request.session['id'] = id
             request.session['user_name'] = name
             request.session['email'] = email
+            request.session['location'] = location
             request.session['app_name'] = app_name
             context['user_name'] = request.session.get('user_name')
             return render(request, 'restApp/index.html', context)
@@ -231,3 +237,30 @@ def update_logo(request):
         context.update(rest)
         messages.info(request, 'Succcessfully updated LOGO !!!')
         return render(request, 'restApp/update_logo.html', context)
+
+
+def update_location(request):
+    context = {}
+    if not_this_season(request, app_name):
+        messages.info(request, "Please Log in")
+        return redirect('/rest')
+    context['location'] = request.session.get('location')
+    context['user_name'] = request.session.get('user_name')
+    rest_id = request.session.get('id')
+    if request.method == 'POST':
+        location = request.POST.get('location')
+        if location != request.session.get('location'):
+            try:
+                request.session['location'] = location
+                to_execute = "UPDATE RESTAURANT SET LOCATION = {location} WHERE ID = {id}"
+                to_execute = to_execute.format(
+                    location=wrap_with_in_single_quote(location),
+                    id=wrap_with_in_single_quote(rest_id)
+                )
+                # print(to_execute)
+                sql.execute(to_execute)
+                messages.info(request, "Successfully updated location to " + location)
+            except Exception as e:
+                print(e)
+                pass
+    return render(request, 'restApp/update_location.html', context)
