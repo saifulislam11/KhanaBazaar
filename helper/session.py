@@ -6,10 +6,11 @@ def not_this_season(request, app_name):
     :param app_name:
     :return: boolean
     '''
-    if request.season.is_empty():
+
+    if request is None or request.session is None or request.session.is_empty():
         return True
-    elif request.season.get('app_name') == app_name:
+    elif request.session.get('app_name') == app_name:
         return False
     else:
-        request.season.flush()
+        request.session.flush()
         return True
