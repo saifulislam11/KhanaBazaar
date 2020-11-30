@@ -252,7 +252,7 @@ def create_promo(request):
     context = {}
     # for r in request.session.items():
     #     print(r)
-    if not_this_season():
+    if not_this_season(request,app_name):
         messages.info(request, "Something went wrong. Please Log in again")
         return redirect('/admin')
     if request.method == 'POST':
