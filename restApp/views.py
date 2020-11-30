@@ -154,16 +154,16 @@ def edit_particular_food(request):
         return redirect('/rest')
     rest_id = request.session.get('id')
     if request.method == 'GET':
-        #print(request.GET)
+        # print(request.GET)
         food_id = request.GET.get('food_id')
         if food_id is not None:
-            #print('one is ', food_id)
+            # print('one is ', food_id)
             context = fetch_all.food_item(food_id=food_id, rest_id=rest_id)
             return render(request, 'restApp/edit_particular_food.html', context)
         else:
             return redirect('/rest/edit_food')
     if request.method == 'POST':
-        #print(request.POST)
+        # print(request.POST)
         food_id = request.POST.get('food_id')
         name = request.POST.get('name')
         price = request.POST.get('price')
