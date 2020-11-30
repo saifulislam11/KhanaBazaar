@@ -1,15 +1,17 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from helper import sql, fetch_all
 from helper.read_write_to_file import handle_uploaded_file
+from helper.session import not_this_season
 from helper.wrap_and_encode import get_hashed_value, wrap_with_in_single_quote
-# Create your views here.
 from khanabazaar.settings import STATIC_ROOT, IMAGE_PATH
+from restApp.urls import app_name
 
 
 def index(request):
     context = {}
+    not_this_season(request, app_name)
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -36,6 +38,7 @@ def index(request):
             request.session['id'] = id
             request.session['user_name'] = name
             request.session['email'] = email
+            request.session['app_name'] = app_name
             context['user_name'] = request.session.get('user_name')
             return render(request, 'restApp/index.html', context)
 
@@ -47,6 +50,7 @@ def index(request):
             return render(request, 'restApp/sign_in.html', context)
 
         if not request.session.is_empty():
+            context['user_name'] = request.session.get('user_name')
             return render(request, 'restApp/index.html', context)
         else:
             return render(request, 'restApp/sign_in.html', context)
@@ -56,6 +60,9 @@ def index(request):
 
 def add_food(request):
     context = {}
+    if not_this_season(request, app_name):
+        messages.info(request, 'Please log in')
+        return redirect('/rest')
     if request.method == 'POST':
         name = request.POST.get('name')
         image = request.FILES['food_image']
@@ -121,6 +128,9 @@ def add_food(request):
 
 def edit_food(request):
     context = {}
+    if not_this_season(request, app_name):
+        messages.info(request, 'Please log in')
+        return redirect('/rest')
     if request.method == 'GET':
 
         if not request.session.is_empty():
@@ -133,8 +143,9 @@ def edit_food(request):
 
 def edit_particular_food(request):
     context = {}
-    if request.session.is_empty():
-        return render(request, 'restApp/sign_in.html', context)
+    if not_this_season(request, app_name):
+        messages.info(request, 'Please log in')
+        return redirect('/rest')
     rest_id = request.session.get('id')
     if request.method == 'GET':
         food_id = request.GET.get('rest')
@@ -163,7 +174,7 @@ def edit_particular_food(request):
             rest_id=wrap_with_in_single_quote(rest_id)
         )
         sql.execute(to_execute)
-        #print(to_execute)
+        # print(to_execute)
         rest = fetch_all.food_item(food_id, rest_id)
         context.update(rest)
         messages.info(request, "Successfully Updated")
@@ -172,8 +183,9 @@ def edit_particular_food(request):
 
 def update_time(request):
     context = {}
-    if request.session.is_empty():
-        return render(request, 'restApp/sign_in.html', context)
+    if not_this_season(request, app_name):
+        messages.info(request, 'Please log in')
+        return redirect('/rest')
     rest_id = request.session.get('id')
     if request.method == 'GET':
         rest = fetch_all.restaurant(rest_id)
@@ -200,8 +212,9 @@ def update_time(request):
 
 def update_logo(request):
     context = {}
-    if request.session.is_empty():
-        return render(request, 'restApp/sign_in.html', context)
+    if not_this_season(request, app_name):
+        messages.info(request, 'Please log in')
+        return redirect('/rest')
     rest_id = request.session.get('id')
     if request.method == 'GET':
         rest = fetch_all.restaurant(rest_id)
