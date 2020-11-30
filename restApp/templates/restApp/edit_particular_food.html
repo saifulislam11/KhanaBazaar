@@ -103,7 +103,8 @@
         <div class="row form-group d-none">
             <label for="id" class="col-md-2 col-form-label bg-info d-flex justify-content-center">id : </label>
             <div>
-                <input type="text" class="form-control" id="id" name="id" placeholder="id" value="{{ id }}">
+                <input type="text" class="form-control" id="food_id" name="food_id" placeholder="food_id"
+                       value="{{ id }}">
             </div>
         </div>
 
@@ -138,7 +139,26 @@
 
         </div>
 
-        <h3> Availibility radio button deoya hobe </h3>
+        <div class="row form-group">
+            <label class="col-md-2 col-form-label bg-info d-flex justify-content-center">availibility
+                : </label>
+            <div>
+                <input type="text" class="form-control d-none" id="initial_availibility"
+                       value="{{ availibility }}">
+                <div class="form-check offset-2">
+                    <input id="availibility1" class="form-check-input" type="radio" name="availibility"
+                           value="Y">
+                    <label for="availibility1" class="form-check-label">Yes</label>
+                    <br>
+                    <input id="availibility0" class="form-check-input" type="radio" name="availibility" value="N">
+                    <label for="availibility0" class="form-check-label">No</label>
+                    {#                    <input id="c" type="radio" name="hopping" value="c">#}
+                    {#                    <label for="c"><span></span>C</label>#}
+                </div>
+            </div>
+
+        </div>
+
 
         <div class="row form-group">
             <label for="type" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Type
@@ -159,10 +179,32 @@
 
         <div class="form-group row">
             <div class="offset-md-2 col-md-10">
-                <input type="submit" class="btn btn-primary" placeholder="submit">
+                <input type="submit" id="form_submit" class="btn btn-primary" placeholder="submit">
 
             </div>
         </div>
+        <!-- script to handle form button -->
+        <script>
+            const availibility = document.getElementById('initial_availibility');
+            const r1 = document.getElementById('availibility1');
+            const r0 = document.getElementById('availibility0');
+
+            function initialize_radio_buttons() {
+
+                if (availibility.value == 'Y')
+                    r1.setAttribute('checked', true);
+                else
+                    r0.setAttribute('checked', true);
+                //console.log(availibility.value);
+                //console.log(r0.value);
+                //console.log(r1.value);
+
+            };
+            initialize_radio_buttons();
+            const form_submit = document.getElementById('form_submit');
+
+
+        </script>
 
 
     </form>
@@ -230,7 +272,7 @@
 <script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
 <script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'restApp/js/scripts.js' %}"></script>
-<script src="{% static 'restApp/js/form.js' %}"></script>
+{#<script src="{% static 'restApp/js/form.js' %}"></script>#}
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 

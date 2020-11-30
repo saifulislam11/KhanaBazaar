@@ -86,7 +86,7 @@
         {% for food in foods %}
 
             <div class="fig-container food-item">
-                <a id="{{ food.id }}" href="/rest/edit_particular_food/?rest={{ food.id }}" method="GET">
+                <a id="{{ food.id }}" href="/rest/edit_particular_food/?food_id={{ food.id }}" method="GET">
                     {% if food.img_path.0 is not None %}
                         <img class=" img-fluid "
                              src="{{ baseURL }}/{{ food.img_path.0 }}" alt="restaurant1">
