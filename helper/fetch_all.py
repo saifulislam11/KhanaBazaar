@@ -102,8 +102,44 @@ def restaurant(rest_id):
     rest['rating'] = row[4]
     rest['open_time'] = row[5]
     rest['close_time'] = row[6]
-
+    cursor.close()
     return rest
+
+
+def customer(customer_id):
+    '''
+    returns all data about customer
+    except password
+    :param customer_id:
+    :return:
+    '''
+
+    cursor = sql.create_cursor()
+    to_execute = "SELECT * FROM CUSTOMER WHERE ID = {id}"
+    to_execute = to_execute.format(id=wrap_with_in_single_quote(customer_id))
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    cust = {'id': row[0], 'last_name': row[1], 'first_name': row[2], 'email': row[3], 'address': row[5]}
+    cursor.close()
+    return cust
+
+
+def customer_all():
+    '''
+    returns all customers under an admin
+    in sorted order of order by a customer
+    :return:
+    '''
+
+    cursor = sql.create_cursor()
+    to_execute = 'SELECT * FROM CUSTOMER C ORDER BY(SELECT COUNT(*) FROM CHOOSES WHERE CUSTOMER_ID = C.ID ) DESC '
+    cursor.execute(to_execute)
+    rows = cursor.fetchall()
+    customers = []
+    for row in rows:
+        cust = {'id': row[0], 'last_name': row[1], 'first_name': row[2], 'email': row[3], 'address': row[5]}
+        customers.append(cust)
+    return customers
 
 
 if __name__ == '__main__':
