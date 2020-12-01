@@ -199,6 +199,8 @@ def update_time(request):
         messages.info(request, 'Please log in')
         return redirect('/rest')
     rest_id = request.session.get('id')
+    context['hour_list'] = range(24)
+    context['minute_list'] = range(0, 60, 1)
     if request.method == 'GET':
         rest = fetch_all.restaurant(rest_id)
         print(rest)

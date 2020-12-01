@@ -90,25 +90,90 @@
         <div class="row form-group">
             <label for="openTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Open Time
                 : </label>
-            <div>
-                <input type="text" class="form-control" id="openTime" name="openTime" placeholder="openTime"
+            <div class="inline-group">
+                <input type="text" class="d-none form-control" id="openTime" name="openTime"
+                       placeholder="openTime"
                        value="{{ open_time }}">
+                {#                <input type="text" class=" col-2 offset-1" id="openTime" name="openTime"#}
+                {#                       placeholder="openTime"#}
+                {#                       value="{{ open_time }}"> Hour#}
+                {##}
+                {#                <input type="text" class="col-2 offset-1" id="openTime" name="openTime"#}
+                {#                       placeholder="openTime"#}
+                {#                       value="{{ open_time }}">Minute#}
+
+                <select class="browser-default custom-select offset-1 col-4" id="open_hour">
+                    {% for i in hour_list %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select> Hour
+
+                <select class="browser-default custom-select offset-1 col-4" id="open_minute">
+                    {% for i in minute_list %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select> Minute
+                <script>
+                    var oh = document.getElementById('open_hour')
+                    console.log(oh.selectedIndex)
+                </script>
+
             </div>
         </div>
         <div class="row form-group">
             <label for="closeTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Close Time
                 : </label>
             <div>
-                <input type="text" class="form-control" id="closeTime" name="closeTime" placeholder="closeTime"
+                <input type="text" class="form-control d-none" id="closeTime" name="closeTime" placeholder="closeTime"
                        value="{{ close_time }}">
+                <select class="browser-default custom-select offset-1 col-4" id="close_hour">
+                    {% for i in hour_list %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select> Hour
+
+                <select class="browser-default custom-select offset-1 col-4" id="close_minute">
+                    {% for i in minute_list %}
+                        <option value="{{ i }}">{{ i }}</option>
+                    {% endfor %}
+                </select> Minute
+
             </div>
         </div>
         <div class="form-group row">
             <div class="offset-md-2 col-md-10">
-                <input type="submit" class="btn btn-primary" placeholder="submit">
+                <input type="submit" class="btn btn-primary" id="submit" placeholder="submit">
 
             </div>
         </div>
+        <script>
+            const open_time = document.getElementById('openTime');
+            const open_hour = document.getElementById('open_hour');
+            const open_minute = document.getElementById('open_minute');
+            const close_time = document.getElementById('closeTime')
+            const close_hour = document.getElementById('close_hour')
+            const close_minute = document.getElementById('close_minute');
+
+            //console.log(open_time)
+            function initialize_times() {
+                var o = open_time.value.split(':')
+                var oh = +o[0];
+                var om = +o[1];
+                open_hour.selectedIndex = oh;
+                open_minute.selectedIndex = om;
+                var c = close_time.value.split(':');
+                close_hour.selectedIndex = +c[0];
+                close_minute.selectedIndex = +c[1];
+            }
+
+            initialize_times();
+            const submit = document.getElementById('submit')
+            submit.addEventListener('click', function (e) {
+                open_time.value = open_hour.selectedIndex + ':' + open_minute.selectedIndex
+                close_time.value = close_hour.selectedIndex + ':' + close_minute.selectedIndex
+            })
+
+        </script>
     </form>
     <div class="d-flex justify-content-center">
         {% for message in messages %}
@@ -173,8 +238,8 @@
 <script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
 <script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
 <script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'restApp/js/scripts.js' %}"></script>
-<script src="{% static 'restApp/js/form.js' %}"></script>
+{#<script src="{% static 'restApp/js/scripts.js' %}"></script>#}
+{#<script src="{% static 'restApp/js/form.js' %}"></script>#}
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 
