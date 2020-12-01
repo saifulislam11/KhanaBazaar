@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 
 from adminApp.urls import app_name
 from helper import sql
+from helper.fetch_all import customer_all
+from helper.promo import promo_exists
 from helper.read_write_to_file import handle_uploaded_file
 from helper.session import not_this_season
 from helper.sql import get_next_id
@@ -252,40 +254,51 @@ def create_promo(request):
     context = {}
     # for r in request.session.items():
     #     print(r)
-    if not_this_season(request,app_name):
+    if not_this_season(request, app_name):
         messages.info(request, "Something went wrong. Please Log in again")
         return redirect('/admin')
     if request.method == 'POST':
         name = request.POST.get('name')
-        percent = request.POST.get('percent')
-        fixed_amount = request.POST.get('fixed_amount')
-        promo_limit = request.POST.get('promo_limit')
-        min_order_value = request.POST.get('min_order_value')
-        max_discount_amount = request.POST.get('max_discount_amount')
-        promo_id = sql.get_next_id()
-        to_execute = "INSERT INTO PROMO(ID, NAME, PERCENT, FIXED_AMOUNT, PROMO_LIMIT, MIN_ORDER_VALUE, " \
-                     "MAX_DISCOUNT_AMOUNT)" \
-                     "VALUES({id}, {name}, {percent}, {fixed_amount}, {promo_limit}, {min_order_value}, " \
-                     "{max_discount_amount}) "
-        to_execute = to_execute.format(
-            id=wrap_with_in_single_quote(promo_id),
-            name=wrap_with_in_single_quote(percent),
-            percent=percent,
-            fixed_amount=fixed_amount,
-            promo_limit=promo_limit,
-            min_order_value=min_order_value,
-            max_discount_amount=max_discount_amount
-        )
-        # print(to_execute)
-        sql.execute(to_execute)
-        messages.info(request, 'Creation of promo is successful')
-        return redirect('/admin/create_promo', context)
+        if promo_exists(name):
+            messages.info(request, 'The promo exists')
+        else:
+            percent = request.POST.get('percent')
+            fixed_amount = request.POST.get('fixed_amount')
+            promo_limit = request.POST.get('promo_limit')
+            min_order_value = request.POST.get('min_order_value')
+            max_discount_amount = request.POST.get('max_discount_amount')
+            promo_id = sql.get_next_id()
+            to_execute = "INSERT INTO PROMO(ID, NAME, PERCENT, FIXED_AMOUNT, PROMO_LIMIT, MIN_ORDER_VALUE, " \
+                         "MAX_DISCOUNT_AMOUNT)" \
+                         "VALUES({id}, {name}, {percent}, {fixed_amount}, {promo_limit}, {min_order_value}, " \
+                         "{max_discount_amount}) "
+            to_execute = to_execute.format(
+                id=wrap_with_in_single_quote(promo_id),
+                name=wrap_with_in_single_quote(name),
+                percent=percent,
+                fixed_amount=fixed_amount,
+                promo_limit=promo_limit,
+                min_order_value=min_order_value,
+                max_discount_amount=max_discount_amount
+            )
+            # print(to_execute)
+            sql.execute(to_execute)
+            messages.info(request, 'Creation of promo is successful')
+            # return redirect('/admin/create_promo', context)
     return render(request, 'adminApp/create_promo.html', context)
 
 
 def edit_restaurant(request):
     context = {}
+
     return render(request, 'adminApp/edit_restaurant.html', context)
+
+
+def offer_promo(request):
+    context = {}
+    context['customers'] = customer_all()
+    print(context)
+    return render(request, 'adminApp/offer_promo.html', context)
 
 
 if __name__ == '__main__':

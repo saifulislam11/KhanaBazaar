@@ -1,22 +1,22 @@
 {% load static %}
-{% static 'adminApp/img' as baseURL %}
+{% static 'img' as baseURL %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>KHANABAZAAR</title>
+    <title>KHANABAZAAR rest</title>
     <!-- Required meta tags always come first -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{% static 'adminApp/img/khanabazaar.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'restApp/img/khanabazaar.png' %}">
 
     <!--build:css css/main.css-->
-    <link rel="stylesheet" href="{% static 'adminApp/modules/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap-social/bootstrap-social.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap-social/bootstrap-social.css' %}">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'adminApp/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'restApp/css/styles.css' %}">
     <!--flickity-->
     <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
@@ -29,8 +29,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'adminApp:index' %}"><img src="{% static 'adminApp/img/khanabazaar.png' %}"
-                                                                       alt="LOGO" width="41" height="30">
+        <a class="navbar-brand" href="{% url 'restApp:index' %}"><img src="{% static 'restApp/img/khanabazaar.png' %}"
+                                                                      alt="LOGO" width="41" height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -64,7 +64,7 @@
                     lipsmacking creations will tickle your culinary senses!</p>
             </div>
             <div class="col-12 col-sm-3 mt-0">
-                <img src="{% static 'adminApp/img/khanabazaar.png' %}" class="img-fluid">
+                <img src="{% static 'restApp/img/khanabazaar.png' %}" class="img-fluid">
             </div>
             <div class="col-12 col-sm-3 align-self-center">
                 <!--adding tooltip
@@ -80,85 +80,17 @@
 </header>
 
 <div class="container background">
-    <h1 class="d-flex justify-content-center">Add a New Restaurant</h1>
-    <form action="add_restaurant" method="POST" class="offset-1" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="row form-group">
-            <label for="name" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Name : </label>
-            <div>
-                <input type="text" class="form-control" id="name" name="name" placeholder="name">
-            </div>
-        </div>
+    <h1 class="d-flex justify-content-center">Edit a Food item</h1>
 
-        <div class="row form-group d-none">
-            <label for="location" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Location
-                : </label>
-            <div>
-                <input type="text" class="form-control" id="location" name="location" placeholder="location"
-                       value="23.7265768,90.3926623">
-            </div>
-        </div>
+    <div class="row restaurant-row-content">
 
-        <div class="row form-group">
-            <label for="restaurantLogo" class="col-md-2 col-form-label bg-info d-flex justify-content-center">LOGO
-                : </label>
-            <div>
-                <input type="file" class="form-control" id="restaurantLogo"
-                       name="restaurantLogo" placeholder="choose image" accept="image/png, image/jpeg"
-                       enctype="multipart/form-data">
-            </div>
+    </div>
 
-        </div>
-
-        <div class="row form-group d-none">
-            <label for="openTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Open Time
-                : </label>
-            <div>
-                <input type="text" class="form-control" id="openTime" name="openTime" placeholder="openTime"
-                       value="8:00">
-            </div>
-        </div>
-        <div class="row form-group d-none">
-            <label for="closeTime" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Close Time
-                : </label>
-            <div>
-                <input type="text" class="form-control" id="closeTime" name="closeTime" placeholder="closeTime"
-                       value="22:00">
-            </div>
-        </div>
-
-        <div class="row form-group">
-            <label for="email" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Email : </label>
-            <div>
-                <input type="text" class="form-control" id="email" name="email" placeholder="email">
-            </div>
-        </div>
-
-        <div class="row form-group">
-            <label for="password1" class="col-md-2 col-form-label bg-info d-flex justify-content-center">Password
-                : </label>
-            <div>
-                <input type="password" class="form-control" id="password1" name="password1" placeholder="****">
-            </div>
-        </div>
-
-        <div class="row form-group">
-            <label for="password2" class="col-md-2 col-form-label bg-info d-flex justify-content-center"> Confirm
-                Password : </label>
-            <div>
-                <input type="password" class="form-control" id="password2" name="password2" placeholder="****">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" class="btn btn-primary" placeholder="submit">
-
-            </div>
-        </div>
-
-
-    </form>
+{#    {% for food in foods %}#}
+{#        <div>#}
+{#            {{ food.name }} + {{ food.description }}#}
+{#        </div>#}
+{#    {% endfor %}#}
     <div class="d-flex justify-content-center">
         {% for message in messages %}
             {{ message }}
@@ -222,11 +154,11 @@
 </footer>
 <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
 <!--build:js js/main.js-->
-<script src="{% static 'adminApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
-<script src="{% static 'adminApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
-<script src="{% static 'adminApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'adminApp/js/scripts.js' %}"></script>
-<script src="{% static 'adminApp/js/form.js' %}"></script>
+<script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+<script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'restApp/js/scripts.js' %}"></script>
+<script src="{% static 'restApp/js/form.js' %}"></script>
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 
