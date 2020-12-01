@@ -298,6 +298,7 @@ def offer_promo(request):
     context = {}
     context['customers'] = customer_all()
     print(context)
+
     return render(request, 'adminApp/offer_promo.html', context)
 
 

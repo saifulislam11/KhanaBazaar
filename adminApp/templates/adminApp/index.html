@@ -90,13 +90,15 @@
     <!--adding carousel-->
     <a class="btn btn-block  btn-sm" role="button" id="add_restaurant" href="{% url 'adminApp:add_restaurant' %} ">Add
         Restaurant</a>
-    <a class="btn btn-block  btn-sm" role="button" id="edit_restaurant" href="{% url 'adminApp:edit_restaurant' %}">Edit Restaurant</a>
+    <a class="btn btn-block  btn-sm d-none" role="button" id="edit_restaurant"
+       href="{% url 'adminApp:edit_restaurant' %}">Edit Restaurant</a>
     <div>
         <a class="btn btn-block  btn-sm" role="button" id="create_promo" href="{% url 'adminApp:create_promo' %}">Create
             Promo</a>
     </div>
 
-    <a class="btn btn-block  btn-sm" role="button" id="offerPromo" href="{% url 'adminApp:offer_promo' %}">Offer Promo to Customer</a>
+    <a class="btn btn-block  btn-sm" role="button" id="offerPromo" href="{% url 'adminApp:offer_promo' %}">Offer Promo
+        to Customer</a>
     <a class="btn btn-block  btn-sm" role="button" id="suspendCustomer">Suspend Customer</a>
     <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" href="{% url 'adminApp:add_foodman' %}">Add
         FoodMan</a>
