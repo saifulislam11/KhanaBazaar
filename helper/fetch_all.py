@@ -120,6 +120,7 @@ def customer(customer_id):
     cursor.execute(to_execute)
     row = cursor.fetchone()
     cust = {'id': row[0], 'last_name': row[1], 'first_name': row[2], 'email': row[3], 'address': row[5]}
+    cust['phone_no'] = customer_phone(cust['id'])
     cursor.close()
     return cust
 
@@ -138,8 +139,94 @@ def customer_all():
     customers = []
     for row in rows:
         cust = {'id': row[0], 'last_name': row[1], 'first_name': row[2], 'email': row[3], 'address': row[5]}
+        cust['phone_no'] = customer_phone(cust['id'])
         customers.append(cust)
     return customers
+
+
+def customer_phone(id):
+    '''
+    returns the latest two numbers updated by customer
+    returns as a string using comma separated format
+    suppose 00 and 11 is the number so it will return "00,11"
+    :param id: string
+    :return: string
+    '''
+    cursor = sql.create_cursor()
+    to_execute = "SELECT * FROM CUSTOMER_PHONE WHERE CUSTOMER_ID ={id} ORDER BY CUSTOMER_ID ASC"
+    to_execute = to_execute.format(
+        id=wrap_with_in_single_quote(id)
+    )
+    cursor.execute(to_execute)
+    rows = cursor.fetchall()
+    cursor.close()
+    numbers = ''
+    lim = min(2, len(rows))
+    for i in range(lim):
+        if (i > 0):
+            numbers += ','
+        numbers += rows[i][1]
+    return numbers
+
+
+def foodman(id):
+    '''
+
+    :param id: string
+    :return: list
+    '''
+    cursor = sql.create_cursor()
+    to_execute = 'SELECT * FROM FOODMAN WHERE ID = {id}'
+    to_execute = to_execute.format(id=wrap_with_in_single_quote(id))
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    cursor.close()
+    fm = {'id': row[0], 'name': row[1], 'email': row[2], 'rating': row[4], 'image_path': row[5]}
+    fm['phone_no'] = foodman_phone(fm['id'])
+    return fm
+
+
+def foodman_all():
+    '''
+
+    :return: dictinary
+    '''
+    cursor = sql.create_cursor()
+    to_execute = 'SELECT * FROM FOODMAN'
+    cursor.execute(to_execute)
+    rows = cursor.fetchall()
+    cursor.close()
+    fms = []
+    for row in rows:
+        fm = {'id': row[0], 'name': row[1], 'email': row[2], 'rating': row[4], 'image_path': row[5]}
+        fm['phone_no'] = foodman_phone(fm['id'])
+        fms.append(fm)
+    return fms
+
+
+def foodman_phone(id):
+    '''
+    returns the latest two numbers updated by foodman
+    returns as a string using comma separated format
+    suppose 00 and 11 is the number so it will return "00,11"
+    :param id: string
+    :return: string
+    '''
+    cursor = sql.create_cursor()
+    to_execute = "SELECT * FROM FOODMAN_PHONE WHERE ID ={id} ORDER BY ID ASC"
+    to_execute = to_execute.format(
+        id=wrap_with_in_single_quote(id)
+    )
+    cursor.execute(to_execute)
+    rows = cursor.fetchall()
+    cursor.close()
+    numbers = ''
+    lim = min(2, len(rows))
+    for i in range(lim):
+        if (i > 0):
+            numbers += ','
+        numbers += rows[i][1]
+    return numbers
 
 
 def promo(promo_id):
@@ -149,7 +236,7 @@ def promo(promo_id):
     :return:
     '''
     cursor = sql.create_cursor()
-    to_execute = "SELECT * FROM PROMO WHERE ID = {id}"
+    to_execute = "SELECT * FROM PROMO WHERE ID ={id}"
     to_execute = to_execute.format(
         id=wrap_with_in_single_quote(promo_id)
     )
