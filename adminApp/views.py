@@ -347,6 +347,18 @@ def suspend_customer(request):
     return render(request, 'adminApp/suspend_customer.html', context)
 
 
+def suspend_foodman(request):
+    context = {}
+    if request.method == 'POST':
+        foodmans = request.POST.get('foodmans')
+        foodmans = foodmans.split(',')
+        print(foodmans)
+        messages.info(request, 'Work is being done in backend!!!')
+        pass
+    context['foodmans'] = fetch_all.foodman_all()
+    return render(request, 'adminApp/suspend_foodman.html', context)
+
+
 if __name__ == '__main__':
     # havershine js plus leaflet js
     print(app_name)

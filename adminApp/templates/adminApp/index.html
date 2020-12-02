@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'adminApp/css/styles.css' %}">
     <!--flickity-->
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <link rel="text/stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
 </head>
 
@@ -103,7 +103,8 @@
         Customer</a>
     <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" href="{% url 'adminApp:add_foodman' %}">Add
         FoodMan</a>
-    <a class="btn btn-block  btn-sm" role="button" id="removeFoodMan">Delete FoodMan</a>
+    <a class="btn btn-block  btn-sm" role="button" id="remove_foodman" href="{% url 'adminApp:suspend_foodman' %}">Suspend
+        FoodMan</a>
 
 </div>
 
@@ -169,8 +170,8 @@
 <script src="{% static 'adminApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
 <script src="{% static 'adminApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
 <script src="{% static 'adminApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'adminApp/js/scripts.js' %}"></script>
-<script src="{% static 'adminApp/js/form.js' %}"></script>
+{#<script src="{% static 'adminApp/js/scripts.js' %}"></script>#}
+{#<script src="{% static 'adminApp/js/form.js' %}"></script>#}
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 
