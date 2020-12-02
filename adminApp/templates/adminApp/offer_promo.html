@@ -9,16 +9,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/png" href="{% static 'restApp/img/khanabazaar.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'adminApp/img/khanabazaar.png' %}">
 
     <!--build:css css/main.css-->
-    <link rel="stylesheet" href="{% static 'restApp/modules/font-awesome/css/font-awesome.min.css' %}">
-    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap-social/bootstrap-social.css' %}">
+    <link rel="stylesheet" href="{% static 'adminApp/modules/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap-social/bootstrap-social.css' %}">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'restApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'restApp/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'adminApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminApp/css/styles.css' %}">
     <!--flickity-->
-    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <link rel="text/stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
 </head>
 
@@ -29,8 +29,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'restApp:index' %}"><img src="{% static 'restApp/img/khanabazaar.png' %}"
-                                                                      alt="LOGO" width="41" height="30">
+        <a class="navbar-brand" href="{% url 'adminApp:index' %}"><img src="{% static 'adminApp/img/khanabazaar.png' %}"
+                                                                       alt="LOGO" width="41" height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -64,7 +64,7 @@
                     lipsmacking creations will tickle your culinary senses!</p>
             </div>
             <div class="col-12 col-sm-3 mt-0">
-                <img src="{% static 'restApp/img/khanabazaar.png' %}" class="img-fluid">
+                <img src="{% static 'adminApp/img/khanabazaar.png' %}" class="img-fluid">
             </div>
             <div class="col-12 col-sm-3 align-self-center">
                 <!--adding tooltip
@@ -85,7 +85,7 @@
         <form action="." method="POST" class="offset-1">
             {% csrf_token %}
             <div class="form-group form-check d-flex offset-4">
-                <input class="form-check-input" type="checkbox" id="check_all">
+                <input class="form-check-input" type="checkbox" id="check_all" value="0">
                 <label class="form-check-label" for="check_all">Select all</label>
             </div>
             <div class="row form-group">
@@ -111,78 +111,140 @@
 
                 </table>
 
-                <input class="d-none" id="customers" value="">
-                <input class="d-none" id="promo" value="">
-                <div class="form-group row">
-                    <div class="offset-md-2 col-md-10">
-                        <input type="submit" class="btn btn-primary" placeholder="submit" id="submit">
 
-                    </div>
+            </div>
+
+            <div class="row form-group">
+                <table class="table table-striped table-bordered  table-sm table-active table-hover"
+                       id="promo_table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Promo ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Percent</th>
+                        <th scope="col">Fixed Amount</th>
+                        <th scope="col">Min Order</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for promo in promos %}
+
+                        <tr class="" id="promo{{ forloop.counter }}" name="{{ promo.id }}" scope="row"
+                            value="">
+                            <td>{{ promo.id }}</td>
+                            <td>{{ promo.name }} {{ customer.last_name }}</td>
+                            <td>{{ promo.percent }}</td>
+                            <td>{{ promo.fixed_amount }}</td>
+                            <td>{{ promo.min_order_value }}</td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+
+                </table>
+
+
+            </div>
+
+            <input class="d-none" id="customers" name="customers" value="">
+            <input class="d-none" id="promo" name="promo" value="">
+            <div class="form-group row">
+                <div class="offset-md-2 col-md-10">
+                    <input type="submit" class="btn btn-primary" placeholder="submit" id="submit">
+
                 </div>
-
-                <script>
-                    const customer_table = document.getElementById('customer_table');
-
-                    const submit = document.getElementById('submit');
-                    const check_all = document.getElementById('check_all');
-
-                    const customer_num ={{ customers|length }};
-                    console.log(customer_num);
-
-                    var i;
-                    for (i = 1; i <= customer_num; i++) {
-                        var cell = document.getElementById('cust' + i);
-                        console.log(cell.attributes.name.value);
-                        cell.addEventListener('click', function (e) {
-                            var val = this.attributes.value.value
-                            var name = this.attributes.name.value
-                            console.log(val, name);
-                            if (name == val) {
-                                // was selected befrore
-                                this.attributes.class.value = "";
-                                this.attributes.value.value = "";
-                                //console.log('unset');
-                            } else {
-                                this.attributes.class.value = "bg-primary";
-                                this.attributes.value.value = name;
-                                //console.log('set');
-                            }
-                        });
-                        //console.log(cell);
-
-                        check_all.addEventListener('click', function (event) {
-                            console.log('Event received from tagName: ' + event.target.tagName);
-                            console.log(check_all.value);
-                        })
-
-                        submit.addEventListener('click', function (e) {
-                            var customers_value = ""
-                            var i;
-                            var koyta = 0;
-                            for (i = 1; i <= customer_num; i++) {
-                                var cell = document.getElementById('cust' + i);
-                                var val = cell.attributes.value.value
-                                var name = cell.attributes.name.value
-
-                                if (check_all.value === 'on' || val == name) {
-                                    if (koyta != 0)
-                                        customers_value += ',';
-                                    customers_value += name;
-
-                                    koyta++;
-                                }
-                            }
-                            console.log(check_all.value);
-                            console.log(customers_value);
-                            alert("Wait");
-
-                        })
-
-                    }
-                </script>
             </div>
 
         </form>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const customer_table = document.getElementById('customer_table');
+
+                const submit = document.getElementById('submit');
+                const check_all = document.getElementById('check_all');
+                //console.log(check_all.attributes);
+                const customer_num ={{ customers|length }};
+                const promo_num = {{ promos|length }};
+                //console.log(customer_num);
+                var selected_promo = undefined;
+                var i;
+                for (i = 1; i <= customer_num; i++) {
+                    var cell = document.getElementById('cust' + i);
+                    //console.log(cell.attributes.name.value);
+                    cell.addEventListener('click', function (e) {
+                        var val = this.attributes.value.value
+                        var name = this.attributes.name.value
+                        //console.log(val, name);
+                        if (name == val) {
+                            // was selected befrore
+                            this.attributes.class.value = "";
+                            this.attributes.value.value = "";
+                            //console.log('unset');
+                        } else {
+                            this.attributes.class.value = "bg-primary";
+                            this.attributes.value.value = name;
+                            //console.log('set');
+                        }
+                    });
+                    //console.log(cell);
+                }
+
+                // assigning promo
+                for (i = 1; i <= promo_num; i++) {
+                    var cell = document.getElementById('promo' + i);
+                    //console.log(cell.attributes.name.value);
+                    cell.addEventListener('click', function (e) {
+
+                        if (selected_promo !== undefined) {
+                            selected_promo.attributes.class.value = "";
+                            selected_promo.attributes.value.value = "";
+                        }
+
+                        this.attributes.class.value = "bg-success";
+                        this.attributes.value.value = name;
+                        selected_promo = this;
+
+                    });
+                    //console.log(cell);
+                }
+
+                check_all.addEventListener('click', function (event) {
+
+                    check_all.value = 1 - parseInt(check_all.value);
+                });
+
+                submit.addEventListener('click', function (e) {
+                    var customers_value = ""
+                    var i;
+                    var koyta = 0;
+                    for (i = 1; i <= customer_num; i++) {
+                        var cell = document.getElementById('cust' + i);
+                        var val = cell.attributes.value.value
+                        var name = cell.attributes.name.value
+
+                        if (check_all.value === '1' || val == name) {
+                            if (koyta != 0)
+                                customers_value += ',';
+                            customers_value += name;
+
+                            koyta++;
+                        }
+                    }
+                    document.getElementById('customers').value = customers_value;
+                    if (selected_promo != undefined)
+                        document.getElementById('promo').value = selected_promo.attributes.name.value;
+
+                    //console.log(check_all.value);
+                    //console.log(document.getElementById('customers').value);
+                    //alert("Wait");
+
+                });
+
+
+            });
+
+        </script>
 
     </div>
     <div class="container">
@@ -246,11 +308,11 @@
     </footer>
     <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
     <!--build:js js/main.js-->
-    <script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
-    <script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
-    <script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-    {#<script src="{% static 'restApp/js/scripts.js' %}"></script>#}
-    {#<script src="{% static 'restApp/js/form.js' %}"></script>#}
+    <script src="{% static 'adminApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'adminApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
+    <script src="{% static 'adminApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    {#<script src="{% static 'adminApp/js/scripts.js' %}"></script>#}
+    {#<script src="{% static 'adminApp/js/form.js' %}"></script>#}
     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
     <!--endbuild-->
 

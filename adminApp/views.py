@@ -2,8 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from adminApp.urls import app_name
-from helper import sql
-from helper.fetch_all import customer_all
+from helper import sql, fetch_all
 from helper.promo import promo_exists
 from helper.read_write_to_file import handle_uploaded_file
 from helper.session import not_this_season
@@ -296,8 +295,41 @@ def edit_restaurant(request):
 
 def offer_promo(request):
     context = {}
-    context['customers'] = customer_all()
-    print(context)
+
+    if request.method == 'POST':
+        customers = request.POST.get('customers')
+        customers = customers.split(',')  # data was send via comma separated strings
+        promo_id = request.POST.get('promo')
+        if (promo_id == ''):
+            messages.info(request, 'please select a promo')
+        elif len(customers) == 0:
+            messages.info(request, 'You have not selected any customer')
+        else:
+            try:
+                cursor = sql.create_cursor()
+                remaining_promo = fetch_all.promo(promo_id)['promo_limit']
+                admin_id = request.session.get('id')
+                print(admin_id)
+                for customer_id in customers:
+                    to_execute = "INSERT INTO OFFERS(ADMIN_ID, CUSTOMER_ID, PROMO_ID, REMAINING_PROMO) VALUES ({admin_id}, {customer_id}, {promo_id},{remaining_promo})"
+                    to_execute = to_execute.format(
+                        admin_id=wrap_with_in_single_quote(admin_id),
+                        customer_id=wrap_with_in_single_quote(customer_id),
+                        promo_id=wrap_with_in_single_quote(promo_id),
+                        remaining_promo=remaining_promo
+                    )
+                    try:
+                        sql.execute(to_execute)
+                    except Exception as e:
+                        print(e)
+                        print('the customer already has this promo')
+                        pass
+            except Exception as e:
+                print('Error happen in writing in offer table ')
+                pass
+
+    context['customers'] = fetch_all.customer_all()
+    context['promos'] = fetch_all.promo_all()
 
     return render(request, 'adminApp/offer_promo.html', context)
 
