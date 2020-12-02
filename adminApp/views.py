@@ -324,14 +324,27 @@ def offer_promo(request):
                         print(e)
                         print('the customer already has this promo')
                         pass
+                    messages.info(request, 'Successfully distributed Promos')
             except Exception as e:
                 print('Error happen in writing in offer table ')
+                messages.info(request, 'Some error occured! please Try again!')
                 pass
 
     context['customers'] = fetch_all.customer_all()
     context['promos'] = fetch_all.promo_all()
 
     return render(request, 'adminApp/offer_promo.html', context)
+
+
+def suspend_customer(request):
+    context = {}
+    if request.method == 'POST':
+        customers = request.POST.get('customers')
+        customers = customers.split(',')
+        print(customers)
+        messages.info(request, 'Work is being done in backend!!!')
+    context['customers'] = fetch_all.customer_all()
+    return render(request, 'adminApp/suspend_customer.html', context)
 
 
 if __name__ == '__main__':
