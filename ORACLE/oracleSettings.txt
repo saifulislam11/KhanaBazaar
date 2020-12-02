@@ -5,3 +5,7 @@ Link                                    : https://vodro:1158/em
 User					: KB
 Password				: 123
 Navicat queries				:C:\Users\chondrima\Documents\Navicat\Oracle\Servers\khanabazar@localhost\KB
+
+
+--- ORACLE----------
+GRANT CREATE PROCEDURE TO KB;
