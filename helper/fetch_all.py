@@ -142,6 +142,43 @@ def customer_all():
     return customers
 
 
+def promo(promo_id):
+    '''
+    returns a dictionary promo(id,name,percent,fixed_amount,promo_limit,min_order_value,max_discount_amount)
+    :param promo_id:
+    :return:
+    '''
+    cursor = sql.create_cursor()
+    to_execute = "SELECT * FROM PROMO WHERE ID = {id}"
+    to_execute = to_execute.format(
+        id=wrap_with_in_single_quote(promo_id)
+    )
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    cursor.close()
+    pr = {'id': row[0], 'name': row[1], 'percent': row[2], 'fixed_amount': row[3], 'promo_limit': row[4],
+          'min_order_value': row[5], 'max_discount_amount': row[6]}
+    return pr
+
+
+def promo_all():
+    '''
+    returns all the available promos
+    :return:
+    '''
+    cursor = sql.create_cursor()
+    to_execute = "SELECT * FROM PROMO"
+    cursor.execute(to_execute)
+    rows = cursor.fetchall()
+    cursor.close()
+    promos = []
+    for row in rows:
+        pr = {'id': row[0], 'name': row[1], 'percent': row[2], 'fixed_amount': row[3], 'promo_limit': row[4],
+              'min_order_value': row[5], 'max_discount_amount': row[6]}
+        promos.append(pr)
+    return promos
+
+
 if __name__ == '__main__':
     foods = food_item_all('1000000152')
     print(foods)
