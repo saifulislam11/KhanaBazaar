@@ -34,7 +34,6 @@ def index(request):
             list2.append(dict_result[i])
         else:
             list3.append(dict_result[i])
-    c.close()
 
     # -------------logout--------------#
     if request.method == 'GET':
@@ -52,11 +51,69 @@ def index(request):
         print('has session while in index')
         if 'first_name' in request.session:
             first_name = request.session['first_name']
+        if 'id' in request.session:
+            cust_id = request.session['id']
+        command = "select * from CHOOSES WHERE CUSTOMER_ID = %s" % cust_id
+        c.execute(command)
+        orders = c.fetchall()
+        
+        order_dic=[]
+        restaurant_dic = []
+        for r in orders:
+            order_id = r[0]
+            table_name = '"' + "ORDER" + '"'
+            command = "select * from {table_name} WHERE ID = %s" % order_id
+            command = command.format(table_name="{}".format(table_name))
+            c.execute(command)
+            order = c.fetchall()
+            temp_dic = None
+            #-----------pay id-----------#
+            command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
+            c.execute(command)
+            pays = c.fetchall()
+            pay_id = None
+            for row in pays:
+                pay_id = row[1]
+                break
+            for row in order:
+                ord_id = row[0]
+                ord_time = row[1]
+                ord_deltime = row[2]
+                ord_loc = row[3]
+                temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+            command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
+            c.execute(command)
+            food_item = c.fetchall()
+            for row in food_item:
+                food_id = row[1]
+                command = "select * from FOOD_ITEM WHERE ID = %s" % food_id
+                c.execute(command)
+                fooditem_tbl = c.fetchall()
+                for fooditem in fooditem_tbl:
+                    rest_id = fooditem[1]
+                    command = "select * from RESTAURANT WHERE ID = %s" % rest_id
+                    c.execute(command)
+                    restaurant_tbl = c.fetchall()
+                    for rest in restaurant_tbl:
+                        restaurant_data = {'restaurant_id':rest[0],'restaurant_name':rest[1],'restaurant_location':rest[2],'restaurant_path':rest[3]}
+                        temp_dic.update(restaurant_data)
+                        order_dic.append(temp_dic)
+                        break
+                    break
+                break
+
+
+                   
+        print(order_dic)
+        print(restaurant_dic)
+
+        c.close()
         return render(request, 'homeApp/homepage.html',
-                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name})
+                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic,'pay_id':pay_id})
 
     # connection.commit()
     # cursor.close()
+    c.close()
     return render(request, 'homeApp/index.html', {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
 
 
@@ -90,10 +147,116 @@ def homepage(request):
         print('has session')
         if 'first_name' in request.session:
             first_name = request.session['first_name']
+        if 'id' in request.session:
+            cust_id = request.session['id']
+        star = None
+        if request.method == 'POST' and request.POST.get('feedback')!=None:
+            feedback = request.POST.get('feedback')
+            star = request.POST.get('star')
+            image = request.POST.get('imagefile')
+            pay_id = request.POST.get('pay_id')
+            restaurant_id = request.POST.get('restaurant_id')
+
+
+            print(star+' '+feedback+' '+image+' '+pay_id+' '+restaurant_id)
+            review_id = get_next_id()
+            now = datetime.now()
+            review_time = now.strftime("%d/%m/%Y %H:%M:%S")
+            comment = '"' + "COMMENT" + '"'
+            
+
+            command = "INSERT INTO REVIEW(ID,FOOD_RATING,{comment},DATE_TIME)" \
+                " VALUES({review_id},{star},{feedback}, to_date({review_time},'DD/MM/YYYY HH24:MI:SS')) "
+            command = command.format(
+            comment = comment.format(comment="{}".format(comment)),
+            review_id=wrap_with_in_single_quote(review_id),
+            star=wrap_with_in_single_quote(star),
+            feedback=wrap_with_in_single_quote(feedback),
+            review_time=wrap_with_in_single_quote(review_time)
+            )
+            print(command)
+            sql.execute(command)
+            command = "INSERT INTO REVIEW_IMAGE(REVIEW_ID,IMAGE_PATH)" \
+                " VALUES({review_id},{image}) "
+            command = command.format(
+            review_id=wrap_with_in_single_quote(review_id),
+            image=wrap_with_in_single_quote(image)
+            )
+            sql.execute(command)
+            command = "INSERT INTO REVIEWS(CUSTOMER_ID,PAY_ID,RESTAURANT_ID,REVIEW_ID)" \
+                " VALUES({cust_id},{pay_id},{restaurant_id},{review_id}) "
+            command = command.format(
+            cust_id=wrap_with_in_single_quote(cust_id),
+            pay_id=wrap_with_in_single_quote(pay_id),
+            restaurant_id=wrap_with_in_single_quote(restaurant_id),
+            review_id=wrap_with_in_single_quote(review_id)
+            )
+            sql.execute(command)
+
+
+
+        command = "select * from CHOOSES WHERE CUSTOMER_ID = %s" % cust_id
+        c.execute(command)
+        orders = c.fetchall()
+        
+        order_dic=[]
+        restaurant_dic = []
+        for r in orders:
+            order_id = r[0]
+            table_name = '"' + "ORDER" + '"'
+            command = "select * from {table_name} WHERE ID = %s" % order_id
+            command = command.format(table_name="{}".format(table_name))
+            c.execute(command)
+            order = c.fetchall()
+            #-----------pay id-----------#
+            command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
+            c.execute(command)
+            pays = c.fetchall()
+            pay_id = None
+            for row in pays:
+                pay_id = row[1]
+                break
+            temp_dic = None
+            for row in order:
+                ord_id = row[0]
+                ord_time = row[1]
+                ord_deltime = row[2]
+                ord_loc = row[3]
+                temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+            command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
+            c.execute(command)
+            food_item = c.fetchall()
+            for row in food_item:
+                food_id = row[1]
+                command = "select * from FOOD_ITEM WHERE ID = %s" % food_id
+                c.execute(command)
+                fooditem_tbl = c.fetchall()
+                for fooditem in fooditem_tbl:
+                    rest_id = fooditem[1]
+                    command = "select * from RESTAURANT WHERE ID = %s" % rest_id
+                    c.execute(command)
+                    restaurant_tbl = c.fetchall()
+                    for rest in restaurant_tbl:
+                        restaurant_data = {'restaurant_id':rest[0],'restaurant_name':rest[1],'restaurant_location':rest[2],'restaurant_path':rest[3]}
+                        temp_dic.update(restaurant_data)
+                        order_dic.append(temp_dic)
+                        break
+                    break
+                break
+
+
+                   
+        print(order_dic)
+        print(restaurant_dic)
+        
         return render(request, 'homeApp/homepage.html',
-                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name})
+                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic,'pay_id':pay_id})
+    
     if request.method == 'POST':
         # ------------------sign up-------------#
+        star = request.POST.get('star')
+        print(star)
+        print('hello world')
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
         email_log = request.POST.get('email')
@@ -172,6 +335,7 @@ def homepage(request):
                 return render(request, 'homeApp/index.html',
                               {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
             else:
+                cprime = con.cursor()
                 print('We need to do something')
                 id = customer[0]
                 last_name = customer[1]
@@ -182,10 +346,65 @@ def homepage(request):
                 request.session['email'] = email
                 # info = id + ' ' +firstname +' '+lastname+' '+email
                 # customer_info= info.split(' ')
+                cust_id = id
+                command = "select * from CHOOSES WHERE CUSTOMER_ID = %s" % cust_id
+                cprime.execute(command)
+                orders = cprime.fetchall()
+                
+                order_dic=[]
+                restaurant_dic = []
+                for r in orders:
+                    order_id = r[0]
+                    table_name = '"' + "ORDER" + '"'
+                    command = "select * from {table_name} WHERE ID = %s" % order_id
+                    command = command.format(table_name="{}".format(table_name))
+                    cprime.execute(command)
+                    order = cprime.fetchall()
+                    temp_dic = None
+                    #-----------pay id-----------#
+                    command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
+                    cprime.execute(command)
+                    pays = cprime.fetchall()
+                    pay_id = None
+                    for row in pays:
+                        pay_id = row[1]
+                        break
+                    for row in order:
+                        ord_id = row[0]
+                        ord_time = row[1]
+                        ord_deltime = row[2]
+                        ord_loc = row[3]
+                        temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+                    command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
+                    cprime.execute(command)
+                    food_item = cprime.fetchall()
+                    for row in food_item:
+                        food_id = row[1]
+                        command = "select * from FOOD_ITEM WHERE ID = %s" % food_id
+                        cprime.execute(command)
+                        fooditem_tbl = cprime.fetchall()
+                        for fooditem in fooditem_tbl:
+                            rest_id = fooditem[1]
+                            command = "select * from RESTAURANT WHERE ID = %s" % rest_id
+                            cprime.execute(command)
+                            restaurant_tbl = cprime.fetchall()
+                            for rest in restaurant_tbl:
+                                restaurant_data = {'restaurant_id':rest[0],'restaurant_name':rest[1],'restaurant_location':rest[2],'restaurant_path':rest[3]}
+                                temp_dic.update(restaurant_data)
+                                order_dic.append(temp_dic)
+                                break
+                            break
+                        break
+
+
+                        
+                print(order_dic)
+                print(restaurant_dic)
+                cprime.close()
 
                 return render(request, 'homeApp/homepage.html',
                               {'list1': list1, 'list2': list2, 'list3': list3, 'customer': customer,
-                               'customer_name': customer[2]})
+                               'customer_name': customer[2],'orders':order_dic,'pay_id':pay_id})
         else:
             return redirect('/homepage')
     else:
@@ -442,6 +661,113 @@ def restaurant(request):
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                    'all_types': unique_types, 'customer_name': first_name})
                 # return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})'''
+    elif request.method == 'GET':
+        print('get method')
+        if 'action' in request.GET:
+            action = request.GET.get('action')
+            print(action)
+            
+            to_execute = "Select * From RESTAURANT Where NAME = {action} "
+            to_execute = to_execute.format(
+                    action=wrap_with_in_single_quote(action),
+                )
+            c.execute(to_execute)
+            rest_tbl = c.fetchall()
+            REST_id = None
+            for r in rest_tbl:
+                REST_id = r[0]
+                title = r[1]
+                results = r[3]
+                print(REST_id)
+            command = "select * from FOOD_ITEM WHERE RESTAURANT_ID = %s" % REST_id
+            c.execute(command)
+            foods = c.fetchall()
+
+            dict_result = []
+            types = []
+            for row in foods:
+                id = row[0]
+                id = str(id)
+                command = "select * from FOOD_ITEM_PATH WHERE ID = %s" % id
+                c.execute(command)
+                food_path = c.fetchall()
+                path = None
+                for r in food_path:
+                    path = r[1]
+                name = row[2]
+                price = row[3]
+                food_type = row[7]
+                print(id + ' ' + name + ' ' + food_type + ' ' + path)
+                types.append(food_type)
+                dic = {'id': id, 'name': name, 'price': price, 'type': food_type, 'path': path}
+                dict_result.append(dic)
+            types_set = set(types)
+            unique_types = list(types_set)
+            c.close()
+            if not request.session.is_empty():
+                print('has session')
+                if 'first_name' in request.session:
+                    first_name = request.session['first_name']
+                if 'id' in request.session:
+                    id = request.session['id']
+                if 'last_name' in request.session:
+                    last_name = request.session['last_name']
+                if 'email' in request.session:
+                    email = request.session['email']
+                customer_dict = {'id': id, 'last_name': last_name, 'first_name': first_name, 'email': email}
+                print(customer_dict)
+                return render(request, 'homeApp/restaurant.html',
+                              {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict})
+            elif email == None or password == None:
+                return render(request, 'homeApp/restaurant_log_in.html',
+                              {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                               'all_types': unique_types, 'customer_name': 'none'})
+            else:
+                print(email + ' ' + password)
+                # c.close()
+                connect = sql.create_cursor()
+                password = get_hashed_value(password)
+                print(email, password)
+                to_execute = "Select * From CUSTOMER Where EMAIL = {email} " \
+                             "and PASSWORD_HASH = {password}"
+                to_execute = to_execute.format(
+                    email=wrap_with_in_single_quote(email),
+                    password=wrap_with_in_single_quote(password)
+                )
+                connect.execute(to_execute)
+                customer = connect.fetchone()
+                connect.close()
+                '''customer = list(customer)
+                print(customer)'''
+
+                if customer is None:
+                    print('no customer found')
+                    return render(request, 'homeApp/restaurant_log_in.html',
+                                  {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                                   'all_types': unique_types, 'customer_name': 'none'})
+                else:
+                    print('We need to do something')
+                    id = customer[0]
+                    last_name = customer[1]
+                    first_name = customer[2]
+                    email = customer[3]
+                    address = customer[5]
+                    customer_dict = {'id': id, 'last_name': last_name, 'first_name': first_name, 'email': email,
+                                     'address': address}
+                    print(customer_dict)
+                    request.session['id'] = id
+                    request.session['last_name'] = last_name
+                    request.session['first_name'] = first_name
+                    request.session['email'] = email
+                    # info = id + ' ' +firstname +' '+lastname+' '+email
+                    # customer_info= info.split(' ')
+
+                    return render(request, 'homeApp/restaurant.html',
+                                  {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                                   'all_types': unique_types, 'customer_name': first_name,
+                                   'customer_dic': customer_dict})
+            #return render(request, 'homeApp/restaurant.html')
 
 
 def confirm_payment(request):
