@@ -58,6 +58,7 @@ def index(request):
         orders = c.fetchall()
         
         order_dic=[]
+        pay_id = None
         restaurant_dic = []
         for r in orders:
             order_id = r[0]
@@ -71,16 +72,18 @@ def index(request):
             command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
             c.execute(command)
             pays = c.fetchall()
-            pay_id = None
-            for row in pays:
-                pay_id = row[1]
-                break
+            
             for row in order:
                 ord_id = row[0]
                 ord_time = row[1]
                 ord_deltime = row[2]
                 ord_loc = row[3]
                 temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+            for row in pays:
+                pay_id = row[1]
+                pay_data = {'pay_id':pay_id}
+                temp_dic.update(pay_data)
+                break
             command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
             c.execute(command)
             food_item = c.fetchall()
@@ -109,7 +112,7 @@ def index(request):
 
         c.close()
         return render(request, 'homeApp/homepage.html',
-                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic,'pay_id':pay_id})
+                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic})
 
     # connection.commit()
     # cursor.close()
@@ -200,6 +203,7 @@ def homepage(request):
         orders = c.fetchall()
         
         order_dic=[]
+        pay_id = None
         restaurant_dic = []
         for r in orders:
             order_id = r[0]
@@ -212,10 +216,6 @@ def homepage(request):
             command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
             c.execute(command)
             pays = c.fetchall()
-            pay_id = None
-            for row in pays:
-                pay_id = row[1]
-                break
             temp_dic = None
             for row in order:
                 ord_id = row[0]
@@ -223,6 +223,11 @@ def homepage(request):
                 ord_deltime = row[2]
                 ord_loc = row[3]
                 temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+            for row in pays:
+                pay_id = row[1]
+                pay_data = {'pay_id':pay_id}
+                temp_dic.update(pay_data)
+                break
             command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
             c.execute(command)
             food_item = c.fetchall()
@@ -250,7 +255,7 @@ def homepage(request):
         print(restaurant_dic)
         
         return render(request, 'homeApp/homepage.html',
-                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic,'pay_id':pay_id})
+                      {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic})
     
     if request.method == 'POST':
         # ------------------sign up-------------#
@@ -352,6 +357,7 @@ def homepage(request):
                 orders = cprime.fetchall()
                 
                 order_dic=[]
+                pay_id = None
                 restaurant_dic = []
                 for r in orders:
                     order_id = r[0]
@@ -365,16 +371,17 @@ def homepage(request):
                     command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
                     cprime.execute(command)
                     pays = cprime.fetchall()
-                    pay_id = None
-                    for row in pays:
-                        pay_id = row[1]
-                        break
                     for row in order:
                         ord_id = row[0]
                         ord_time = row[1]
                         ord_deltime = row[2]
                         ord_loc = row[3]
                         temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+                    for row in pays:
+                        pay_id = row[1]
+                        pay_data = {'pay_id':pay_id}
+                        temp_dic.update(pay_data)
+                        break
                     command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
                     cprime.execute(command)
                     food_item = cprime.fetchall()
@@ -404,7 +411,7 @@ def homepage(request):
 
                 return render(request, 'homeApp/homepage.html',
                               {'list1': list1, 'list2': list2, 'list3': list3, 'customer': customer,
-                               'customer_name': customer[2],'orders':order_dic,'pay_id':pay_id})
+                               'customer_name': customer[2],'orders':order_dic})
         else:
             return redirect('/homepage')
     else:

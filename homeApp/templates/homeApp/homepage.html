@@ -23,6 +23,9 @@
      <!--flickity-->
      <link rel="stylesheet" type="text/css" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--endbuild-->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
 </head>
 
 <body class="background" data-spy="scroll">
@@ -100,7 +103,7 @@
                     <form class="review_form" method="POST" action="{% url 'homeApp:homepage' %}" >
                         {% csrf_token %}
                         <input name="restaurant_id" value="{{order.restaurant_id}}" hidden>
-                        <input name="pay_id" value="{{pay_id}}" hidden>
+                        <input name="pay_id" value="{{order.pay_id}}" hidden>
                         
                         <div class="form-group row">
                             <label for="feedback" class="col-md-2 col-form-label ">Your Feedback</label>
@@ -110,7 +113,7 @@
                         </div>
                         
                         <div class="form-group row">
-                            <label for="feedback" style="top:4px;" class="col-md-2 col-form-label ">Image Review</label>
+                            <label for="imagefile" style="top:4px;" class="col-md-2 col-form-label ">Image Review</label>
 
                             <div class="col-md-3 ">
                                 <input style="margin-top: 16px;" type="file" id="imagefile" name="imagefile" title="choose file" >
@@ -119,11 +122,11 @@
                         <div class="form-group row">
                             <label for="rating" style="top:4px;" class="col-md-2 col-form-label ">Review</label>
                             <div class="col-md-4 rating" style="margin-top: -11px; margin-left:-55px">
-                                <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
-                                <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
-                                <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
-                                <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
-                                <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+                                <input type="radio" name="star" id="star5{{order.order_id}}" value="5"><label for="star5{{order.order_id}}"></label>
+                                <input type="radio" name="star" id="star4{{order.order_id}}" value="4"><label for="star4{{order.order_id}}"></label>
+                                <input type="radio" name="star" id="star3{{order.order_id}}" value="3"><label for="star3{{order.order_id}}"></label>
+                                <input type="radio" name="star" id="star2{{order.order_id}}" value="2"><label for="star2{{order.order_id}}"></label>
+                                <input type="radio" name="star" id="star1{{order.order_id}}" value="1"><label for="star1{{order.order_id}}"></label>
                             </div>
                         </div>
                         <div class="form-row">
@@ -179,6 +182,11 @@
             </div>
         </div>
     </header>
+    <!--{#    <div class="row row-content">#}
+        <div class="" style="height: 400px;" id="map">
+
+        </div>
+        {#    </div>#}-->
 
     <div class="container background">
         <!--adding carousel-->
@@ -255,7 +263,7 @@
             {% for restaurant in list1 %}
                 <div class="carousel-cell ">
                     <div class="fig-container">
-                        <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        <a href="{% url 'homeApp:restaurant' %}?action={{restaurant.name}}" role="button"><img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1"></a>
                         <div class="overlay"><h4>{{restaurant.name}}</h4></div>
                     </div>
                 </div>
@@ -266,7 +274,7 @@
             {% for restaurant in list2 %}
                 <div class="carousel-cell ">
                     <div class="fig-container">
-                        <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        <a href="{% url 'homeApp:restaurant' %}?action={{restaurant.name}}" role="button"><img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1"></a>
                         <div class="overlay"><h4>{{restaurant.name}}</h4></div>
                     </div>
                 </div>
@@ -277,7 +285,7 @@
             {% for restaurant in list3 %}
                 <div class="carousel-cell ">
                     <div class="fig-container">
-                        <img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1">
+                        <a href="{% url 'homeApp:restaurant' %}?action={{restaurant.name}}" role="button"><img src="{{baseURL}}/{{restaurant.path}}" width="295px" height="190px" alt="restaurant1"></a>
                         <div class="overlay"><h4>{{restaurant.name}}</h4></div>
                     </div>
                 </div>
