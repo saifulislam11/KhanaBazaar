@@ -20,6 +20,13 @@
     <!--flickity-->
     <link rel="text/stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
     <!--endbuild-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
 </head>
 
 <body class="background" data-spy="scroll">
@@ -64,28 +71,94 @@
 
 <header class="jumbotron">
     <div class="container header-content">
-        <div class="row">
-            <div class="col-12 col-sm-6">
-                <div class="title">
-                    <h1 class="ml-0">{{ name }}</h1>
+        <form>
+            <div class="row">
+                <div class=" col-6">
+                    <div class="title">
+                        <h1 class="ml-0">{{ name }}</h1>
+                    </div>
+                    <p>You are Currently {{ status }}</p>
                 </div>
-                <p>You are Currently {{ status }}</p>
-            </div>
-            <div class="col-12 col-sm-3 mt-0">
-                <div style=id="map">
+                <div class="col-12 col-sm-3 mt-0">
+                    <div class="border-dark" id="map" style="height: 200px; width: 100%;">
 
+                    </div>
+                    <div> Your current location {{ location }}</div>
+                    <input id="location" class="d-none" value="{{ location }}">
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            function splitter(ss) {
+                                var arr = ss.split(',');
+                                var a = +arr[0]
+                                var b = +arr[1]
+                                return [a, b];
+                            }
+
+                            const latlng_buet = [23.7265768, 90.3926623];
+
+                            function parser_haversine(ss) {
+                                return {
+                                    latitude: ss[0],
+                                    longitude: ss[1]
+                                }
+                            }
+
+                            var loction = document.getElementById('location');
+
+                            var map = L.map('map',
+                                {
+                                    center: latlng_buet,
+                                    enableHighAccuracy: true
+                                });
+                            console.log(loction.value)
+                            console.log(splitter(loction.value));
+                            console.log(haversine(parser_haversine(latlng_buet), parser_haversine(splitter(loction.value))))
+                            var cur_loc_marker = L.marker(latlng_buet).addTo(map);
+                            cur_loc_marker.bindPopup("Your current Location").openPopup();
+                            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                                maxZoom: 18,
+                                id: 'mapbox/streets-v11',
+                                tileSize: 512,
+                                zoomOffset: -1,
+                                accessToken: 'pk.eyJ1Ijoidm9kcm8iLCJhIjoiY2tpMzh1ZnZ5MGRwazJyc3k1d2c2dmcxOSJ9.EeruKONlBRsXX8I77GbuPw'
+                            }).addTo(map);
+                            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                                maxZoom: 18,
+                                id: 'mapbox/streets-v11',
+                                tileSize: 512,
+                                zoomOffset: -1,
+                                accessToken: 'pk.eyJ1Ijoidm9kcm8iLCJhIjoiY2tpMzh1ZnZ5MGRwazJyc3k1d2c2dmcxOSJ9.EeruKONlBRsXX8I77GbuPw'
+                            }).addTo(map);
+
+                            map.locate({
+                                enableHighAccuracy: true,
+                                watch: true,
+                                setView: true,
+                                maxZoom: 18
+                            });
+
+                            function onLocationFound(e) {
+                                cur_loc_marker.setLatLng(e.latlng);
+                                map.flyTo(e.latlng);
+                            }
+
+                            map.on('locationfound', onLocationFound);
+                        });
+                    </script>
                 </div>
-            </div>
-            <div class="col-12 col-sm-3 align-self-center">
-                <!--adding tooltip
-                <a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button"
-                data-toggle="tooltip" data-html="true"
-                title="or call at<br> +01710100921" data-placement="bottom">Reserve Table</a>-->
-                <!--<a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button" id="reservetable" >Reserve Table</a>-->
+        </form>
+        <div class="col-12 col-sm-3 align-self-center">
+            <!--adding tooltip
+            <a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button"
+            data-toggle="tooltip" data-html="true"
+            title="or call at<br> +01710100921" data-placement="bottom">Reserve Table</a>-->
+            <!--<a class="btn btn-block btn-warning btn-sm" href="#reservation" role="button" id="reservetable" >Reserve Table</a>-->
 
 
-            </div>
         </div>
+    </div>
     </div>
 </header>
 
@@ -158,7 +231,7 @@
 <script src="{% static 'foodmanApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
 <script src="{% static 'foodmanApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
-
+<script type="text/javascript" src="{% static 'foodmanApp/js/haversine.js' %}"></script>
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 
