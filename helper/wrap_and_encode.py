@@ -2,7 +2,11 @@ from datetime import datetime
 from hashlib import md5
 
 not_picked_date = datetime.strptime('0001-01-01', "%Y-%m-%d")
+not_picked_str = not_picked_date.strftime("%d-%m-%Y %H:%M:%S")
 not_delivered_date = datetime.strptime('1000-01-01', "%Y-%m-%d")
+not_delivered_str = not_delivered_date.strftime("%d-%m-%Y %H:%M:%S")
+
+date_format_oracle = 'DD/MM/YYYY HH24:MI:SS'
 
 
 def wrap_with_in_single_quote(s):

@@ -1,7 +1,7 @@
-from datetime import datetime
-
 from cx_Oracle import connect
 from django.db import connection
+
+from helper.wrap_and_encode import wrap_with_in_single_quote, not_delivered_str, date_format_oracle
 
 
 def open_connection():
@@ -59,14 +59,27 @@ def rollback():
     connection.rollback()
 
 
-# if __name__ == '__main__':
-#     my_string = None
+if __name__ == '__main__':
+    # cursor = open_connection().cursor()
+    # cursor.callproc('ORDER_PICKED', ['11111111111', '11111111111'])
+    #cursor = open_connection().cursor()
+    # cursor = sql.create_cursor()
+    to_execute = 'SELECT * FROM "ORDER" WHERE DELIVERY_TIME = TO_DATE({time}, {format})'
+    to_execute = to_execute.format(
+        time=wrap_with_in_single_quote(not_delivered_str),
+        format=wrap_with_in_single_quote(date_format_oracle)
+    )
+    print(to_execute)
+# my_string = None
 #
-#     # Create date object in given time format yyyy-mm-dd
-#     my_date = datetime.strptime('0001-01-01', "%Y-%m-%d")
+# # Create date object in given time format yyyy-mm-dd
+# my_date = datetime.strptime('0001-01-01', "%Y-%m-%d")
 #
-#     print(my_date)
-#     print('Type: ', type(my_date))
+# print(my_date.strftime("%d-%m-%Y %H:%M:%S"))
+# print('Type: ', type(my_date))
+# not_picked_date = datetime.strptime('0001-01-01', "%Y-%m-%d")
+# not_picked_str = not_picked_date.strftime("%d-%m-%Y %H:%M:%S")
+# print(not_picked_str)
 #     cursor = open_connection().cursor()
 #     to_execute = 'SELECT DELIVERY_TIME FROM "ORDER"'
 #     cursor.execute(to_execute)

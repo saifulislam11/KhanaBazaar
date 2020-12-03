@@ -1,5 +1,5 @@
 from helper import sql
-from helper.wrap_and_encode import wrap_with_in_single_quote
+from helper.wrap_and_encode import wrap_with_in_single_quote, not_picked_str, date_format_oracle
 
 
 def food_item(food_id, rest_id):
@@ -268,9 +268,29 @@ def promo_all():
     return promos
 
 
+def currently_available_orders(not_picke_str=None):
+    '''
+    returns all the not picked orders
+    :return:
+    '''
+    cursor = sql.open_connection().cursor()
+    # cursor = sql.create_cursor()
+    to_execute = 'SELECT * FROM "ORDER" WHERE DELIVERY_TIME = TO_DATE({time}, {format})'
+    to_execute = to_execute.format(
+        time=wrap_with_in_single_quote(not_picked_str),
+        format=wrap_with_in_single_quote(date_format_oracle)
+    )
+    # print(to_execute)
+    cursor.execute(to_execute)
+    rows = cursor.fetchall()
+    cursor.close()
+    orders = []
+    for row in rows:
+        order = {'id': row[0], 'location': row[3]}
+        # print(order)
+        orders.append(order)
+    return orders
+
+
 if __name__ == '__main__':
-    foods = food_item_all('1000000152')
-    print(foods)
-    for row in foods:
-        print('new food \n\n', type(row))
-        print(row)
+    current_available_orders()
