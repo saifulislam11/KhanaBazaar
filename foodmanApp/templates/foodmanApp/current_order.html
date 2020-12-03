@@ -36,8 +36,9 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'foodmanApp:index' %}"><img src="{% static 'foodmanApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
-                                              height="30">
+        <a class="navbar-brand" href="{% url 'foodmanApp:index' %}"><img
+                src="{% static 'foodmanApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
+                height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -81,79 +82,11 @@
                     <p>You are Currently {{ status }}</p>
                 </div>
                 <div class="col-12 col-sm-3 mt-0">
-                    <div class="border-dark" id="map" style="height: 200px; width: 100%;">
 
-                    </div>
-                    <div> Your current location {{ location }}</div>
                     <input id="location" name="location" class="d-none" value="{{ location }}">
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const latlng_buet = {'lat': 23.7265768, 'lng': 90.3926623};
+                    <input id="order_location" class="d-none" value="{{ order.location }}">
+                    <input id="restaurant_location" class="d-none" value="{{ restaurant.location }}">
 
-                            function splitter(ss) {
-                                var arr = ss.split(',');
-                                var a = +arr[0];
-                                var b = +arr[1];
-                                return {'lat': a, 'lng': b};
-                            }
-
-
-                            function parser_haversine(ss) {
-                                return {
-                                    latitude: ss[0],
-                                    longitude: ss[1]
-                                }
-                            }
-
-                            var loction = document.getElementById('location');
-                            var update_location_form = document.getElementById('update_location_form')
-                            var map = L.map('map',
-                                {
-                                    center: latlng_buet,
-                                    enableHighAccuracy: true
-                                });
-                            //console.log(loction.value)
-                            //console.log();
-                            //console.log(haversine(parser_haversine(latlng_buet), parser_haversine(splitter(loction.value))))
-                            var cur_loc_marker = L.marker(splitter(loction.value)).addTo(map);
-                            //loction.value = ""
-                            cur_loc_marker.bindPopup("Your current Location").openPopup();
-                            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                                maxZoom: 18,
-                                id: 'mapbox/streets-v11',
-                                tileSize: 512,
-                                zoomOffset: -1,
-                                accessToken: 'pk.eyJ1Ijoidm9kcm8iLCJhIjoiY2tpMzh1ZnZ5MGRwazJyc3k1d2c2dmcxOSJ9.EeruKONlBRsXX8I77GbuPw'
-                            }).addTo(map);
-
-
-                            map.locate({
-                                enableHighAccuracy: true,
-                                watch: true,
-                                setView: true,
-                                maxZoom: 18
-                            });
-
-                            function onLocationFound(e) {
-                                var dist = haversine(cur_loc_marker.getLatLng(), e.latlng, {
-                                    format: '{lat,lng}',
-                                    'unit': 'meter'
-                                });
-                                if (dist > 500) {
-                                    loction.value = e.latlng.lat + ',' + e.latlng.lng;
-                                    console.log(dist);
-                                    alert('Your Location is being Updated');
-                                    update_location_form.submit()
-                                }
-
-                                cur_loc_marker.setLatLng(e.latlng);
-                                map.flyTo(e.latlng);
-                            }
-
-                            map.on('locationfound', onLocationFound);
-                        });
-                    </script>
                 </div>
         </form>
         <div class="col-12 col-sm-3 align-self-center">
@@ -169,14 +102,102 @@
     </div>
 </header>
 
-<div class="container  text-light bg-dark background">
+<div class="container bg-dark background">
     <!--adding carousel-->
+    <div class="row">
+        <div class="border-dark" id="map" style="height: 400px; width: 100%;">
 
+        </div>
+        <div class="bg-info col-12"> Your current location {{ location }}</div>
+        <br>
+        <div class="bg-info col-12"> delivery location {{ order.location }}</div>
+        <div class="bg-info col-12"> Restaurant location {{ restaurant.location }}</div>
+    </div>
 
-    <a class="btn btn-block  btn-sm" role="button" id="change_logo">Current Order</a>
+    <div class="container bg-info">
+        <div class="d-flex justify-content-center">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    </div>
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const latlng_buet = {'lat': 23.7265768, 'lng': 90.3926623};
 
+        function splitter(ss) {
+            var arr = ss.split(',');
+            var a = +arr[0];
+            var b = +arr[1];
+            return {'lat': a, 'lng': b};
+        }
+
+
+        function parser_haversine(ss) {
+            return {
+                latitude: ss[0],
+                longitude: ss[1]
+            }
+        }
+
+        var loction = document.getElementById('location');
+        var order_location = document.getElementById('order_location');
+        var restaurant_location = document.getElementById('restaurant_location');
+        var update_location_form = document.getElementById('update_location_form')
+        var map = L.map('map',
+            {
+                center: latlng_buet,
+                enableHighAccuracy: true
+            });
+        //console.log(loction.value)
+        //console.log();
+        //console.log(haversine(parser_haversine(latlng_buet), parser_haversine(splitter(loction.value))))
+        var cur_loc_marker = L.marker(splitter(loction.value)).addTo(map);
+        var order_loc_marker = L.marker(splitter(order_location.value)).addTo(map);
+        var restaurant_loc_marker = L.marker(splitter(restaurant_location.value)).addTo(map);
+        //loction.value = ""
+        cur_loc_marker.bindPopup("Your current Location").openPopup();
+        order_loc_marker.bindPopup("Delivery here").openPopup();
+        restaurant_loc_marker.bindPopup("Restaurant Here").openPopup();
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1Ijoidm9kcm8iLCJhIjoiY2tpMzh1ZnZ5MGRwazJyc3k1d2c2dmcxOSJ9.EeruKONlBRsXX8I77GbuPw'
+        }).addTo(map);
+
+
+        map.locate({
+            enableHighAccuracy: true,
+            watch: true,
+            setView: true,
+            maxZoom: 18
+        });
+
+        function onLocationFound(e) {
+            var dist = haversine(cur_loc_marker.getLatLng(), e.latlng, {
+                format: '{lat,lng}',
+                'unit': 'meter'
+            });
+            if (dist > 500) {
+                loction.value = e.latlng.lat + ',' + e.latlng.lng;
+                console.log(dist);
+                alert('Your Location is being Updated');
+                update_location_form.submit()
+            }
+
+            cur_loc_marker.setLatLng(e.latlng);
+            map.flyTo(e.latlng);
+            //map.fitBounds(cur_loc_marker.getLatLng(), order_loc_marker.getLatLng(), restaurant_loc_marker.getLatLng())
+        }
+
+        map.on('locationfound', onLocationFound);
+    });
+</script>
 <div class="row restaurant-search-row-header">
 
 </div>

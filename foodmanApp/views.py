@@ -5,7 +5,7 @@ from helper.fetch_all import currently_available_orders
 
 app_name = 'foodmanApp'
 # Create your views here.
-from helper import session, sql
+from helper import session, sql, fetch_all
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
 
 
@@ -91,8 +91,33 @@ def current_order(request):
     if session.not_this_season(request, app_name):
         messages.info(request, 'Please Sign in first')
         return redirect('/foodman')
+    foodman_id = request.session.get('id')
 
+    if request.method == 'GET':
+        if 'location' in request.GET:
+            try:
+                foodman_id = request.session.get('id')
+                location = request.GET.get('location')
+                if location != request.session.get('location'):
+                    request.session['location'] = location
+                    to_execute = "UPDATE FOODMAN SET LOCATION = {location} WHERE ID = {id}"
+                    to_execute = to_execute.format(
+                        location=wrap_with_in_single_quote(location),
+                        id=wrap_with_in_single_quote(foodman_id)
+                    )
+                    sql.execute(to_execute)
+                    print(to_execute)
+            except Exception as e:
+                print(e)
+                pass
+        else:
+            print('why location is not being updated')
     context.update(request.session)
+
+    context['order'] = fetch_all.current_order_by_foodman(foodman_id)
+    order_id = context['order']['id']
+    rest_id = fetch_all.restaurant_ID_by_order_ID(order_id)
+    context['restaurant'] = fetch_all.restaurant(rest_id)
     return render(request, 'foodmanApp/current_order.html', context)
 
 
