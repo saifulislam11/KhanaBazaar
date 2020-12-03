@@ -27,10 +27,6 @@
   color: rgb(179, 179, 182);
   padding-top: .8rem;
 }
-.navbar-dark .navbar-nav .nav-link2{
-  color: rgb(255, 251, 0);
-  padding-top: .8rem;
-}
 .navbar-dark .navbar-nav .nav-link:hover{
   border-bottom: 1px solid white;
   
@@ -88,7 +84,7 @@
 .jumbotron {
   margin: 0px auto;
   padding: 30px 20px;
-  background: linear-gradient(to bottom left, #e60688de 0%, #0b0b38 84%);
+  background: #24173d;
   color: floralwhite;
 }
 /*---end of header---*/
@@ -129,15 +125,14 @@ body {
   z-index: 1;
 }
 .modal-content .modal-header {
-  background: #ffee03;
-  color: rgb(8, 8, 7) ;
+  background: #512DA8;
+  color: floralwhite ;
 }
 .modal-content .modal-header button {
   color: floralwhite ;
 }
 .modal-content .modal-body {
-  background: #ffffff;
-  color: #0b0b38;
+  background: #9575CD;
 }
 header div div div img{
   border-radius: 50%;
@@ -263,37 +258,4 @@ header div div div img{
 .flickity-prev-next-button.next {
   right: -40px;
 }
-/*-----card-----*/
-.card-header{
-  text-align: center;
-  padding-left: 30px;
-  font-weight: 800;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-size: 40px;
-  color: rgb(241, 105, 241)!important;
-}
-.card-body-header{
-  padding-left: 100px;
-  color: #168cec;
-  font-style: italic;
-}
-/*------end of card---------*/
-
-/*-------button-------*/
-.btn-warning{
-  background-color: #b9f10e!important;
-  color: rgba(0, 0, 0, 0.9);
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
-}
-.btn-warning:hover{
-  opacity: 1;
-  color: rgba(0, 0, 0);
-}
-/*---------login modal-----------*/
-
   

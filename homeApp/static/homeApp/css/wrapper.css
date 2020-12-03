@@ -1,0 +1,211 @@
+.review-button{
+    width: 120px;
+    height: 40px;
+    font-size: 15px;
+    margin-left: 40px;
+    margin-top: 20px;
+    
+    text-transform: uppercase;
+}
+.btn:link,
+.btn:visited {
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 15px 40px;
+  display: inline-block;
+  border-radius: 100px;
+  -webkit-transition: all .2s;
+  transition: all .2s;
+  position: absolute;
+}
+
+.btn:hover {
+  -webkit-transform: translateY(-3px);
+          transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  -webkit-transform: translateY(-1px);
+          transform: translateY(-1px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white {
+  background-color: rgb(245, 241, 10);
+  color: rgb(134, 36, 36);
+}
+
+.btn::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  border-radius: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  -webkit-transition: all .4s;
+  transition: all .4s;
+}
+
+.btn-white::after {
+  background-color: #fff;
+}
+
+.btn:hover::after {
+  -webkit-transform: scaleX(1.4) scaleY(1.6);
+          transform: scaleX(1.4) scaleY(1.6);
+  opacity: 0;
+}
+
+.btn-animated {
+  -webkit-animation: moveInBottom 5s ease-out;
+          animation: moveInBottom 5s ease-out;
+  -webkit-animation-fill-mode: backwards;
+          animation-fill-mode: backwards;
+}
+
+@-webkit-keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+}
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+}
+
+
+.dropdown{
+    color: rgb(179, 179, 182);
+}
+.dropdown-list{
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    transform: perspective(1000px) rotateX(-90deg);
+    transform-origin: top;
+    transition: 0.5s;
+}
+.active{
+    transform: perspective(1000px) rotateX(0deg);
+}
+.dropdown-list li{
+    list-style: none;
+}
+.dropdown-list li a{
+    display: block;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    background: #262626;
+    color: #fff;
+    border-bottom: 1px solid rgb(0,0,0,0.2);
+}
+.dropdown-list li a:hover{
+    background: #0d7ad0;
+
+}
+.carousel .carousel-item {
+  height: 590px;
+}
+
+.carousel-item img {
+    position: absolute;
+    object-fit:cover;
+    top: 0;
+    left: 0;
+    min-height: 590px;
+}
+/*----------------modal -----------------*/
+.modal-content .modal-header {
+  background:rgba(0, 0, 0, 0.8);
+  color: rgb(56, 175, 64) ;
+}
+.modal-content .modal-header button {
+  color: floralwhite ;
+
+}
+.modal-content .modal-body {
+  background: rgba(0, 0, 0, 0.1);
+}
+.modal-content .modal-header .modal-price{
+  margin-left: 90px;
+  margin-top: 8px;
+  color: rgb(255, 238, 5);
+  font-style: italic;
+  font-weight: lighter;
+}
+/*------------------rating------------*/
+.col-form-label{
+  padding-left: 7%;
+}
+.col-form-label-payment{
+ padding-left: 3%;
+ color: rgb(246, 241, 247);
+ font-family: sans-serif;
+}
+.form-box{
+  background-color: rgba(255, 255, 255,);
+  padding-right: 5%;
+  color: rgb(255, 244, 244);
+}
+.rating{
+  position: relative;
+  
+}
+.rating input{
+  display: none;
+}
+.rating label{
+ float:right;
+ display: inline;
+ color: rgb(255, 255, 255);
+ position: relative;
+ margin-right: 2%;
+ align-items: flex-start;
+ 
+ font-size: 40px;
+ text-shadow: 1px 1px #222;
+ top: 0;
+ left: 0;
+ 
+
+}
+.rating label:before{ 
+  content: "\2605";
+  
+  
+}
+.rating input:checked ~ label{
+  color: gold;
+  text-shadow: 1px 1px #e74c3c;
+}
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label{
+  color: gold;
+}
+.rating input:checked > label:hover,
+.rating input:checked > label:hover ~ label{
+  color: gold;
+  text-shadow: 1px 1px goldenrod;
+}

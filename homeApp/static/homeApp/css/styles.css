@@ -110,17 +110,18 @@ body {
   padding: 10px;
 }
 .carousel {
-  background: #512DA8;
+  background: #bcdfd5b7;
 }
 .carousel .carousel-item {
-  height: 300px;
+  height: 590px;
 }
 
-.carousel .carousel-item img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-height: 300px;
+.carousel-item img {
+    position: absolute;
+    object-fit:cover;
+    top: 0;
+    left: 0;
+    min-height: 590px;
 }
 #carouselButton {
   right: 0px;
