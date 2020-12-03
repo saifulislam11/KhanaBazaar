@@ -252,8 +252,7 @@ def update_location(request):
     if not_this_season(request, app_name):
         messages.info(request, "Please Log in")
         return redirect('/rest')
-    context['location'] = request.session.get('location')
-    context['user_name'] = request.session.get('user_name')
+
     rest_id = request.session.get('id')
     if request.method == 'POST':
         location = request.POST.get('location')
@@ -271,4 +270,6 @@ def update_location(request):
             except Exception as e:
                 print(e)
                 pass
+    context['location'] = request.session.get('location')
+    context['user_name'] = request.session.get('user_name')
     return render(request, 'restApp/update_location.html', context)
