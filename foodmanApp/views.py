@@ -1,5 +1,7 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from helper.fetch_all import currently_available_orders
 
 app_name = 'foodmanApp'
 # Create your views here.
@@ -82,3 +84,48 @@ def index(request):
             return render(request, 'foodmanApp/sign_in.html', context)
 
     # return render(request, 'foodmanApp/sign_in.html', context)
+
+
+def current_order(request):
+    context = {}
+    if session.not_this_season(request, app_name):
+        messages.info(request, 'Please Sign in first')
+        return redirect('/foodman')
+
+    context.update(request.session)
+    return render(request, 'foodmanApp/current_order.html', context)
+
+
+def accept_order(request):
+    context = {}
+    if session.not_this_season(request, app_name):
+        messages.info(request, 'Please Sign in first')
+        return redirect('/foodman')
+    print(request.session.get('status'), 'F')
+    if request.session.get('status') != 'F':
+        messages.info(request, 'You are either busy or In rest.')
+        return redirect('/foodman')
+
+    if request.method == 'POST':
+        order_id = request.POST.get('order')
+        if order_id != '':
+            try:
+                foodman_id = request.session.get('id')
+
+                cursor = sql.create_cursor()
+                cursor.callproc('ORDER_PICKED', [order_id, foodman_id])
+                print('Successfull')
+                request.session['status'] = 'R'
+            except Exception as e:
+                print('the order was already picked')
+                print(e)
+                pass
+            finally:
+                cursor.close()
+        print(order_id)
+        messages.info(request, 'Now delivery is our motto!!!!')
+
+    context.update(request.session)
+    context['orders'] = currently_available_orders()
+    print(currently_available_orders())
+    return render(request, 'foodmanApp/accept_order.html', context)

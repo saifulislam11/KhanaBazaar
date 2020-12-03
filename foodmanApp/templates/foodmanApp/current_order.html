@@ -36,9 +36,8 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand"
-           href="#"><img src="{% static 'foodmanApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
-                         height=" 30">
+        <a class="navbar-brand" href="{% url 'foodmanApp:index' %}"><img src="{% static 'foodmanApp/img/khanabazaar.png' %}" alt="LOGO" width="41"
+                                              height="30">
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
@@ -174,18 +173,8 @@
     <!--adding carousel-->
 
 
-    <a class="btn btn-block  btn-sm" role="button" id="current_order" name="current_order"
-       href="{% url 'foodmanApp:current_order' %}">Current Order</a>
-    <a class="btn btn-block  btn-sm" role="button" id="accept_order" name="accept_order"
-       href="{% url 'foodmanApp:accept_order' %}">Accept Order</a>
+    <a class="btn btn-block  btn-sm" role="button" id="change_logo">Current Order</a>
 
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    </div>
 </div>
 
 <div class="row restaurant-search-row-header">
