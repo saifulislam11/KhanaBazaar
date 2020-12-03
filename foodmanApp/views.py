@@ -36,7 +36,7 @@ def index(request):
                     request.session['image_path'] = row[5]
                     request.session['status'] = row[7]
                     context.update(request.session)
-                    print(context)
+                    # print(context)
                     return render(request, 'foodmanApp/index.html', context)
             except Exception as e:
                 print(e)
@@ -55,6 +55,25 @@ def index(request):
             request.session.flush()
             print('log out ing')
             return render(request, 'foodmanApp/sign_in.html', context)
+        if 'location' in request.GET:
+            try:
+                foodman_id = request.session.get('id')
+                location = request.GET.get('location')
+                if location != request.session.get('location'):
+                    request.session['location'] = location
+                    to_execute = "UPDATE FOODMAN SET LOCATION = {location} WHERE ID = {id}"
+                    to_execute = to_execute.format(
+                        location=wrap_with_in_single_quote(location),
+                        id=wrap_with_in_single_quote(foodman_id)
+                    )
+                    sql.execute(to_execute)
+                    print(to_execute)
+            except Exception as e:
+                print(e)
+                pass
+        else:
+            print('why location is not being updated')
+
         if not request.session.is_empty():
             context.update(request.session)
             print(context)
