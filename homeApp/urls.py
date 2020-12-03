@@ -1,8 +1,10 @@
 from django.urls import path
-from . import views
 
 ###registering appname to hyperlink in htmls
 app_name = 'homeApp'
+from . import views
+
+
 
 
 urlpatterns = [

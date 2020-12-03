@@ -7,6 +7,8 @@ import helper.wrap_and_encode
 from helper import sql
 from helper.sql import get_next_id
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
+from homeApp.urls import app_name
+from helper.session import not_this_season
 
 con = cx_Oracle.connect("KB", "123", "localhost/orcl")
 print("Connected!")
@@ -35,6 +37,12 @@ def index(request):
             list2.append(dict_result[i])
         else:
             list3.append(dict_result[i])
+    
+    #------------checking this session-----------#
+    if not_this_season(request, app_name):
+        c.close()
+        return render(request, 'homeApp/index.html', {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
+
 
     # -------------logout--------------#
     if request.method == 'GET':
@@ -146,6 +154,171 @@ def homepage(request):
 
     # connection.commit()
     # cursor.close()
+    #-----------check session---------#
+    if not_this_season(request, app_name):
+        if request.method == 'POST':
+            # ------------------sign up-------------#
+            star = request.POST.get('star')
+            print(star)
+            print('hello world')
+            firstname = request.POST.get('firstname')
+            lastname = request.POST.get('lastname')
+            email_log = request.POST.get('email')
+            phone = request.POST.get('phone')
+            password1 = request.POST.get('password')
+            password1 = get_hashed_value(password1)
+            password2 = request.POST.get('confirmpassword')
+            address = request.POST.get('address')
+            id = get_next_id()
+            # print(firstname+lastname+address)
+            if (firstname != None and lastname != None and email_log != None):
+                to_execute = "INSERT INTO CUSTOMER(ID,LAST_NAME,FIRST_NAME,EMAIL,PASSWORD_HASH,ADDRESS)" \
+                            " VALUES({id}, {lastname}, {firstname}, {email}, {password_hash}, {address}) "
+                to_execute_phone = "INSERT INTO CUSTOMER_PHONE(CUSTOMER_ID,PHONE_NO)" \
+                                " VALUES({id}, {phone}) "
+                to_execute_phone = to_execute_phone.format(
+                    id=wrap_with_in_single_quote(id),
+                    phone=wrap_with_in_single_quote(phone)
+                )
+                to_execute = to_execute.format(
+                    id=wrap_with_in_single_quote(id),
+                    firstname=wrap_with_in_single_quote(firstname),
+                    lastname=wrap_with_in_single_quote(lastname),
+                    email=wrap_with_in_single_quote(email_log),
+                    password_hash=wrap_with_in_single_quote(password1),
+                    address=wrap_with_in_single_quote(address)
+                )
+
+                info = id + ' ' + firstname + ' ' + lastname + ' ' + email_log
+                customer_info = info.split(' ')
+                print(customer_info)
+
+                # print(firstname+lastname+address)
+                print(to_execute)
+                try:
+                    sql.execute(to_execute)
+                    sql.execute(to_execute_phone)
+                    contex = 'registered successfully'
+                    return render(request, 'homeApp/index.html',
+                                {'list1': list1, 'list2': list2, 'list3': list3, 'contex': contex})
+
+                except:
+                    print("Something is not right. And why rollback is not working.")
+                    sql.rollback()
+                    # messages.info(request, "adding of foodman was unsuccessfull")
+                    return render(request, 'homeApp/index.html', {'list1': list1, 'list2': list2, 'list3': list3,
+                                                                'contex': 'something went wrong.try again'})
+
+                finally:
+                    c.close()
+                    sql.commit()
+
+                # return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
+            if lastname == None:
+                # ---------------------sign up--------------------#
+                c.close()
+                connect = sql.create_cursor()
+                email = request.POST['email']
+                password = request.POST['password']
+                password = get_hashed_value(password)
+                print(email, password)
+                to_execute = "Select * From CUSTOMER Where EMAIL = {email} " \
+                            "and PASSWORD_HASH = {password}"
+                to_execute = to_execute.format(
+                    email=wrap_with_in_single_quote(email),
+                    password=wrap_with_in_single_quote(password)
+                )
+                connect.execute(to_execute)
+                customer = connect.fetchone()
+                connect.close()
+                customer = list(customer)
+                print(customer)
+
+                if customer is None:
+                    print('no customer found')
+                    return render(request, 'homeApp/index.html',
+                                {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
+                else:
+                    cprime = con.cursor()
+                    print('We need to do something')
+                    id = customer[0]
+                    last_name = customer[1]
+                    first_name = customer[2]
+                    request.session['id'] = id
+                    request.session['last_name'] = last_name
+                    request.session['first_name'] = first_name
+                    request.session['email'] = email
+                    request.session['app_name'] = app_name
+                    # info = id + ' ' +firstname +' '+lastname+' '+email
+                    # customer_info= info.split(' ')
+                    cust_id = id
+                    command = "select * from CHOOSES WHERE CUSTOMER_ID = %s" % cust_id
+                    cprime.execute(command)
+                    orders = cprime.fetchall()
+                    
+                    order_dic=[]
+                    pay_id = None
+                    restaurant_dic = []
+                    for r in orders:
+                        order_id = r[0]
+                        table_name = '"' + "ORDER" + '"'
+                        command = "select * from {table_name} WHERE ID = %s" % order_id
+                        command = command.format(table_name="{}".format(table_name))
+                        cprime.execute(command)
+                        order = cprime.fetchall()
+                        temp_dic = None
+                        #-----------pay id-----------#
+                        command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
+                        cprime.execute(command)
+                        pays = cprime.fetchall()
+                        for row in order:
+                            ord_id = row[0]
+                            ord_time = row[1]
+                            ord_deltime = row[2]
+                            ord_loc = row[3]
+                            temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
+                        for row in pays:
+                            pay_id = row[1]
+                            pay_data = {'pay_id':pay_id}
+                            temp_dic.update(pay_data)
+                            break
+                        command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
+                        cprime.execute(command)
+                        food_item = cprime.fetchall()
+                        for row in food_item:
+                            food_id = row[1]
+                            command = "select * from FOOD_ITEM WHERE ID = %s" % food_id
+                            cprime.execute(command)
+                            fooditem_tbl = cprime.fetchall()
+                            for fooditem in fooditem_tbl:
+                                rest_id = fooditem[1]
+                                command = "select * from RESTAURANT WHERE ID = %s" % rest_id
+                                cprime.execute(command)
+                                restaurant_tbl = cprime.fetchall()
+                                for rest in restaurant_tbl:
+                                    restaurant_data = {'restaurant_id':rest[0],'restaurant_name':rest[1],'restaurant_location':rest[2],'restaurant_path':rest[3]}
+                                    temp_dic.update(restaurant_data)
+                                    order_dic.append(temp_dic)
+                                    break
+                                break
+                            break
+
+
+                            
+                    print(order_dic)
+                    print(restaurant_dic)
+                    cprime.close()
+
+                    return render(request, 'homeApp/homepage.html',
+                                {'list1': list1, 'list2': list2, 'list3': list3, 'customer': customer,
+                                'customer_name': customer[2],'orders':order_dic})
+            else:
+                return redirect('/homepage')
+        else:
+            print('couldnt fetch post method')
+            return render(request, 'homeApp/index.html', {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
+        c.close()
+
     # ----------------sign in----------------#
     if not request.session.is_empty():
         print('has session')
@@ -258,167 +431,7 @@ def homepage(request):
         return render(request, 'homeApp/homepage.html',
                       {'list1': list1, 'list2': list2, 'list3': list3, 'customer_name': first_name,'orders':order_dic})
     
-    if request.method == 'POST':
-        # ------------------sign up-------------#
-        star = request.POST.get('star')
-        print(star)
-        print('hello world')
-        firstname = request.POST.get('firstname')
-        lastname = request.POST.get('lastname')
-        email_log = request.POST.get('email')
-        phone = request.POST.get('phone')
-        password1 = request.POST.get('password')
-        password1 = get_hashed_value(password1)
-        password2 = request.POST.get('confirmpassword')
-        address = request.POST.get('address')
-        id = get_next_id()
-        # print(firstname+lastname+address)
-        if (firstname != None and lastname != None and email_log != None):
-            to_execute = "INSERT INTO CUSTOMER(ID,LAST_NAME,FIRST_NAME,EMAIL,PASSWORD_HASH,ADDRESS)" \
-                         " VALUES({id}, {lastname}, {firstname}, {email}, {password_hash}, {address}) "
-            to_execute_phone = "INSERT INTO CUSTOMER_PHONE(CUSTOMER_ID,PHONE_NO)" \
-                               " VALUES({id}, {phone}) "
-            to_execute_phone = to_execute_phone.format(
-                id=wrap_with_in_single_quote(id),
-                phone=wrap_with_in_single_quote(phone)
-            )
-            to_execute = to_execute.format(
-                id=wrap_with_in_single_quote(id),
-                firstname=wrap_with_in_single_quote(firstname),
-                lastname=wrap_with_in_single_quote(lastname),
-                email=wrap_with_in_single_quote(email_log),
-                password_hash=wrap_with_in_single_quote(password1),
-                address=wrap_with_in_single_quote(address)
-            )
-
-            info = id + ' ' + firstname + ' ' + lastname + ' ' + email_log
-            customer_info = info.split(' ')
-            print(customer_info)
-
-            # print(firstname+lastname+address)
-            print(to_execute)
-            try:
-                sql.execute(to_execute)
-                sql.execute(to_execute_phone)
-                contex = 'registered successfully'
-                return render(request, 'homeApp/index.html',
-                              {'list1': list1, 'list2': list2, 'list3': list3, 'contex': contex})
-
-            except:
-                print("Something is not right. And why rollback is not working.")
-                sql.rollback()
-                # messages.info(request, "adding of foodman was unsuccessfull")
-                return render(request, 'homeApp/index.html', {'list1': list1, 'list2': list2, 'list3': list3,
-                                                              'contex': 'something went wrong.try again'})
-
-            finally:
-                c.close()
-                sql.commit()
-
-            # return render(request, 'homeApp/homepage.html',{'list1':list1,'list2':list2,'list3':list3,'customer':customer_info,'customer_name':firstname})
-        if lastname == None:
-            # ---------------------sign up--------------------#
-            c.close()
-            connect = sql.create_cursor()
-            email = request.POST['email']
-            password = request.POST['password']
-            password = get_hashed_value(password)
-            print(email, password)
-            to_execute = "Select * From CUSTOMER Where EMAIL = {email} " \
-                         "and PASSWORD_HASH = {password}"
-            to_execute = to_execute.format(
-                email=wrap_with_in_single_quote(email),
-                password=wrap_with_in_single_quote(password)
-            )
-            connect.execute(to_execute)
-            customer = connect.fetchone()
-            connect.close()
-            customer = list(customer)
-            print(customer)
-
-            if customer is None:
-                print('no customer found')
-                return render(request, 'homeApp/index.html',
-                              {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
-            else:
-                cprime = con.cursor()
-                print('We need to do something')
-                id = customer[0]
-                last_name = customer[1]
-                first_name = customer[2]
-                request.session['id'] = id
-                request.session['last_name'] = last_name
-                request.session['first_name'] = first_name
-                request.session['email'] = email
-                # info = id + ' ' +firstname +' '+lastname+' '+email
-                # customer_info= info.split(' ')
-                cust_id = id
-                command = "select * from CHOOSES WHERE CUSTOMER_ID = %s" % cust_id
-                cprime.execute(command)
-                orders = cprime.fetchall()
-                
-                order_dic=[]
-                pay_id = None
-                restaurant_dic = []
-                for r in orders:
-                    order_id = r[0]
-                    table_name = '"' + "ORDER" + '"'
-                    command = "select * from {table_name} WHERE ID = %s" % order_id
-                    command = command.format(table_name="{}".format(table_name))
-                    cprime.execute(command)
-                    order = cprime.fetchall()
-                    temp_dic = None
-                    #-----------pay id-----------#
-                    command = "select * from PAYS WHERE ORDER_ID = %s" % order_id
-                    cprime.execute(command)
-                    pays = cprime.fetchall()
-                    for row in order:
-                        ord_id = row[0]
-                        ord_time = row[1]
-                        ord_deltime = row[2]
-                        ord_loc = row[3]
-                        temp_dic = {'order_id':ord_id,'order_time':ord_time,'delivery_time':ord_deltime,'delivery_location':ord_loc}
-                    for row in pays:
-                        pay_id = row[1]
-                        pay_data = {'pay_id':pay_id}
-                        temp_dic.update(pay_data)
-                        break
-                    command = "select * from SELECTED WHERE ORDER_ID = %s" % order_id
-                    cprime.execute(command)
-                    food_item = cprime.fetchall()
-                    for row in food_item:
-                        food_id = row[1]
-                        command = "select * from FOOD_ITEM WHERE ID = %s" % food_id
-                        cprime.execute(command)
-                        fooditem_tbl = cprime.fetchall()
-                        for fooditem in fooditem_tbl:
-                            rest_id = fooditem[1]
-                            command = "select * from RESTAURANT WHERE ID = %s" % rest_id
-                            cprime.execute(command)
-                            restaurant_tbl = cprime.fetchall()
-                            for rest in restaurant_tbl:
-                                restaurant_data = {'restaurant_id':rest[0],'restaurant_name':rest[1],'restaurant_location':rest[2],'restaurant_path':rest[3]}
-                                temp_dic.update(restaurant_data)
-                                order_dic.append(temp_dic)
-                                break
-                            break
-                        break
-
-
-                        
-                print(order_dic)
-                print(restaurant_dic)
-                cprime.close()
-
-                return render(request, 'homeApp/homepage.html',
-                              {'list1': list1, 'list2': list2, 'list3': list3, 'customer': customer,
-                               'customer_name': customer[2],'orders':order_dic})
-        else:
-            return redirect('/homepage')
-    else:
-        print('couldnt fetch post method')
-        return render(request, 'homeApp/index.html', {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
-    c.close()
+    
     # ---------------------end of sign in ------------------#
 
 
@@ -657,6 +670,7 @@ def restaurant(request):
                     request.session['last_name'] = last_name
                     request.session['first_name'] = first_name
                     request.session['email'] = email
+                    request.session['app_name'] = app_name
                     # info = id + ' ' +firstname +' '+lastname+' '+email
                     # customer_info= info.split(' ')
 
@@ -712,6 +726,12 @@ def restaurant(request):
             types_set = set(types)
             unique_types = list(types_set)
             c.close()
+            #-----------checking session-----------#
+            if not_this_season(request, app_name):
+                return render(request, 'homeApp/restaurant_log_in.html',
+                              {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
+                               'all_types': unique_types, 'customer_name': 'none'})
+
             if not request.session.is_empty():
                 print('has session')
                 if 'first_name' in request.session:
@@ -768,6 +788,7 @@ def restaurant(request):
                     request.session['last_name'] = last_name
                     request.session['first_name'] = first_name
                     request.session['email'] = email
+                    request.session['app_name'] = app_name
                     # info = id + ' ' +firstname +' '+lastname+' '+email
                     # customer_info= info.split(' ')
 
