@@ -181,7 +181,8 @@ def foodman(id):
     cursor.execute(to_execute)
     row = cursor.fetchone()
     cursor.close()
-    fm = {'id': row[0], 'name': row[1], 'email': row[2], 'rating': row[4], 'image_path': row[5]}
+    fm = {'id': row[0], 'name': row[1], 'email': row[2], 'rating': row[4], 'image_path': row[5], 'location': row[6],
+          'status': row[7]}
     fm['phone_no'] = foodman_phone(fm['id'])
     return fm
 
@@ -198,7 +199,8 @@ def foodman_all():
     cursor.close()
     fms = []
     for row in rows:
-        fm = {'id': row[0], 'name': row[1], 'email': row[2], 'rating': row[4], 'image_path': row[5]}
+        fm = {'id': row[0], 'name': row[1], 'email': row[2], 'rating': row[4], 'image_path': row[5], 'location': row[6],
+              'status': row[7]}
         fm['phone_no'] = foodman_phone(fm['id'])
         fms.append(fm)
     return fms
