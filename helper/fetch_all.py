@@ -1,5 +1,5 @@
 from helper import sql
-from helper.wrap_and_encode import wrap_with_in_single_quote, not_picked_str, date_format_oracle
+from helper.wrap_and_encode import wrap_with_in_single_quote, not_picked_str, date_format_oracle, not_delivered_str
 
 
 def food_item(food_id, rest_id):
@@ -253,7 +253,7 @@ def promo(promo_id):
 def promo_all():
     '''
     returns all the available promos
-    :return:
+    :return: list of dict
     '''
     cursor = sql.create_cursor()
     to_execute = "SELECT * FROM PROMO"
@@ -290,6 +290,74 @@ def currently_available_orders(not_picke_str=None):
         # print(order)
         orders.append(order)
     return orders
+
+
+def current_order_by_foodman(foodman_id):
+    '''
+    returns all the available order for a foodman
+    :param foodman_id: string
+    :return: dict
+    '''
+    to_excute = 'SELECT O.ID, O.DELIVERY_LOCATION FROM DELIVERS D, "ORDER" O WHERE D.FOODMAN_ID = {foodman_id} AND O.DELIVERY_TIME = TO_DATE({time}, {format})'
+    to_excute = to_excute.format(
+        foodman_id=wrap_with_in_single_quote(foodman_id),
+        time=wrap_with_in_single_quote(not_delivered_str),
+        format=wrap_with_in_single_quote(date_format_oracle)
+    )
+    cursor = sql.create_cursor()
+    cursor.execute(to_excute)
+    row = cursor.fetchone()
+    cursor.close()
+    order = {'id': row[0], 'location': row[1]}
+    return order
+
+
+def restaurant_ID_by_order_ID(order_id):
+    '''
+    grabs the restaurant_id of a particular order
+    :param order_id: string
+    :return: string
+    '''
+    to_execute = "SELECT F.RESTAURANT_ID FROM SELECTED S, FOOD_ITEM F WHERE F.ID = S.FOOD_ID AND ORDER_ID = {order_id}"
+    to_execute = to_execute.format(
+        order_id=wrap_with_in_single_quote(order_id)
+    )
+    cursor = sql.create_cursor()
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    return row[0]
+
+
+def food_ID_by_order_ID(order_id):
+    '''
+    grabs only one food_id of a particular order
+    :param order_id: string
+    :return: string
+    '''
+    to_execute = "SELECT FOOD_ID FROM SELECTED WHERE ORDER_ID = {order_id}"
+    to_execute = to_execute.format(
+        order_id=wrap_with_in_single_quote(order_id)
+    )
+    cursor = sql.create_cursor()
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    return row[0]
+
+
+def restaurant_ID_by_food_ID(food_id):
+    '''
+    grabs the restaurant_id of a particular food_id
+    :param order_id: string
+    :return: string
+    '''
+    to_execute = "SELECT RESTAURANT_ID FROM FOOD_ITEM WHERE ID = {food_id}"
+    to_execute = to_execute.format(
+        food_id=wrap_with_in_single_quote(food_id)
+    )
+    cursor = sql.create_cursor()
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    return row[0]
 
 
 if __name__ == '__main__':
