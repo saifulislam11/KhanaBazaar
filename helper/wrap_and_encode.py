@@ -1,4 +1,8 @@
+from datetime import datetime
 from hashlib import md5
+
+not_picked_date = datetime.strptime('0001-01-01', "%Y-%m-%d")
+not_delivered_date = datetime.strptime('1000-01-01', "%Y-%m-%d")
 
 
 def wrap_with_in_single_quote(s):

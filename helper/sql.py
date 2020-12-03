@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from cx_Oracle import connect
 from django.db import connection
 
@@ -57,21 +59,25 @@ def rollback():
     connection.rollback()
 
 
-if __name__ == '__main__':
-    email = 'vodro@khanabazaar.com'
-    password = '77d9ec7c7b405cd2be7f2276dc500f5e'
-    c = open_connection().cursor()
-    sql = "Select * From ADMIN Where EMAIL = {email} " \
-          "and PASSWORD_HASH = {password}"
-    from helper.wrap_and_encode import wrap_with_in_single_quote
-
-    sql = sql.format(
-        email=wrap_with_in_single_quote(email),
-        password=wrap_with_in_single_quote(password)
-    )
-    c.execute(sql)
-    admin = c.fetchone()
-    c.close()
-    for r in admin:
-        print(r)
-    pass
+# if __name__ == '__main__':
+#     my_string = None
+#
+#     # Create date object in given time format yyyy-mm-dd
+#     my_date = datetime.strptime('0001-01-01', "%Y-%m-%d")
+#
+#     print(my_date)
+#     print('Type: ', type(my_date))
+#     cursor = open_connection().cursor()
+#     to_execute = 'SELECT DELIVERY_TIME FROM "ORDER"'
+#     cursor.execute(to_execute)
+#     rows = cursor.fetchall()
+#     for i in rows:
+#         print(type(i))
+#         for j in i:
+#             print(j)
+#             print(type(j))
+#             now = datetime.now()
+#             print(type(now))
+#             order_time = now.strftime("%d-%m-%Y %H:%M:%S")
+#             print(type(order_time))
+#             print(order_time)
