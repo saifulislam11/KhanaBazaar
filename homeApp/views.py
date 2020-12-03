@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import cx_Oracle
 from django.shortcuts import render, redirect
+import helper.wrap_and_encode
 
 from helper import sql
 from helper.sql import get_next_id
@@ -807,7 +808,7 @@ def confirm_payment(request):
         now = datetime.now()
         order_time = now.strftime("%d/%m/%Y %H:%M:%S")
         print(order_time)
-        delivery_time = now + timedelta(hours=2)
+        delivery_time = helper.wrap_and_encode.not_picked_date
         delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
         print(delivery_time)
         #---------------end of getting current date-----------#
