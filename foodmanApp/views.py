@@ -61,9 +61,10 @@ def index(request):
             try:
                 foodman_id = request.session.get('id')
                 status = request.GET.get('status')
+                cursor = sql.create_cursor()
                 if status != request.session.get('status'):
                     request.session['status'] = status
-                    cursor = sql.create_cursor()
+
                     cursor.callproc('CHANGE_FOODMAN_STATUS', [foodman_id, status])
                     print('succesfully changed status')
             except Exception as e:
@@ -107,8 +108,34 @@ def current_order(request):
         messages.info(request, 'Please Sign in first')
         return redirect('/foodman')
     foodman_id = request.session.get('id')
-
+    status = request.session.get('status')
+    if status == 'I' or status == 'F':
+        messages.info(request, 'Please pick a order first')
+        return redirect('/foodman')
     if request.method == 'GET':
+        if 'status' in request.GET:
+            try:
+                foodman_id = request.session.get('id')
+                status = request.GET.get('status')
+                if status != request.session.get('status'):
+                    request.session['status'] = status
+                    cursor = sql.create_cursor()
+                    cursor.callproc('CHANGE_FOODMAN_STATUS', [foodman_id, status])
+                    if status == 'F':
+                        order_id = fetch_all.current_order_by_foodman(foodman_id)['id']
+                        print(order_id)
+                        cursor.callproc('ORDER_DELIVERED', [order_id])
+                        messages.info(request, 'You have succefully completed the order!!!')
+                        return redirect('/foodman')
+
+                    print('succesfully changed status')
+            except Exception as e:
+                print('something is problem in status updation')
+                print(e)
+                pass
+            finally:
+                cursor.close()
+
         if 'location' in request.GET:
             try:
                 foodman_id = request.session.get('id')
@@ -156,7 +183,10 @@ def accept_order(request):
                 cursor.callproc('ORDER_PICKED', [order_id, foodman_id])
                 print('Successfull')
                 request.session['status'] = 'R'
+                messages.info(request, 'order was successfully picked')
+                return redirect('/foodman')
             except Exception as e:
+                messages.info(request, 'some error happened')
                 print('the order was already picked')
                 print(e)
                 pass

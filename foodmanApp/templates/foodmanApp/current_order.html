@@ -27,6 +27,8 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"/>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 </head>
 
 <body class="background" data-spy="scroll">
@@ -79,7 +81,13 @@
                     <div class="title">
                         <h1 class="ml-0">{{ name }}</h1>
                     </div>
-                    <p>You are Currently {{ status }}</p>
+                    <input class="d-none" id="status" name="status" value="{{ status }}">
+                    <p>
+                        <span id="status_show" name="status_show"></span>
+                    <p>
+                        <button class="btn btn-primary" type="submit" id="status_button" name="status_button"></button>
+                    </p>
+                    </p>
                 </div>
                 <div class="col-12 col-sm-3 mt-0">
 
@@ -125,6 +133,31 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var status = document.getElementById('status');
+        var status_show = document.getElementById('status_show');
+        var status_button = document.getElementById('status_button');
+        if (status.value === 'R') {
+            status_show.innerText = "You are now heading toward restaurant.";
+            status_button.innerText = "food accepted from restaurant";
+        } else if (status.value === 'C') {
+            status_show.innerText = "Your are being superman! Delivering the food to customer";
+            status_button.innerText = "food delivered to customer!";
+        } else {
+            status_button.hidden = true;
+            status_show.innerText = "Please Delivery the order fast";
+        }
+
+        status_button.addEventListener('click', function () {
+            if (status.value == 'R') {
+                status.value = 'C';
+            } else if (status.value == 'C') {
+                status.value = 'F';
+            }
+        })
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
         const latlng_buet = {'lat': 23.7265768, 'lng': 90.3926623};
 
         function splitter(ss) {
@@ -145,7 +178,8 @@
         var loction = document.getElementById('location');
         var order_location = document.getElementById('order_location');
         var restaurant_location = document.getElementById('restaurant_location');
-        var update_location_form = document.getElementById('update_location_form')
+        var update_location_form = document.getElementById('update_location_form');
+        var status = document.getElementById('status');
         var map = L.map('map',
             {
                 center: latlng_buet,
@@ -158,6 +192,24 @@
         var order_loc_marker = L.marker(splitter(order_location.value)).addTo(map);
         var restaurant_loc_marker = L.marker(splitter(restaurant_location.value)).addTo(map);
         //loction.value = ""
+
+        if (status.value === 'R') {
+            L.Routing.control({
+                waypoints: [
+                    cur_loc_marker.getLatLng(),
+                    restaurant_loc_marker.getLatLng()
+                ]
+            }).addTo(map);
+            console.log('kajj kore nah vai ')
+        } else if (status.value === 'C') {
+            L.Routing.control({
+                waypoints: [
+                    cur_loc_marker.getLatLng(),
+                    order_loc_marker.getLatLng()
+                ]
+            }).addTo(map);
+            console.log('kajj kore nah vai ')
+        }
         cur_loc_marker.bindPopup("Your current Location").openPopup();
         order_loc_marker.bindPopup("Delivery here").openPopup();
         restaurant_loc_marker.bindPopup("Restaurant Here").openPopup();
