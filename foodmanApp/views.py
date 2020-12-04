@@ -117,9 +117,10 @@ def current_order(request):
             try:
                 foodman_id = request.session.get('id')
                 status = request.GET.get('status')
+                cursor = sql.create_cursor()
                 if status != request.session.get('status'):
                     request.session['status'] = status
-                    cursor = sql.create_cursor()
+
                     cursor.callproc('CHANGE_FOODMAN_STATUS', [foodman_id, status])
                     if status == 'F':
                         order_id = fetch_all.current_order_by_foodman(foodman_id)['id']
