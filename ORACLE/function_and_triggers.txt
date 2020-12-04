@@ -56,4 +56,10 @@ end;
 /
 
 
---------
+-------- procedure to change foodman status -------
+
+CREATE OR REPLACE PROCEDURE CHANGE_FOODMAN_STATUS(FM_ID IN CHAR, ST IN CHAR) IS
+BEGIN
+    UPDATE FOODMAN SET STATUS = ST WHERE ID = FM_ID;
+end;
+/
