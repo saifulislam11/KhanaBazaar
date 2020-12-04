@@ -79,7 +79,13 @@
                     <div class="title">
                         <h1 class="ml-0">{{ name }}</h1>
                     </div>
-                    <p>You are Currently {{ status }}</p>
+                    <input class="d-none" id="status" name="status" value="{{ status }}">
+                    <p>
+                        <span id="status_show" name="status_show"></span>
+                    <p>
+                        <button class="btn btn-primary" type="submit" id="status_button" name="status_button"></button>
+                    </p>
+                    </p>
                 </div>
                 <div class="col-12 col-sm-3 mt-0">
                     <div class="border-dark" id="map" style="height: 200px; width: 100%;">
@@ -88,6 +94,30 @@
                     <div> Your current location {{ location }}</div>
                     <input id="location" name="location" class="d-none" value="{{ location }}">
                     <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var status = document.getElementById('status');
+                            var status_show = document.getElementById('status_show');
+                            var status_button = document.getElementById('status_button');
+                            if (status.value === 'I') {
+                                status_show.innerText = "You are not working.";
+                                status_button.innerText = "want to Join???";
+                            } else if (status.value === 'F') {
+                                status_show.innerText = "Your are on Work! Grab some order Please!";
+                                status_button.innerText = "want to take rest???";
+                            } else {
+                                status_button.hidden = true;
+                                status_show.innerText = "Please Delivery the order fast";
+                            }
+
+                            status_button.addEventListener('click', function () {
+                                if (status.value == 'I') {
+                                    status.value = 'F';
+                                } else if (status.value == 'F') {
+                                    status.value = 'I';
+                                }
+                            })
+
+                        })
                         document.addEventListener('DOMContentLoaded', function () {
                             const latlng_buet = {'lat': 23.7265768, 'lng': 90.3926623};
 

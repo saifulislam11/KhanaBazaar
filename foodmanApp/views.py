@@ -57,6 +57,21 @@ def index(request):
             request.session.flush()
             print('log out ing')
             return render(request, 'foodmanApp/sign_in.html', context)
+        if 'status' in request.GET:
+            try:
+                foodman_id = request.session.get('id')
+                status = request.GET.get('status')
+                if status != request.session.get('status'):
+                    request.session['status'] = status
+                    cursor = sql.create_cursor()
+                    cursor.callproc('CHANGE_FOODMAN_STATUS', [foodman_id, status])
+                    print('succesfully changed status')
+            except Exception as e:
+                print('something is problem in status updation')
+                print(e)
+                pass
+            finally:
+                cursor.close()
         if 'location' in request.GET:
             try:
                 foodman_id = request.session.get('id')
