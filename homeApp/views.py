@@ -56,7 +56,7 @@ def index(request):
                     request.session.flush()
                     return render(request, 'homeApp/index.html',
                                   {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
-    if not request.session.is_empty():
+    if not request.session.is_empty() and request.session['app_name'] ==app_name:
         print('has session while in index')
         if 'first_name' in request.session:
             first_name = request.session['first_name']
@@ -320,7 +320,7 @@ def homepage(request):
         c.close()
 
     # ----------------sign in----------------#
-    if not request.session.is_empty():
+    if not request.session.is_empty() and request.session['app_name'] ==app_name:
         print('has session')
         if 'first_name' in request.session:
             first_name = request.session['first_name']
@@ -545,12 +545,33 @@ def payment(request):
     if 'email' in request.session:
         email = request.session['email']
     print(email + last_name)
+    #---------for promo-----------#
+    c = con.cursor()
+    command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
+    c.execute(command)
+    promos = c.fetchall()
+    print(promos)
+    print('hello')
+    promo =[]
+    available_promo = []
+    for row in promos:
+        promo_id = row[2]
+        command = "Select * From PROMO Where ID = %s" % promo_id
+        c.execute(command)
+        single_promo = c.fetchall()
+        for row2 in single_promo:
+            if int(price) >= int(row2[5]):
+                dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6]}
+                promo.append(dic)
+
+    print(promo)
+    c.close()
 
     
 
     return render(request, 'homeApp/payment.html',
                   {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
-                   'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods})
+                   'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods,'promos':promo})
 
 
 def restaurant(request):
@@ -614,7 +635,7 @@ def restaurant(request):
             types_set = set(types)
             unique_types = list(types_set)
             c.close()
-            if not request.session.is_empty():
+            if not request.session.is_empty() and request.session['app_name'] ==app_name :
                 print('has session')
                 if 'first_name' in request.session:
                     first_name = request.session['first_name']
@@ -626,9 +647,30 @@ def restaurant(request):
                     email = request.session['email']
                 customer_dict = {'id': id, 'last_name': last_name, 'first_name': first_name, 'email': email}
                 print(customer_dict)
+                #---------for promo-----------#
+                c = con.cursor()
+                command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
+                c.execute(command)
+                promos = c.fetchall()
+                print(promos)
+                print('hello')
+                promo =[]
+                for row in promos:
+                    promo_id = row[2]
+                    command = "Select * From PROMO Where ID = %s" % promo_id
+                    c.execute(command)
+                    single_promo = c.fetchall()
+                    for row2 in single_promo:
+                        dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6]}
+                        promo.append(dic)
+                print(promo)
+                c.close()
+
+
+
                 return render(request, 'homeApp/restaurant.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict})
+                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict,'promos':promo})
             elif email == "None" or password == "None":
                 return render(request, 'homeApp/restaurant_log_in.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
@@ -673,11 +715,29 @@ def restaurant(request):
                     request.session['app_name'] = app_name
                     # info = id + ' ' +firstname +' '+lastname+' '+email
                     # customer_info= info.split(' ')
+                    #---------for promo-----------#
+                    c = con.cursor()
+                    command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
+                    c.execute(command)
+                    promos = c.fetchall()
+                    print(promos)
+                    print('hello')
+                    promo =[]
+                    for row in promos:
+                        promo_id = row[2]
+                        command = "Select * From PROMO Where ID = %s" % promo_id
+                        c.execute(command)
+                        single_promo = c.fetchall()
+                        for row2 in single_promo:
+                            dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6]}
+                            promo.append(dic)
+                    print(promo)
+                    c.close()
 
                     return render(request, 'homeApp/restaurant.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                    'all_types': unique_types, 'customer_name': first_name,
-                                   'customer_dic': customer_dict})
+                                   'customer_dic': customer_dict,'promos':promo})
                 # return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
                 '''return render(request, 'homeApp/restaurant.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
@@ -732,7 +792,7 @@ def restaurant(request):
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                'all_types': unique_types, 'customer_name': 'none'})
 
-            if not request.session.is_empty():
+            if not request.session.is_empty() and request.session['app_name'] ==app_name:
                 print('has session')
                 if 'first_name' in request.session:
                     first_name = request.session['first_name']
@@ -744,9 +804,27 @@ def restaurant(request):
                     email = request.session['email']
                 customer_dict = {'id': id, 'last_name': last_name, 'first_name': first_name, 'email': email}
                 print(customer_dict)
+                #---------for promo-----------#
+                c = con.cursor()
+                command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
+                c.execute(command)
+                promos = c.fetchall()
+                print(promos)
+                print('hello')
+                promo =[]
+                for row in promos:
+                    promo_id = row[2]
+                    command = "Select * From PROMO Where ID = %s" % promo_id
+                    c.execute(command)
+                    single_promo = c.fetchall()
+                    for row2 in single_promo:
+                        dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6]}
+                        promo.append(dic)
+                print(promo)
+                c.close()
                 return render(request, 'homeApp/restaurant.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict})
+                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict,'promos':promo})
             elif email == None or password == None:
                 return render(request, 'homeApp/restaurant_log_in.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
@@ -789,13 +867,31 @@ def restaurant(request):
                     request.session['first_name'] = first_name
                     request.session['email'] = email
                     request.session['app_name'] = app_name
+                    #---------for promo-----------#
+                    c = con.cursor()
+                    command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
+                    c.execute(command)
+                    promos = c.fetchall()
+                    print(promos)
+                    print('hello')
+                    promo =[]
+                    for row in promos:
+                        promo_id = row[2]
+                        command = "Select * From PROMO Where ID = %s" % promo_id
+                        c.execute(command)
+                        single_promo = c.fetchall()
+                        for row2 in single_promo:
+                            dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6]}
+                            promo.append(dic)
+                    print(promo)
+                    c.close()
                     # info = id + ' ' +firstname +' '+lastname+' '+email
                     # customer_info= info.split(' ')
 
                     return render(request, 'homeApp/restaurant.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                    'all_types': unique_types, 'customer_name': first_name,
-                                   'customer_dic': customer_dict})
+                                   'customer_dic': customer_dict,'promos':promo})
             #return render(request, 'homeApp/restaurant.html')
 
 

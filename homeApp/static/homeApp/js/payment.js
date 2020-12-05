@@ -65,11 +65,21 @@ close.addEventListener("click",function(){
 
     const gateway = document.querySelector('.gateway');
     const orderBTN = document.querySelector('#confirm_order');
+    const promo_used = document.querySelector('#promo_used');
+    const final_price = document.querySelector('#final_price');
     const sel = document.querySelector('.payment-method');
+    const promo = document.querySelector('.promo-selected');
+    const promo_table_row = document.getElementsByClassName('promo-table-row');
     const img_pay = document.querySelector('.img_pay');
+    const typing = document.querySelector('.typing');
+    const cart_total = document.querySelector('.Pcart-total');
+    var save_price = final_price.value;
 
     let selected_method = sel.options[sel.selectedIndex];
+    let selected_promo = promo.options[promo.selectedIndex];
     console.log(selected_method);
+    console.log(selected_promo);
+    promo_used.value = selected_promo.innerHTML;
     console.log(PcartBTN);
     sel.addEventListener("change",function(){
         let opt;
@@ -82,6 +92,39 @@ close.addEventListener("click",function(){
         }
         selected_method = opt;
         console.log(selected_method.innerHTML);
+    })
+    promo.addEventListener("change",function(){
+        let opt;
+        for ( let i = 0, len = promo.options.length; i < len; i++ ) {
+            opt = promo.options[i];
+            console.log(opt);
+            if ( opt.selected === true ) {
+                break;
+            }
+        }
+        
+        selected_promo = opt;
+        console.log(selected_promo.innerHTML);
+        promo_used.value = selected_promo.innerHTML;
+        console.log(promo_used.value);
+        if(promo_used.value === "Not now")
+        {
+            swal({
+                title:"No Promo Selected!!" ,
+                text: "Are you sure?",
+                icon: "warning",
+                button: "Yes",
+              });
+        }
+        else{
+            swal({
+                title:selected_promo.innerHTML.concat(" Selected!!") ,
+                text: "Thanks for using the promo!",
+                icon: "success",
+                button: "OK!",
+              });
+        }
+        
     })
  
     
@@ -169,6 +212,70 @@ close.addEventListener("click",function(){
         order_type.value = selected_method.innerHTML;
         console.log(delivery_address.value);
         console.log(selected_method.innerHTML);
+        for(let i=0;i<promo_table_row.length;i++)
+        {
+            //checking selected promo
+            console.log('hello');
+            const temp = promo_table_row[i].children[0].innerHTML;
+            console.log(temp);
+            if(promo_used.value == temp)
+            {
+                var temp_percent = promo_table_row[i].children[2].innerHTML;
+                console.log(temp_percent);
+                var temp_fixed = promo_table_row[i].children[3].innerHTML;
+                console.log(temp_fixed);
+                temp_fixed = temp_fixed.replace('$','');
+                temp_percent = temp_percent.replace('%','');
+                if(Number(temp_percent) === 0){
+                    console.log('check for fixed amount now');
+                    //setting reduced price
+                    final_price.value = final_price.value - Number(temp_fixed);
+                    typing.innerHTML = "Your Total is ".concat(final_price.value,"TK");
+                    cart_total.innerHTML = final_price.value;
+
+                }
+                else{
+                    var offer = Number(temp_percent);
+                    var reduce = (final_price.value*offer)/100
+                    
+                    var max_offer = promo_table_row[i].children[5].innerHTML;
+                    
+                    max_offer = max_offer.replace('$','');
+                    console.log(max_offer);
+                    ///if less than max discount
+                    if(Number(max_offer)>=reduce)
+                    {
+                        final_price.value = final_price.value - reduce ;
+                        typing.innerHTML = "Your Total is ".concat(final_price.value,"TK");
+                        cart_total.innerHTML = final_price.value;
+                        
+                    }
+                    else{
+                        ///setting promo to not now
+                        promo_used.value = "Not now";
+                        typing.innerHTML = "Your Total is ".concat(save_price,"TK");
+                        cart_total.innerHTML = save_price;
+                        final_price.value = save_price;
+                        swal({
+                            title:"Promo Not Applicable!!" ,
+                            text: "Thanks For your response",
+                            icon: "warning",
+                            button: "ok",
+                          });
+                    }
+
+                   
+
+                }
+                break;
+            }
+        }
+        if (promo_used.value === "Not now" ){
+            typing.innerHTML = "Your Total is ".concat(save_price,"TK");
+            cart_total.innerHTML = save_price;
+            final_price.value = save_price;
+            console.log(save_price);
+        }
         if(selected_method.innerHTML == 'Bkash')
         {
             while(img_pay.children.length>0){

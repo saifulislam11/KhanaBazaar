@@ -21,6 +21,7 @@
      <!--flickity-->
      <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
      <script src="{% static 'homeApp/js/payment.js' %}" type="module" async></script>
      <!--endbuild-->
 </head>
@@ -55,8 +56,15 @@
                          </label>
                      </div>
                      <button type="submit" id="submit_pop" class="btn">Log In</button>-->
+                     <label for="promo_used">Promo-Used</label>
+                    <div class="form-group">
+                        <input type="text" id="promo_used" name="promo_used" readonly>
+                    </div>
+                    <label for="final_price">Final Toal</label>
+                    <div class="form-group">
+                        <input type="text" id="final_price" name="order_price" value="{{price}}" readonly>
+                    </div>
                     <button type="submit" id="submit_pop" class="btn">Confirm Checkout & Continue</button>
-                    <input class="form-control" type="text" id="order_price" name="order_price" value="{{price}}" hidden>
                     <input class="form-control" type="text" id="delivery_type" name="delivery_type" hidden>
                     <input class="form-control" type="text" id="delivery_address" name="delivery_address" hidden>
                     <input class="form-control" type="text" id="ordered_foods" name="ordered_foods" value="{{foods}}" hidden>
@@ -153,135 +161,199 @@
         <div>   
         <!--cart summary-->
         <div class="background">
-        <div class="container">
-            <div class="row row-content">
-                <div class="col-12 col-sm-7">
-                    <h2>Cart Summary</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped table-dark table-bordered">
-                            <thead class="theader">
-                                <tr>
-                                    <th>Food Item</th>
-                                    <th>No of Items</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in cart %}
-                                <tr>
-                                    <th>{{item.food}}</th>
-                                    <td>{{item.count}}</td>
-                                    <td>{{item.price}}</td>   
-                                </tr>
-                                {% endfor %}
+            <div class="container">
+                <div class="row row-content">
+                    <div class="col-12 col-sm-7">
+                        <h2>Cart Summary</h2>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-dark table-bordered">
+                                <thead class="theader">
+                                    <tr>
+                                        <th>Food Item</th>
+                                        <th>No of Items</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart %}
+                                    <tr>
+                                        <th>{{item.food}}</th>
+                                        <td>{{item.count}}</td>
+                                        <td>{{item.price}}</td>   
+                                    </tr>
+                                    {% endfor %}
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-3">
+                        <div class="total-amount">
+                            <h1 class="typing" >Your Total is {{price}}TK</h1>
+                        </div>
+                        
                     </div>
                 </div>
-                <div class="col-12 col-sm-3">
-                    <div class="total-amount">
-                        <h1 class="typing" >Your Total is {{price}}TK</h1>
+                <div class="row row-content">
+                    <div class="col-12 col-sm-12">
+                        <h2>Fill up the form below</h2>
+                        <form class="order-submit-form">
+                            <!--first name-->
+                            <div class="form-group row">
+                                <label for="firstname" style="margin-top: 30px;" class="col-md-2 col-form-label ">First Name*</label>
+                                <div class="col-md-5" style="margin-top: 30px;">
+                                    <input type="text" class="form-control" id="firstname" name="firstname" value="{{customer_name}}" readonly>
+                                </div>
+                            </div>
+
+                            <!--lastname-->
+                            <div class="form-group row">
+                                <label for="lastname" class="col-md-2 col-form-label">Last Name*</label>
+                                <div class="col-md-5">
+                                    <input type="text" class="form-control " id="lastname" name="firstname" value="{{last_name}}" readonly >
+                                </div>
+
+                            </div>
+                                
+                            <!--address row-->
+                            <div class="form-group row">
+                                <label for="address" class="col-12 col-md-2 col-form-label">Address*</label>
+                                <div class="col-12 col-md-8">
+                                    <input type="address" class="form-control form-box del-address" id="address" name="address" placeholder="Address" required>
+                                </div>
+                            </div>
+                            <!--telno,email row-->
+                            <div class="form-group row">
+                                <label for="telno" class="col-md-2 col-form-label">Tel. No*</label>
+                                <div class="col-12 col-md-3">
+                                    <input type="tel" class="form-control form-box" id="telno" name="telno" placeholder="Tel No." required>
+                                </div>
+                                <label for="email" class="col-md-2">E-mail</label>
+                                <div class="col-md-3 form_pad">
+                                    <input type="mail" class="form-control" id="email" name="email" value="{{email}}" readonly>
+                                </div>
+
+                            </div>
+                                
+                            <!--payment row-->
+                            <div class="form-group row">
+                                <label for="payment_method" style="padding-left: 80px;" class="col-md-2 col-from-label " required>Payment Method*</label>   
+                                <div class="col-12 col-md-3">
+                                    <select required class="payment-method ">
+                                        <option value="Bkash">Bkash</option>
+                                        <option value="Rocket">Rocket</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="On cash">On Cash</option>
+                                    </select>
+                                </div> 
+                                <!--<label for="note" class="col-md-2 ">Your Total</label>
+                                <div class="col-md-3 form_pad">
+                                    <input class="form-control" type="text" id="total" name="total" value="{{price}}" readonly style="background-color: rgb(250, 11, 11); color:cornsilk;font-size:x-large;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+                                </div> -->
+                                
+                                <label for="promo-selected" class="col-md-2 col-from-label ">Use Promo?</label>   
+                                <div class="col-12 col-md-3">
+                                    <select required class="promo-selected ">
+                                        {% for promo in promos %}
+                                            <option value="{{promo.name}}">{{promo.name}}</option>
+                                        {% endfor %}
+                                        <option value="Later">Not now</option>
+                                    </select>
+                                </div> 
+                            </div>
+                            <!--feedback row
+                            <div class="form-group row">
+                                <label for="feedback" class="col-md-2 col-form-label ">Your Feedback</label>
+                                <div class="col-md-8 form_pad">
+                                    <textarea class="form-control form-box" id="feedback" name="feedback" rows="10" ></textarea>
+                                </div>
+                            </div>-->
+                            <!--review star
+                            <div class="form-group row">
+                                <label for="feedback" style="top:4px;" class="col-md-2 col-form-label ">Image Review</label>
+                                <div class="col-md-3 ">
+                                    <input style="margin-top: 16px;" type="file" id="imagefile" name="imagefile" title="choose file" >
+                                </div>
+                                <label for="rating" style="top:10px;" class="col-md-1 col-form-label ">Review</label>
+                                <div class="col-md-3 rating">
+                                    <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
+                                    <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
+                                    <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
+                                    <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
+                                    <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
+                                </div>
+                            </div>-->
+                            <!--submit-->
+                            <div class="form-group row">
+                                <div class="col-12 col-md-6 offset-md-2">
+                                    <button class="btn btn-danger" role="button" type="button" id="confirm_order" style="margin-bottom: 30px;">Confirm Order</button>
+                                </div>
+        
+                            </div>
+        
+                            </div>
+
+                        </form>
+
                     </div>
+
+
+                </div>
+                <div class="row row-content">
+                    <div class="col-12 col-sm-12">
+                        <div class="container2">
+        
+                            <div class="box">
+                                <div class="imgbox">
+                                    <img src="{% static 'homeApp/img/promo.jpg' %}">
+                                </div>
+                                <div class="content">
+                                    <div class="icon">
+                                        <img src="{% static 'homeApp/img/promo.jpg' %}">
+                                    </div>
+                                    <h2>Your Available PROMOS</h2>
+                                    <div style="max-height: 700px;overflow: auto">
+                                        <table class="table table-striped table-bordered  table-sm table-active table-hover" id="customer_table">
+                                            <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">Promo Code</th>
+                                                <th scope="col">Limit</th>
+                                                <th scope="col">% discount</th>
+                                                <th scope="col">$ BDT discount</th>
+                                                <th scope="col">$ Minimum</th>
+                                                <th scope="col">Discount upto $</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for promo in promos %}
+            
+                                                <tr class="promo-table-row" scope="row"
+                                                    value="" style="background-color: yellow;">
+                                                    <td>{{ promo.name }}</td>
+                                                    <td>{{ promo.promo_limit }}</td>
+                                                    <td>{{ promo.percent }}%</td>
+                                                    <td>{{ promo.fixed_amount }}$</td>
+                                                    <td>{{ promo.min_order_value }}$</td>
+                                                    <td>{{ promo.max_discount_value }}$</td>
+            
+                                                </tr>
+            
+                                            {% endfor %}
+                                            </tbody>
+            
+                                        </table> 
+                                    </div>   
+                                </div>
                     
+                            </div>
+                    
+                        </div>
+
+                    </div>
                 </div>
             </div>
-            <div class="row row-content">
-                <div class="col-12 col-sm-12">
-                    <h2>Fill up the form below</h2>
-                    <form class="order-submit-form">
-                        <!--first name-->
-                        <div class="form-group row">
-                            <label for="firstname" style="margin-top: 30px;" class="col-md-2 col-form-label ">First Name*</label>
-                            <div class="col-md-5" style="margin-top: 30px;">
-                                <input type="text" class="form-control" id="firstname" name="firstname" value="{{customer_name}}" readonly>
-                            </div>
-                        </div>
 
-                        <!--lastname-->
-                        <div class="form-group row">
-                            <label for="lastname" class="col-md-2 col-form-label">Last Name*</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control " id="lastname" name="firstname" value="{{last_name}}" readonly >
-                            </div>
-
-                        </div>
-                            
-                        <!--address row-->
-                        <div class="form-group row">
-                            <label for="address" class="col-12 col-md-2 col-form-label">Address*</label>
-                            <div class="col-12 col-md-8">
-                                <input type="address" class="form-control form-box del-address" id="address" name="address" placeholder="Address" required>
-                            </div>
-                        </div>
-                        <!--telno,email row-->
-                        <div class="form-group row">
-                            <label for="telno" class="col-md-2 col-form-label">Tel. No*</label>
-                            <div class="col-12 col-md-3">
-                                <input type="tel" class="form-control form-box" id="telno" name="telno" placeholder="Tel No." required>
-                            </div>
-                            <label for="email" class="col-md-2">E-mail</label>
-                            <div class="col-md-3 form_pad">
-                                <input type="mail" class="form-control" id="email" name="email" value="{{email}}" readonly>
-                            </div>
-
-                        </div>
-                            
-                        <!--payment row-->
-                        <div class="form-group row">
-                            <label for="payment_method" style="padding-left: 80px;" class="col-md-2 col-from-label " required>Payment Method*</label>   
-                            <div class="col-12 col-md-3">
-                                <select required class="payment-method ">
-                                    <option value="Bkash">Bkash</option>
-                                    <option value="Rocket">Rocket</option>
-                                    <option value="Credit Card">Credit Card</option>
-                                    <option value="On cash">On Cash</option>
-                                </select>
-                            </div> 
-                            <label for="note" class="col-md-2 ">Your Total</label>
-                            <div class="col-md-3 form_pad">
-                                <input class="form-control" type="text" id="total" name="total" value="{{price}}" readonly style="background-color: rgb(250, 11, 11); color:cornsilk;font-size:x-large;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-                            </div> 
-                        </div>
-                        <!--feedback row
-                        <div class="form-group row">
-                            <label for="feedback" class="col-md-2 col-form-label ">Your Feedback</label>
-                            <div class="col-md-8 form_pad">
-                                <textarea class="form-control form-box" id="feedback" name="feedback" rows="10" ></textarea>
-                            </div>
-                        </div>-->
-                        <!--review star
-                        <div class="form-group row">
-                            <label for="feedback" style="top:4px;" class="col-md-2 col-form-label ">Image Review</label>
-                            <div class="col-md-3 ">
-                                <input style="margin-top: 16px;" type="file" id="imagefile" name="imagefile" title="choose file" >
-                            </div>
-                            <label for="rating" style="top:10px;" class="col-md-1 col-form-label ">Review</label>
-                            <div class="col-md-3 rating">
-                                <input type="radio" name="star" id="star5" value="5"><label for="star5"></label>
-                                <input type="radio" name="star" id="star4" value="4"><label for="star4"></label>
-                                <input type="radio" name="star" id="star3" value="3"><label for="star3"></label>
-                                <input type="radio" name="star" id="star2" value="2"><label for="star2"></label>
-                                <input type="radio" name="star" id="star1" value="1"><label for="star1"></label>
-                            </div>
-                        </div>-->
-                        <!--submit-->
-                        <div class="form-group row">
-                            <div class="col-12 col-md-6 offset-md-2">
-                                <button class="btn btn-danger" role="button" type="button" id="confirm_order" style="margin-bottom: 30px;">Confirm Order</button>
-                            </div>
-    
-                        </div>
-    
-                        </div>
-
-                    </form>
-
-                </div>
-
-
-            </div>
-        </div>
+            
         </div>
         <!--end of cart summary-->
 
