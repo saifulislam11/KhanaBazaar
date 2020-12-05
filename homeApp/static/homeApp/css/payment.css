@@ -371,12 +371,12 @@
 
   /*---------typing animation---------*/
   .typing{
-    animation: type 4s steps(21);
+    animation: type 4s steps(23);
     overflow: hidden;
     white-space: nowrap;
     font-family: consolas;
     border-right:4px solid black ;
-    width: 21ch;
+    width: 23ch;
     font-weight: 900;
     animation-iteration-count: infinite;
   }
@@ -385,7 +385,7 @@
       width: 0ch;
     }
     100% {
-      width: 21ch;
+      width: 23ch;
     }
   }
   .total-amount{
@@ -644,7 +644,7 @@
   
 .container2{
   position: relative;
-  width: 1000px;
+  width: 1200px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -654,9 +654,9 @@
 }
 .container2 .box{
   position: relative;
-  width: 800px;
+  width: 900px;
   height: 481px;
-  margin-left: 440px;
+  margin-left: 350px;
   margin-top: 2px;
   background-color: rgb(10, 245, 214);
   box-shadow: 0px 30px 50px rgba(0, 0, 0, 0.2);

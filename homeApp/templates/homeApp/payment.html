@@ -32,7 +32,7 @@
         <div class="box">
              <div class="form">
                  <div class="close">&times;</div>
-                 <form action="{% url 'homeApp:confirm_payment' %}" method="POST">
+                 <form action="{% url 'homeApp:confirm_payment' %}" method="POST" style="overflow: auto;max-height:560px">
                      {% csrf_token %}
                      <h3 class="payment-heading">Payment</h3>
                      <div class="img_pay">
@@ -254,10 +254,11 @@
                                 <label for="promo-selected" class="col-md-2 col-from-label ">Use Promo?</label>   
                                 <div class="col-12 col-md-3">
                                     <select required class="promo-selected ">
+                                        <option value="Not now">Not now</option>
                                         {% for promo in promos %}
                                             <option value="{{promo.name}}">{{promo.name}}</option>
                                         {% endfor %}
-                                        <option value="Later">Not now</option>
+                                        
                                     </select>
                                 </div> 
                             </div>
@@ -322,6 +323,7 @@
                                                 <th scope="col">$ BDT discount</th>
                                                 <th scope="col">$ Minimum</th>
                                                 <th scope="col">Discount upto $</th>
+                                                <th scope="col">Remaining Promo</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -335,6 +337,7 @@
                                                     <td>{{ promo.fixed_amount }}$</td>
                                                     <td>{{ promo.min_order_value }}$</td>
                                                     <td>{{ promo.max_discount_value }}$</td>
+                                                    <td>{{ promo.remaining_promo }}</td>
             
                                                 </tr>
             

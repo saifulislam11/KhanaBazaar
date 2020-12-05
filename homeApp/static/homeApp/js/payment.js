@@ -208,6 +208,8 @@ close.addEventListener("click",function(){
        
     // get selected option in sel (reference obtained above)
     orderBTN.addEventListener("click",function(){
+        //initialize final_price
+        final_price.value = save_price;
         delivery_address.value = del_address.value;
         order_type.value = selected_method.innerHTML;
         console.log(delivery_address.value);
@@ -218,6 +220,7 @@ close.addEventListener("click",function(){
             console.log('hello');
             const temp = promo_table_row[i].children[0].innerHTML;
             console.log(temp);
+            
             if(promo_used.value == temp)
             {
                 var temp_percent = promo_table_row[i].children[2].innerHTML;
@@ -226,13 +229,31 @@ close.addEventListener("click",function(){
                 console.log(temp_fixed);
                 temp_fixed = temp_fixed.replace('$','');
                 temp_percent = temp_percent.replace('%','');
+                var remainig_promo = promo_table_row[i].children[6].innerHTML;
                 if(Number(temp_percent) === 0){
-                    console.log('check for fixed amount now');
-                    //setting reduced price
-                    final_price.value = final_price.value - Number(temp_fixed);
-                    typing.innerHTML = "Your Total is ".concat(final_price.value,"TK");
-                    cart_total.innerHTML = final_price.value;
+                    if(Number(remainig_promo)===0)
+                    {
+                        swal({
+                            title:"Promo Not Applicable!!" ,
+                            text: "Thanks For your response",
+                            icon: "error",
+                            button: "ok",
+                          });
+                        ///setting promo to not now
+                        promo_used.value = "Not now";
+                        typing.innerHTML = "Your Total is ".concat(save_price,"TK");
+                        cart_total.innerHTML = save_price;
+                        final_price.value = save_price;
+                    }
+                    else{
+                        console.log('check for fixed amount now');
+                        //setting reduced price
+                        final_price.value = final_price.value - Number(temp_fixed);
+                        typing.innerHTML = "Your Total is ".concat(final_price.value,"TK");
+                        cart_total.innerHTML = final_price.value;
 
+                    }
+                    
                 }
                 else{
                     var offer = Number(temp_percent);
@@ -242,8 +263,23 @@ close.addEventListener("click",function(){
                     
                     max_offer = max_offer.replace('$','');
                     console.log(max_offer);
+
+                    if(Number(remainig_promo)===0)
+                    {
+                        swal({
+                            title:"Promo Not Applicable!!" ,
+                            text: "Thanks For your response",
+                            icon: "error",
+                            button: "ok",
+                          });
+                        ///setting promo to not now
+                        promo_used.value = "Not now";
+                        typing.innerHTML = "Your Total is ".concat(save_price,"TK");
+                        cart_total.innerHTML = save_price;
+                        final_price.value = save_price;
+                    }
                     ///if less than max discount
-                    if(Number(max_offer)>=reduce)
+                    else if(Number(max_offer)>=reduce)
                     {
                         final_price.value = final_price.value - reduce ;
                         typing.innerHTML = "Your Total is ".concat(final_price.value,"TK");

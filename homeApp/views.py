@@ -556,12 +556,13 @@ def payment(request):
     available_promo = []
     for row in promos:
         promo_id = row[2]
+        remainings = row[3]
         command = "Select * From PROMO Where ID = %s" % promo_id
         c.execute(command)
         single_promo = c.fetchall()
         for row2 in single_promo:
             if int(price) >= int(row2[5]):
-                dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6]}
+                dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6],'remaining_promo':remainings}
                 promo.append(dic)
 
     print(promo)
@@ -911,6 +912,7 @@ def confirm_payment(request):
         delivery_location = request.POST.get('delivery_address')
         foods = request.POST.get('ordered_foods')
         restaurant_id = request.POST.get('restaurant_name')
+        promo = request.POST.get('promo_used')
         order_id = get_next_id()
         print(order_price + ' ' + delivery_location + ' ' + delivery_type+' '+foods)
         #-------------getting foods-----------#
@@ -929,6 +931,50 @@ def confirm_payment(request):
         delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
         print(delivery_time)
         #---------------end of getting current date-----------#
+
+        #-------------promo uses-------------#
+        print(promo)
+        if promo != "Not now":
+            print(promo)
+            to_execute = "SELECT * FROM PROMO WHERE NAME ={promo}"
+            to_execute = to_execute.format(
+                    promo=wrap_with_in_single_quote(promo)
+                )
+            c.execute(to_execute)
+            promo_tbl = c.fetchall()
+            for r in promo_tbl:
+                promo_id = r[0]
+                to_execute_uses = "INSERT INTO USES(ORDER_ID,PROMO_ID) VALUES({order_id},{promo_id})"
+                to_execute_uses = to_execute_uses.format(
+                    order_id=wrap_with_in_single_quote(order_id),
+                    promo_id=wrap_with_in_single_quote(promo_id)
+                )
+                print(to_execute)
+                #---------update promo remainings
+                to_execute_offers = "SELECT * FROM OFFERS WHERE PROMO_ID ={promo_id}"
+                to_execute_offers = to_execute_offers.format(
+                        promo_id=wrap_with_in_single_quote(promo_id)
+                    )
+                c.execute(to_execute_offers)
+                offers_tbl = c.fetchall()
+                for r in offers_tbl:
+                    remaining_promo = int(r[3])
+                    remaining_promo = int(remaining_promo) -1
+                    if remaining_promo<=0:
+                        remaining_promo = 0
+
+                    to_execute_update = "UPDATE OFFERS SET REMAINING_PROMO = {remaining_promo} WHERE PROMO_ID = {promo_id}"
+                    to_execute_update = to_execute_update.format(
+                    remaining_promo=wrap_with_in_single_quote(remaining_promo),
+                    promo_id=wrap_with_in_single_quote(promo_id)
+                    )
+                    print(to_execute_update)
+            
+        #----------------end of promo----------------#
+
+            
+            
+
         
         table_name = '"' + "ORDER" + '"'
         print(table_name)
@@ -974,6 +1020,11 @@ def confirm_payment(request):
             sql.execute(to_execute_chooses)
             sql.execute(to_execute_payment)
             sql.execute(to_execute_pays)
+            if promo != "Not now":
+                print('still now ok')
+                sql.execute(to_execute_uses)
+                print('still now ok')
+                sql.execute(to_execute_update)
             contex = 'ordered successfully'
 
         except:
