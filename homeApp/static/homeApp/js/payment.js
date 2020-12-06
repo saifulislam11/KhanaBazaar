@@ -265,10 +265,6 @@ close.addEventListener("click",function(){
     <label for="phone">Phone Number</label>
     <div class="form-group">
         <input type="text" id="phone" name="phone" placeholder="01XXXXXXXXX" required>
-    </div>
-    <label for="pin">confirm location</label>
-    <div class="form-group">
-        <input type="text" class="form-control form-box del-address" id="location" name="location" placeholder="location" required>
     </div>`
 
        
