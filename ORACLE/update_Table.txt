@@ -11,3 +11,11 @@ ALTER TABLE CUSTOMER
 
 
 
+ALTER TABLE USES
+    MODIFY (
+        ORDER_ID CHAR(10),
+        PROMO_ID CHAR(10)
+        );
+
+
+
