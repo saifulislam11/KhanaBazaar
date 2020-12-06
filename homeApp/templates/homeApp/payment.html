@@ -23,6 +23,15 @@
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
      <script src="{% static 'homeApp/js/payment.js' %}" type="module" async></script>
+
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script type="text/javascript" src="{% static 'homeApp/js/haversine.js' %}"></script>
      <!--endbuild-->
 </head>
 
@@ -69,6 +78,7 @@
                     <input class="form-control" type="text" id="delivery_address" name="delivery_address" hidden>
                     <input class="form-control" type="text" id="ordered_foods" name="ordered_foods" value="{{foods}}" hidden>
                     <input class="form-control" type="text" id="restaurant_name" name="restaurant_name" value="{{restaurant.id}}" hidden>
+                    <input id="location" name="location" class="d-none" value="25,88" hidden>
                  </form>
              </div>
         </div>
@@ -216,12 +226,6 @@
                             </div>
                                 
                             <!--address row-->
-                            <div class="form-group row">
-                                <label for="address" class="col-12 col-md-2 col-form-label">Address*</label>
-                                <div class="col-12 col-md-8">
-                                    <input type="address" class="form-control form-box del-address" id="address" name="address" placeholder="Address" required>
-                                </div>
-                            </div>
                             <!--telno,email row-->
                             <div class="form-group row">
                                 <label for="telno" class="col-md-2 col-form-label">Tel. No*</label>
@@ -301,62 +305,67 @@
 
                 </div>
                 <div class="row row-content">
-                    <div class="col-12 col-sm-12">
-                        <div class="container2">
-        
-                            <div class="box">
-                                <div class="imgbox">
+                    <div class="col-12 col-sm-6 container2">
+                        <div class="box">
+                            <div class="imgbox">
+                                <img src="{% static 'homeApp/img/promo.jpg' %}">
+                            </div>
+                            <div class="content">
+                                <div class="icon">
                                     <img src="{% static 'homeApp/img/promo.jpg' %}">
                                 </div>
-                                <div class="content">
-                                    <div class="icon">
-                                        <img src="{% static 'homeApp/img/promo.jpg' %}">
-                                    </div>
-                                    <h2>Your Available PROMOS</h2>
-                                    <div style="max-height: 700px;overflow: auto">
-                                        <table class="table table-striped table-bordered  table-sm table-active table-hover" id="customer_table">
-                                            <thead class="thead-dark">
-                                            <tr>
-                                                <th scope="col">Promo Code</th>
-                                                <th scope="col">Limit</th>
-                                                <th scope="col">% discount</th>
-                                                <th scope="col">$ BDT discount</th>
-                                                <th scope="col">$ Minimum</th>
-                                                <th scope="col">Discount upto $</th>
-                                                <th scope="col">Remaining Promo</th>
+                                <h2>Your Available PROMOS</h2>
+                                <div style="max-height: 700px;overflow: auto">
+                                    <table class="table table-striped table-bordered  table-sm table-active table-hover" id="customer_table">
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">Promo Code</th>
+                                            <th scope="col">Limit</th>
+                                            <th scope="col">% discount</th>
+                                            <th scope="col">$ BDT discount</th>
+                                            <th scope="col">$ Minimum</th>
+                                            <th scope="col">Discount upto $</th>
+                                            <th scope="col">Remaining Promo</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for promo in promos %}
+        
+                                            <tr class="promo-table-row" scope="row"
+                                                value="" style="background-color: yellow;">
+                                                <td>{{ promo.name }}</td>
+                                                <td>{{ promo.promo_limit }}</td>
+                                                <td>{{ promo.percent }}%</td>
+                                                <td>{{ promo.fixed_amount }}$</td>
+                                                <td>{{ promo.min_order_value }}$</td>
+                                                <td>{{ promo.max_discount_value }}$</td>
+                                                <td>{{ promo.remaining_promo }}</td>
+        
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            {% for promo in promos %}
-            
-                                                <tr class="promo-table-row" scope="row"
-                                                    value="" style="background-color: yellow;">
-                                                    <td>{{ promo.name }}</td>
-                                                    <td>{{ promo.promo_limit }}</td>
-                                                    <td>{{ promo.percent }}%</td>
-                                                    <td>{{ promo.fixed_amount }}$</td>
-                                                    <td>{{ promo.min_order_value }}$</td>
-                                                    <td>{{ promo.max_discount_value }}$</td>
-                                                    <td>{{ promo.remaining_promo }}</td>
-            
-                                                </tr>
-            
-                                            {% endfor %}
-                                            </tbody>
-            
-                                        </table> 
-                                    </div>   
-                                </div>
-                    
+        
+                                        {% endfor %}
+                                        </tbody>
+        
+                                    </table> 
+                                </div>   
                             </div>
-                    
+                
                         </div>
-
+                    </div>
+                    <div class="col-12 col-sm-6 container2">
+        
+                        <div class="box">
+                            <div class="imgbox">
+                                <img src="{% static 'homeApp/img/location2.jpg' %}" style="height: 300;width:300;">
+                            </div>
+                            <div class="content">
+                                <div class="border-dark" id="map" style="height: 520px; width: 100%;color:black"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
             </div>
-
-            
         </div>
         <!--end of cart summary-->
 
