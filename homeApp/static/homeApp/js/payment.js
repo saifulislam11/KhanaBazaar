@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
         cur_loc_marker.setLatLng(e.latlng);
         map.flyTo(e.latlng);
+        console.log(e.latlng);
         console.log('map created with current location');
     }
 
@@ -82,7 +83,6 @@ document.addEventListener('DOMContentLoaded',function(){
      //----------------------------login popup----------------------
      const loginPopup = document.querySelector(".login-popup");
      const order_type = document.querySelector("#delivery_type");
-     const delivery_address = document.querySelector("#delivery_address");
      const del_address = document.querySelector(".del-address");
      const close = document.querySelector(".close");
      const order_pop_button = document.querySelector('#confirm_order');
@@ -272,9 +272,8 @@ close.addEventListener("click",function(){
     orderBTN.addEventListener("click",function(){
         //initialize final_price
         final_price.value = save_price;
-        delivery_address.value = del_address.value;
         order_type.value = selected_method.innerHTML;
-        console.log(delivery_address.value);
+
         console.log(selected_method.innerHTML);
         for(let i=0;i<promo_table_row.length;i++)
         {

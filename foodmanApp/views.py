@@ -53,7 +53,7 @@ def index(request):
 
     elif request.method == 'GET':
         action = request.GET.get('action')
-        if action == 'logout':
+        if action == 'logout' and request.session['app_name'] == app_name:
             request.session.flush()
             print('log out ing')
             return render(request, 'foodmanApp/sign_in.html', context)

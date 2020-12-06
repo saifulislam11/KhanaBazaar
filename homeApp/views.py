@@ -53,9 +53,12 @@ def index(request):
                 print('action logout')
                 if request.session.has_key('first_name'):
                     print('has key in session')
-                    request.session.flush()
-                    return render(request, 'homeApp/index.html',
+                    if request.session['app_name'] == app_name:
+                        request.session.flush()
+                        return render(request, 'homeApp/index.html',
                                   {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
+
+                    
     if not request.session.is_empty() and request.session['app_name'] ==app_name:
         print('has session while in index')
         if 'first_name' in request.session:
@@ -515,64 +518,66 @@ def payment(request):
     print(all_price)
     print(price)
     print(items)
-    sql = "select * from RESTAURANT WHERE ID= %s" % restaurant
+    if not request.session.is_empty() and request.session['app_name'] ==app_name:
 
-    c.execute(sql)
+        sql = "select * from RESTAURANT WHERE ID= %s" % restaurant
 
-    for row in c:
-        id = row[0]
-        name = row[1]
-        path = row[3]
-        rest_dic = {'id': id, 'name': name, 'path': path}
+        c.execute(sql)
 
-    print(rest_dic)
-    cart_dic = []
-    for i in range(len(all_food)):
-        food = all_food[i]
-        amount = all_price[i]
-        count = all_count[i]
-        dic = {'food': food, 'price': amount, 'count': count}
-        cart_dic.append(dic)
-    print(cart_dic)
-    c.close()
-    # info from session
-    if 'first_name' in request.session:
-        first_name = request.session['first_name']
-    if 'id' in request.session:
-        id = request.session['id']
-    if 'last_name' in request.session:
-        last_name = request.session['last_name']
-    if 'email' in request.session:
-        email = request.session['email']
-    print(email + last_name)
-    #---------for promo-----------#
-    c = con.cursor()
-    command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
-    c.execute(command)
-    promos = c.fetchall()
-    print(promos)
-    print('hello')
-    promo =[]
-    available_promo = []
-    for row in promos:
-        promo_id = row[2]
-        remainings = row[3]
-        command = "Select * From PROMO Where ID = %s" % promo_id
+        for row in c:
+            id = row[0]
+            name = row[1]
+            path = row[3]
+            rest_dic = {'id': id, 'name': name, 'path': path}
+
+        print(rest_dic)
+        cart_dic = []
+        for i in range(len(all_food)):
+            food = all_food[i]
+            amount = all_price[i]
+            count = all_count[i]
+            dic = {'food': food, 'price': amount, 'count': count}
+            cart_dic.append(dic)
+        print(cart_dic)
+        c.close()
+        # info from session
+        if 'first_name' in request.session:
+            first_name = request.session['first_name']
+        if 'id' in request.session:
+            id = request.session['id']
+        if 'last_name' in request.session:
+            last_name = request.session['last_name']
+        if 'email' in request.session:
+            email = request.session['email']
+        print(email + last_name)
+        #---------for promo-----------#
+        c = con.cursor()
+        command = "Select * From OFFERS Where CUSTOMER_ID = %s" % id
         c.execute(command)
-        single_promo = c.fetchall()
-        for row2 in single_promo:
-            if int(price) >= int(row2[5]):
-                dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6],'remaining_promo':remainings}
-                promo.append(dic)
+        promos = c.fetchall()
+        print(promos)
+        print('hello')
+        promo =[]
+        available_promo = []
+        for row in promos:
+            promo_id = row[2]
+            remainings = row[3]
+            command = "Select * From PROMO Where ID = %s" % promo_id
+            c.execute(command)
+            single_promo = c.fetchall()
+            for row2 in single_promo:
+                if int(price) >= int(row2[5]):
+                    dic = {'id':row2[0],'name':row2[1],'percent':row2[2],'fixed_amount':row2[3],'promo_limit':row2[4],'min_order_value':row2[5],'max_discount_value':row2[6],'remaining_promo':remainings}
+                    promo.append(dic)
 
-    print(promo)
-    c.close()
+        print(promo)
+        c.close()
 
-    
+        
 
-    return render(request, 'homeApp/payment.html',
-                  {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
-                   'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods,'promos':promo})
+        return render(request, 'homeApp/payment.html',
+                    {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
+                    'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods,'promos':promo})
 
 
 def restaurant(request):
@@ -898,177 +903,241 @@ def restaurant(request):
 
 def confirm_payment(request):
     c = con.cursor()
-    if 'first_name' in request.session:
-        first_name = request.session['first_name']
-    if 'id' in request.session:
-        cust_id = request.session['id']
-    if 'last_name' in request.session:
-        last_name = request.session['last_name']
-    if 'email' in request.session:
-        email = request.session['email']
-    if request.method == 'POST':
-        order_price = request.POST.get('order_price')
-        delivery_type = request.POST.get('delivery_type')
-        delivery_location = request.POST.get('delivery_address')
-        foods = request.POST.get('ordered_foods')
-        restaurant_id = request.POST.get('restaurant_name')
-        promo = request.POST.get('promo_used')
-        order_id = get_next_id()
-        print(order_price + ' ' + delivery_location + ' ' + delivery_type+' '+foods)
-        #-------------getting foods-----------#
-        food_collections = foods.split("#")
-        all_food = []
-        for i in range(len(food_collections) - 1):
-            all_food.append(food_collections[i])
-        #---------end of foods------------#
-        
+    if not request.session.is_empty() and request.session['app_name'] ==app_name:
 
-        #----------getting current date--------#
-        now = datetime.now()
-        order_time = now.strftime("%d/%m/%Y %H:%M:%S")
-        print(order_time)
-        delivery_time = helper.wrap_and_encode.not_picked_date
-        delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
-        print(delivery_time)
-        #---------------end of getting current date-----------#
+        if 'first_name' in request.session:
+            first_name = request.session['first_name']
+        if 'id' in request.session:
+            cust_id = request.session['id']
+        if 'last_name' in request.session:
+            last_name = request.session['last_name']
+        if 'email' in request.session:
+            email = request.session['email']
+        if request.method == 'POST':
+            order_price = request.POST.get('order_price')
+            delivery_type = request.POST.get('delivery_type')
+            delivery_location = request.POST.get('location')
+            foods = request.POST.get('ordered_foods')
+            restaurant_id = request.POST.get('restaurant_name')
+            promo = request.POST.get('promo_used')
+            order_id = get_next_id()
+            print(order_price + ' ' + delivery_location + ' ' + delivery_type+' '+foods)
+            #-------------getting foods-----------#
+            food_collections = foods.split("#")
+            all_food = []
+            for i in range(len(food_collections) - 1):
+                all_food.append(food_collections[i])
+            #---------end of foods------------#
+            
 
-        #-------------promo uses-------------#
-        print(promo)
-        if promo != "Not now":
+            #----------getting current date--------#
+            now = datetime.now()
+            order_time = now.strftime("%d/%m/%Y %H:%M:%S")
+            print(order_time)
+            delivery_time = helper.wrap_and_encode.not_picked_date
+            delivery_time = delivery_time.strftime("%d/%m/%Y %H:%M:%S")
+            print(delivery_time)
+            #---------------end of getting current date-----------#
+
+            #-------------promo uses-------------#
             print(promo)
-            to_execute = "SELECT * FROM PROMO WHERE NAME ={promo}"
-            to_execute = to_execute.format(
-                    promo=wrap_with_in_single_quote(promo)
-                )
-            c.execute(to_execute)
-            promo_tbl = c.fetchall()
-            for r in promo_tbl:
-                promo_id = r[0]
-                to_execute_uses = "INSERT INTO USES(ORDER_ID,PROMO_ID) VALUES({order_id},{promo_id})"
-                to_execute_uses = to_execute_uses.format(
-                    order_id=wrap_with_in_single_quote(order_id),
-                    promo_id=wrap_with_in_single_quote(promo_id)
-                )
-                print(to_execute)
-                #---------update promo remainings
-                to_execute_offers = "SELECT * FROM OFFERS WHERE PROMO_ID ={promo_id}"
-                to_execute_offers = to_execute_offers.format(
+            if promo != "Not now":
+                print(promo)
+                to_execute = "SELECT * FROM PROMO WHERE NAME ={promo}"
+                to_execute = to_execute.format(
+                        promo=wrap_with_in_single_quote(promo)
+                    )
+                c.execute(to_execute)
+                promo_tbl = c.fetchall()
+                for r in promo_tbl:
+                    promo_id = r[0]
+                    to_execute_uses = "INSERT INTO USES(ORDER_ID,PROMO_ID) VALUES({order_id},{promo_id})"
+                    to_execute_uses = to_execute_uses.format(
+                        order_id=wrap_with_in_single_quote(order_id),
                         promo_id=wrap_with_in_single_quote(promo_id)
                     )
-                c.execute(to_execute_offers)
-                offers_tbl = c.fetchall()
-                for r in offers_tbl:
-                    remaining_promo = int(r[3])
-                    remaining_promo = int(remaining_promo) -1
-                    if remaining_promo<=0:
-                        remaining_promo = 0
+                    print(to_execute)
+                    #---------update promo remainings
+                    to_execute_offers = "SELECT * FROM OFFERS WHERE PROMO_ID ={promo_id}"
+                    to_execute_offers = to_execute_offers.format(
+                            promo_id=wrap_with_in_single_quote(promo_id)
+                        )
+                    c.execute(to_execute_offers)
+                    offers_tbl = c.fetchall()
+                    for r in offers_tbl:
+                        remaining_promo = int(r[3])
+                        remaining_promo = int(remaining_promo) -1
+                        if remaining_promo<=0:
+                            remaining_promo = 0
 
-                    to_execute_update = "UPDATE OFFERS SET REMAINING_PROMO = {remaining_promo} WHERE PROMO_ID = {promo_id}"
-                    to_execute_update = to_execute_update.format(
-                    remaining_promo=wrap_with_in_single_quote(remaining_promo),
-                    promo_id=wrap_with_in_single_quote(promo_id)
-                    )
-                    print(to_execute_update)
-            
-        #----------------end of promo----------------#
+                        to_execute_update = "UPDATE OFFERS SET REMAINING_PROMO = {remaining_promo} WHERE PROMO_ID = {promo_id}"
+                        to_execute_update = to_execute_update.format(
+                        remaining_promo=wrap_with_in_single_quote(remaining_promo),
+                        promo_id=wrap_with_in_single_quote(promo_id)
+                        )
+                        print(to_execute_update)
+                
+            #----------------end of promo----------------#
 
-            
-            
-
-        
-        table_name = '"' + "ORDER" + '"'
-        print(table_name)
-        to_execute = "INSERT INTO {table_name}(ID,ORDER_TIME,DELIVERY_TIME,DELIVERY_LOCATION)" \
-                     " VALUES({order_id}, to_date({order_time},'DD/MM/YYYY HH24:MI:SS'), to_date({delivery_time},'DD/MM/YYYY HH24:MI:SS'), {delivery_location}) "
-        to_execute = to_execute.format(
-            table_name="{}".format(table_name),
-            order_id=wrap_with_in_single_quote(order_id),
-            order_time=wrap_with_in_single_quote(order_time),
-            delivery_time=wrap_with_in_single_quote(delivery_time),
-            delivery_location=wrap_with_in_single_quote(delivery_location)
-        )
-        payment_id = get_next_id()
-        to_execute_payment = "INSERT INTO PAYMENT(ID,PAYING_AMOUNT,PAYMENT_TYPE,DATE_TIME)" \
-                     " VALUES({payment_id},{order_price},{delivery_type}, to_date({order_time},'DD/MM/YYYY HH24:MI:SS')) "
-        to_execute_payment = to_execute_payment.format(
-            payment_id=wrap_with_in_single_quote(payment_id),
-            order_price=wrap_with_in_single_quote(order_price),
-            delivery_type=wrap_with_in_single_quote(delivery_type),
-            order_time=wrap_with_in_single_quote(order_time)
-        )
-        to_execute_chooses = "INSERT INTO CHOOSES(ORDER_ID,CUSTOMER_ID)" \
-                     " VALUES({order_id},{cust_id}) "
-        to_execute_chooses = to_execute_chooses.format(
-            order_id=wrap_with_in_single_quote(order_id),
-            cust_id = wrap_with_in_single_quote(cust_id)
-        )
-        to_execute_pays = "INSERT INTO PAYS(ORDER_ID,PAY_ID)" \
-                     " VALUES({order_id},{payment_id}) "
-        to_execute_pays = to_execute_pays.format(
-            order_id=wrap_with_in_single_quote(order_id),
-            payment_id = wrap_with_in_single_quote(payment_id)
-        )
-
-        info = order_id + ' ' + delivery_time + ' ' + order_time + ' ' + delivery_location
-        order_info = info.split(' ')
-        print(order_info)
-
-        # print(firstname+lastname+address)
-        print(to_execute)
-        try:
-            sql.execute(to_execute)
-            sql.execute(to_execute_chooses)
-            sql.execute(to_execute_payment)
-            sql.execute(to_execute_pays)
-            if promo != "Not now":
-                print('still now ok')
-                sql.execute(to_execute_uses)
-                print('still now ok')
-                sql.execute(to_execute_update)
-            contex = 'ordered successfully'
-
-        except:
-            print("Something is not right. And why rollback is not working.")
-            sql.rollback()
-            # messages.info(request, "adding of foodman was unsuccessfull")
-
-        finally:
-            sql.commit()
-
-        #------------------selected-------------#
-        for i in range(len(all_food)):
-            food = all_food[i]
-            to_execute = "Select * From FOOD_ITEM Where NAME = {food} " \
-                             "and RESTAURANT_ID = {restaurant_id}"
+            #-------------start of location--------------#
+            to_execute = "SELECT * FROM DELIVERS WHERE ORDER_ID ={order_id}"
             to_execute = to_execute.format(
-                    food=wrap_with_in_single_quote(food),
-                    restaurant_id=wrap_with_in_single_quote(restaurant_id)
+                    order_id=wrap_with_in_single_quote(order_id)
                 )
             c.execute(to_execute)
-            food_tbl = c.fetchall()
-            for r in food_tbl:
-                food_id = r[0]
-                print(food_id)
-                to_execute = "INSERT INTO SELECTED(ORDER_ID,FOOD_ID)" \
-                     " VALUES({order_id},{food_id}) "
-                to_execute = to_execute.format(
-                    order_id=wrap_with_in_single_quote(order_id),
-                    food_id=wrap_with_in_single_quote(food_id)
-                )
-                print(to_execute)
-                try:
-                    sql.execute(to_execute)
-                    contex = 'selected successfully'
-                    print(contex)
+            delivers_tbl = c.fetchall()
+            foodman_dic = None
+            for r in delivers_tbl:
+                foodman_id = r[1]
+                #---------getting foodman---------#
+                to_execute_foodman = "SELECT * FROM FOODMAN WHERE ID ={foodman_id}"
+                to_execute_foodman = to_execute_foodman.format(
+                    foodman_id=wrap_with_in_single_quote(foodman_id)
+                    )
+                c.execute(to_execute_foodman)
+                foodman_tbl = c.fetchall()
 
-                except:
-                    print("Something is not right. And why rollback is not working.")
-                    sql.rollback()
-                    # messages.info(request, "adding of foodman was unsuccessfull")
+                #--------getting foodman phone------------#
+                to_execute_foodmanPhone = "SELECT * FROM FOODMAN_PHONE WHERE ID ={foodman_id}"
+                to_execute_foodmanPhone = to_execute_foodmanPhone.format(
+                    foodman_id=wrap_with_in_single_quote(foodman_id)
+                    )
+                c.execute(to_execute_foodmanPhone)
+                foodmanPhn_tbl = c.fetchall()
 
-                finally:
-                    sql.commit()
-        c.close()
+                #------------getting foodman vehicle--------------#
+                to_execute_foodmanVehicle = "SELECT * FROM DELIVERS_BY WHERE FOODMAN_ID ={foodman_id}"
+                to_execute_foodmanVehicle = to_execute_foodmanVehicle.format(
+                    foodman_id=wrap_with_in_single_quote(foodman_id)
+                    )
+                c.execute(to_execute_foodmanVehicle)
+                foodmanVehicle_tbl = c.fetchall()
+
+                for row in foodmanVehicle_tbl:
+                    foodman_veh_id = row[1]
+                    #------------getting foodman vehicle type--------------#
+                    to_execute_foodmanVehicleType = "SELECT * FROM VEHICLE WHERE ID ={foodman_veh_id}"
+                    to_execute_foodmanVehicleType = to_execute_foodmanVehicleType.format(
+                        foodman_veh_id=wrap_with_in_single_quote(foodman_veh_id)
+                        )
+                    c.execute(to_execute_foodmanVehicleType)
+                    foodmanVehicleType_tbl = c.fetchall()
+                    for row2 in foodmanVehicleType_tbl:
+                        foodman_vehicle_type = {'vehicleType':row2[2]}
+
+
+                for row in foodmanPhn_tbl:
+                    foodman_phn = {'foodman_phone':row[1]}
+                for row in foodman_tbl:
+                    foodman_dic = {'name':row[1],'rating':row[2],'image':row[3],'foodman_location':row[4]}
+                    foodman_dic.update(foodman_phn)
+                    foodman_dic.update(foodman_vehicle_type)
+            print(foodman_dic)
+                
+
+
+
+
+
+            #-----------end location------------------#
+
+                
+                
+
             
-        #----------------end of selected------------#
-    return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name})
+            table_name = '"' + "ORDER" + '"'
+            print(table_name)
+            to_execute = "INSERT INTO {table_name}(ID,ORDER_TIME,DELIVERY_TIME,DELIVERY_LOCATION)" \
+                        " VALUES({order_id}, to_date({order_time},'DD/MM/YYYY HH24:MI:SS'), to_date({delivery_time},'DD/MM/YYYY HH24:MI:SS'), {delivery_location}) "
+            to_execute = to_execute.format(
+                table_name="{}".format(table_name),
+                order_id=wrap_with_in_single_quote(order_id),
+                order_time=wrap_with_in_single_quote(order_time),
+                delivery_time=wrap_with_in_single_quote(delivery_time),
+                delivery_location=wrap_with_in_single_quote(delivery_location)
+            )
+            payment_id = get_next_id()
+            to_execute_payment = "INSERT INTO PAYMENT(ID,PAYING_AMOUNT,PAYMENT_TYPE,DATE_TIME)" \
+                        " VALUES({payment_id},{order_price},{delivery_type}, to_date({order_time},'DD/MM/YYYY HH24:MI:SS')) "
+            to_execute_payment = to_execute_payment.format(
+                payment_id=wrap_with_in_single_quote(payment_id),
+                order_price=wrap_with_in_single_quote(order_price),
+                delivery_type=wrap_with_in_single_quote(delivery_type),
+                order_time=wrap_with_in_single_quote(order_time)
+            )
+            to_execute_chooses = "INSERT INTO CHOOSES(ORDER_ID,CUSTOMER_ID)" \
+                        " VALUES({order_id},{cust_id}) "
+            to_execute_chooses = to_execute_chooses.format(
+                order_id=wrap_with_in_single_quote(order_id),
+                cust_id = wrap_with_in_single_quote(cust_id)
+            )
+            to_execute_pays = "INSERT INTO PAYS(ORDER_ID,PAY_ID)" \
+                        " VALUES({order_id},{payment_id}) "
+            to_execute_pays = to_execute_pays.format(
+                order_id=wrap_with_in_single_quote(order_id),
+                payment_id = wrap_with_in_single_quote(payment_id)
+            )
+
+            info = order_id + ' ' + delivery_time + ' ' + order_time + ' ' + delivery_location
+            order_info = info.split(' ')
+            print(order_info)
+
+            # print(firstname+lastname+address)
+            print(to_execute)
+            try:
+                sql.execute(to_execute)
+                sql.execute(to_execute_chooses)
+                sql.execute(to_execute_payment)
+                sql.execute(to_execute_pays)
+                if promo != "Not now":
+                    print('still now ok')
+                    sql.execute(to_execute_uses)
+                    print('still now ok')
+                    sql.execute(to_execute_update)
+                contex = 'ordered successfully'
+
+            except:
+                print("Something is not right. And why rollback is not working.")
+                sql.rollback()
+                # messages.info(request, "adding of foodman was unsuccessfull")
+
+            finally:
+                sql.commit()
+
+            #------------------selected-------------#
+            for i in range(len(all_food)):
+                food = all_food[i]
+                to_execute = "Select * From FOOD_ITEM Where NAME = {food} " \
+                                "and RESTAURANT_ID = {restaurant_id}"
+                to_execute = to_execute.format(
+                        food=wrap_with_in_single_quote(food),
+                        restaurant_id=wrap_with_in_single_quote(restaurant_id)
+                    )
+                c.execute(to_execute)
+                food_tbl = c.fetchall()
+                for r in food_tbl:
+                    food_id = r[0]
+                    print(food_id)
+                    to_execute = "INSERT INTO SELECTED(ORDER_ID,FOOD_ID)" \
+                        " VALUES({order_id},{food_id}) "
+                    to_execute = to_execute.format(
+                        order_id=wrap_with_in_single_quote(order_id),
+                        food_id=wrap_with_in_single_quote(food_id)
+                    )
+                    print(to_execute)
+                    try:
+                        sql.execute(to_execute)
+                        contex = 'selected successfully'
+                        print(contex)
+
+                    except:
+                        print("Something is not right. And why rollback is not working.")
+                        sql.rollback()
+                        # messages.info(request, "adding of foodman was unsuccessfull")
+
+                    finally:
+                        sql.commit()
+            c.close()
+                
+            #----------------end of selected------------#
+        return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name,'foodman':foodman_dic})

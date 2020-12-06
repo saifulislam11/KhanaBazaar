@@ -22,29 +22,72 @@
      <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
      <script src="{% static 'homeApp/js/confirm_pay.js' %}" type="module" async></script>
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script type="text/javascript" src="{% static 'homeApp/js/haversine.js' %}"></script>
      <!--endbuild-->
 </head>
 
 <body data-spy="scroll" >
-      
+    <!--stylish box -->
+    <div class="box">
+        <div class="content">
+            <h1>Thanks for the Order</h1>
+            <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
+            <h2>Estimated Delivery time:Within 2 hours</h2>
+            <a href="{% url 'homeApp:homepage' %}" class="redirect" role="button" class="btn">Go back to homepage</a>
+            <h2>{{foodman.name}}</h2>
+            <p>
+                ejgriaehgihdfbvidbvadhvfuieahvfiuadbvfakjdfv
+                sdvashfdiaehviadfhvdafv afdvadfviafivafv
+                dfvadfvhaifvhdjvbdfv
+                vfvadifvadfivadfv
+            </p>
+        </div>
+
+    </div>
+    <!--end of stylish box-->
+    <!--<div class="box">
+        <div class="form">
+            <h1>Thanks for the Order</h1>
+            <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
+            <h2>Estimated Delivery time:Within 2 hours</h2>
+            <a href="{% url 'homeApp:homepage' %}" role="button" class="btn">Go back to homepage</a>
+            <h2>{{foodman.name}}</h2>
+            <div class="border-dark" id="map" style="height: 520px; width: 500px;color:black"></div>
+        </div>
     
-    <div class="bg"></div>
+    </div>-->
     <!--login popup-->
-    <div class="login-popup bg">
+    <!--<div class="login-popup bg">
         <div class="box">
-             <!--<div class="img-area">
+             <div class="img-area">
                  <div class="img">
                  </div>
                  -<h1>Your Logo</h1>
-             </div>-->
+             </div>
              <div class="form">
                  <h1>Thanks for the Order</h1>
                  <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
                  <h2>Estimated Delivery time:Within 2 hours</h2>
                  <a href="{% url 'homeApp:homepage' %}" role="button" class="btn">Go back to homepage</a>
+                 <h2>{{foodman.name}}</h2>
+                 <div class="border-dark" id="map" style="height: 520px; width: 100%;color:black"></div>
              </div>
         </div>
-   </div>
+   </div>-->
+   <input name="location" id="location" value="20,65" hidden>
+   
+   
     <!--end of login popup-->
     <!--end of login popup--> 
         
