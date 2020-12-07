@@ -1140,4 +1140,87 @@ def confirm_payment(request):
             c.close()
                 
             #----------------end of selected------------#
-        return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name,'foodman':foodman_dic})
+        return render(request, 'homeApp/confirm_payment.html', {'customer_name': first_name,'foodman':foodman_dic,'order_id':order_id})
+def confirm_foodman(request):
+    c = con.cursor()
+    if not request.session.is_empty() and request.session['app_name'] ==app_name:
+        if 'first_name' in request.session:
+            first_name = request.session['first_name']
+        if 'id' in request.session:
+            cust_id = request.session['id']
+        if 'last_name' in request.session:
+            last_name = request.session['last_name']
+        if 'email' in request.session:
+            email = request.session['email']
+        if request.method == 'POST':
+            order_id = request.POST.get('order_id')
+            print(order_id)
+
+            #-------------start of location--------------#
+            to_execute = "SELECT * FROM DELIVERS WHERE ORDER_ID ={order_id}"
+            to_execute = to_execute.format(
+                    order_id=wrap_with_in_single_quote(order_id)
+                )
+            c.execute(to_execute)
+            delivers_tbl = c.fetchall()
+            foodman_dic = None
+            for r in delivers_tbl:
+                foodman_id = r[1]
+                #---------getting foodman---------#
+                to_execute_foodman = "SELECT * FROM FOODMAN WHERE ID ={foodman_id}"
+                to_execute_foodman = to_execute_foodman.format(
+                    foodman_id=wrap_with_in_single_quote(foodman_id)
+                    )
+                c.execute(to_execute_foodman)
+                foodman_tbl = c.fetchall()
+
+                #--------getting foodman phone------------#
+                to_execute_foodmanPhone = "SELECT * FROM FOODMAN_PHONE WHERE ID ={foodman_id}"
+                to_execute_foodmanPhone = to_execute_foodmanPhone.format(
+                    foodman_id=wrap_with_in_single_quote(foodman_id)
+                    )
+                c.execute(to_execute_foodmanPhone)
+                foodmanPhn_tbl = c.fetchall()
+
+                #------------getting foodman vehicle--------------#
+                to_execute_foodmanVehicle = "SELECT * FROM DELIVERS_BY WHERE FOODMAN_ID ={foodman_id}"
+                to_execute_foodmanVehicle = to_execute_foodmanVehicle.format(
+                    foodman_id=wrap_with_in_single_quote(foodman_id)
+                    )
+                c.execute(to_execute_foodmanVehicle)
+                foodmanVehicle_tbl = c.fetchall()
+
+                for row in foodmanVehicle_tbl:
+                    foodman_veh_id = row[1]
+                    #------------getting foodman vehicle type--------------#
+                    to_execute_foodmanVehicleType = "SELECT * FROM VEHICLE WHERE ID ={foodman_veh_id}"
+                    to_execute_foodmanVehicleType = to_execute_foodmanVehicleType.format(
+                        foodman_veh_id=wrap_with_in_single_quote(foodman_veh_id)
+                        )
+                    c.execute(to_execute_foodmanVehicleType)
+                    foodmanVehicleType_tbl = c.fetchall()
+                    for row2 in foodmanVehicleType_tbl:
+                        foodman_vehicle_type = {'vehicleType':row2[2]}
+
+
+                for row in foodmanPhn_tbl:
+                    foodman_phn = {'foodman_phone':row[1]}
+                for row in foodman_tbl:
+                    foodman_dic = {'name':row[1],'rating':row[4],'image':row[5],'foodman_location':row[6]}
+                    foodman_dic.update(foodman_phn)
+                    foodman_dic.update(foodman_vehicle_type)
+            print(foodman_dic)
+            verifyFOODman = 0
+            if foodman_dic != None:
+                verifyFOODman = 1
+
+            #-----------end location------------------#
+            print(to_execute)
+            c.close()
+            return render(request, 'homeApp/confirm_foodman.html', {'customer_name': first_name,'foodman':foodman_dic,'order_id':order_id,'verify':verifyFOODman})
+                
+            #----------------end of selected------------#
+        return render(request, 'homeApp/confirm_foodman.html', {'customer_name': first_name,'foodman':foodman_dic,'order_id':order_id,'verify':verifyFOODman})
+    
+
+

@@ -77,26 +77,30 @@ document.addEventListener('DOMContentLoaded',function(){
 
     ///---------------end of location--------------//
     const loginPopup = document.querySelector(".login-popup");
+    const order_id = document.querySelector("#order_id");
+    
     const close = document.querySelector(".close");
     window.addEventListener("load",function(){
+        console.log(order_id);
     
-    showPopup();
-    setTimeout(function(){
-      loginPopup.classList.add("show");
-     },1000)
-
-    })
-
+        showPopup();
+        // setTimeout(function(){
+        //   loginPopup.classList.add("show");
+        // },5000)
+    
+        })
+    
     function showPopup(){
-            const timeLimit = 0 // seconds;
+            const timeLimit = 1 // seconds;
             let i=0;
             const timer = setInterval(function(){
+            i++;
             if(i == timeLimit){
             clearInterval(timer);
             loginPopup.classList.add("show");
-            }
-            i++; 
+            } 
             console.log(i)
             },1000);
     }
+    
 })

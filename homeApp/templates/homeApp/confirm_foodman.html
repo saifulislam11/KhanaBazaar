@@ -16,13 +16,12 @@
      <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap-social/bootstrap-social.css' %}">
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="{% static 'homeApp/modules/bootstrap/dist/css/bootstrap.min.css' %}">
-     <link rel="stylesheet" href="{% static 'homeApp/css/confirm_pay.css' %}">
+     <link rel="stylesheet" href="{% static 'homeApp/css/confirm_foodman.css' %}">
      <link rel="stylesheet" href="{% static 'homeApp/css/styles.css' %}">
-     <link rel="stylesheet" href="{% static 'homeApp/css/login_popup_pay.css' %}">
      <!--flickity-->
      <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
-     <script src="{% static 'homeApp/js/confirm_pay.js' %}" type="module" async></script>
+     <script src="{% static 'homeApp/js/confirm_foodman.js' %}" type="module" async></script>
      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
@@ -46,15 +45,10 @@
                 <div class="content">
                     <h1>Thanks for the Order</h1>
                     <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
-                    <h2>Estimated Delivery time:Within 2 hours</h2>
+                    <h2 class="status">PENDING!Please wait for a moment!! </h2>
                     <a href="{% url 'homeApp:homepage' %}" class="redirect" role="button" class="btn">Go back to homepage</a>
-                    <h2>{{foodman.name}}</h2>
-                    <p>
-                        ejgriaehgihdfbvidbvadhvfuieahvfiuadbvfakjdfv
-                        sdvashfdiaehviadfhvdafv afdvadfviafivafv
-                        dfvadfvhaifvhdjvbdfv
-                        vfvadifvadfivadfv
-                    </p>
+                    
+                    <h2 class="place-name"></h2>
                 </div>
 
             </div>
@@ -63,13 +57,16 @@
             <div class="col-12 col-sm-6 container2">
                 <div class="box2">
                     <div class="imgbox">
-                        <img src="{% static 'homeApp/img/promo.jpg' %}">
+                        <img src="{% static 'homeApp/img/phone.png' %}">
                     </div>
                     <div class="content">
                         <div class="icon">
-                            <img src="{% static 'homeApp/img/promo.jpg' %}">
+                            <img src="{% static 'homeApp/img/phone.png' %}">
                         </div>
-                        <h2>Your Available PROMOS</h2>
+                        <h2 class="foodman-status" style="margin-left: -4px;">FOODMAN WILL BE AVAILABLE SOON</h2>
+                        <img class="img-fluid rounded foodman-image" style="height: 200px;width:280px;"  src="{{ baseURL }}/{{ foodman.image }}" class="img-fluid" alt="Foodman not found">
+                        <h3 class="foodman-contact"></h3>
+
                     </div>
 
                 </div>
@@ -81,7 +78,8 @@
                         <img src="{% static 'homeApp/img/location2.jpg' %}" style="height: 300;width:300;">
                     </div>
                     <div class="content">
-                        <div class="border-dark" id="map" style="height: 520px; width: 100%;color:black"></div>
+                        <div class="border-dark location-map" id="map" style="height: 520px; width: 100%;color:black"></div>
+                        <h3 class="location-summary" style="display: none;">FOODMAN LOCATION NOT FOUND YET</h3>
                     </div>
                 </div>
             </div>
@@ -101,19 +99,39 @@
     
     </div>-->
     <!--login popup-->
-    <div class="login-popup">
-        <div class="box3">
+    <!--<div class="login-popup bg">
+        <div class="box">
+             <div class="img-area">
+                 <div class="img">
+                 </div>
+                 -<h1>Your Logo</h1>
+             </div>
              <div class="form">
-                 <form action="{% url 'homeApp:confirm_foodman' %}" method="POST" style="overflow: auto;max-height:560px">
-                     {% csrf_token %}
-                     <h3 style="font-weight: 600;margin-left:58px;font-family:Georgia, 'Times New Roman', Times, serif;color:black">Your Order is PENDING</h3>
-                    <button type="submit" id="submit_pop" class="btn">Click here to wait & Proceed</button>
-                    <input name="location" id="location" value="20,65" hidden>
-                    <input name="order_id" id="order_id" value={{order_id}} hidden>
-                 </form>
+                 <h1>Thanks for the Order</h1>
+                 <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
+                 <h2>Estimated Delivery time:Within 2 hours</h2>
+                 <a href="{% url 'homeApp:homepage' %}" role="button" class="btn">Go back to homepage</a>
+                 <h2>{{foodman.name}}</h2>
+                 <div class="border-dark" id="map" style="height: 520px; width: 100%;color:black"></div>
              </div>
         </div>
-   </div>
+   </div>-->
+   <form action="{% url 'homeApp:confirm_foodman' %}" method="POST" style="overflow: auto;max-height:560px" hidden>
+    {% csrf_token %}
+        <input name="location" id="location" value="20,65" hidden>
+        <input name="order_id" id="order_id" value={{order_id}} hidden>
+        <input name="verify" id="verify" value={{verify}} hidden>
+        <input name="foodman_name" id="foodman_name" value={{foodman.name}} hidden>
+        <input name="foodman_location" id="foodman_location" value={{foodman.foodman_location}} hidden>
+        <input name="foodman_location2" id="foodman_location2" value={{foodman.foodman_location}} hidden>
+        <input name="foodman_phn" id="foodman_phn" value={{foodman.foodman_phone}} hidden>
+        <button type="submit" id="submit_pop" class="btn" hidden>Confirm Checkout & Continue</button>
+
+
+    </form>
+   
+   
+   
     <!--end of login popup-->
     <!--end of login popup--> 
         

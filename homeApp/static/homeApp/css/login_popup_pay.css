@@ -15,8 +15,91 @@
 	visibility:visible;
 	opacity: 1;
 }
+.login-popup .box3{
+	background-color:#ffd900;
+	width: 450px;
+	position: absolute;
+	left: 50%;
+	top:50%;
+	transform:translate(-50%,-50%);
+	display: flex;
+	flex-wrap: wrap;
+	opacity: 0;
+	margin-left: 50px;
+	transition: all 1s ease;
+
+}
+.login-popup.show .box3{
+	opacity: 1;
+	margin-left: 0;
+}
+.login-popup .box3 .form{
+	flex:0 0 100%;
+	max-width: 100%;
+	padding:40px 10px;
+}
+
+.login-popup .box3 .form h1{
+	color:#000000;
+	font-size: 30px;
+	margin:0 0 30px;
+}
+.login-popup .box3 .form .form-control{
+	height: 45px;
+	margin-bottom: 30px;
+	width: 100%;
+	border:none;
+	border-bottom:1px solid #cccccc;
+	font-size: 15px;
+	color:#000000;
+}
+.login-popup .box3 .form .form-control:focus{
+	outline: none;
+}
+.login-popup .box3 .form label{
+	font-size: 15px;
+	color:#555555;
+}
+.login-popup .box3 .form .btn{
+	width: 100%;
+	background-color: #E91E63;
+	margin-top:40px;
+	height: 45px;
+	border:none;
+	border-radius: 25px;
+	font-size: 15px;
+	text-transform: uppercase;
+	color:#ffffff;
+	cursor: pointer;
+}
+.login-popup .box3 .form .btn:focus{
+	outline: none;
+}
+
+.login-popup .box3 .form .close{
+	position: absolute;
+	right: 10px;
+	top:0px;
+	font-size: 30px;
+	cursor: pointer;
+}
+
+/*responsive*/
+@media(max-width: 767px){
+	.login-popup .box3{
+		width: calc(100% - 30px);
+	}
+	.login-popup .box3 .img-area{
+		display: none;
+	}
+	.login-popup .box3 .form{
+		flex: 0 0 100%;
+        max-width: 100%;
+	}
+}
+/*--------box------------*/
 .login-popup .box{
-	background-color:#ffffff;
+	background-color:#ffd900;
 	width: 450px;
 	position: absolute;
 	left: 50%;
