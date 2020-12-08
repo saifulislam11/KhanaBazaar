@@ -132,8 +132,6 @@ IMAGE_PATH = os.path.join(BASE_DIR, 'img')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     IMAGE_PATH,
-    os.path.join(BASE_DIR, 'homeApp/static'),
-    os.path.join(BASE_DIR, 'adminApp/static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
