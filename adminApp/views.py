@@ -278,11 +278,12 @@ def offer_promo(request):
                         sql.execute(to_execute)
                     except Exception as e:
                         print(e)
-                        print('the customer already has this promo')
+                        #print('the customer already has this promo')
                         pass
                     messages.info(request, 'Successfully distributed Promos')
             except Exception as e:
-                print('Error happen in writing in offer table ')
+                #print('Error happen in writing in offer table ')
+                print(e)
                 messages.info(request, 'Some error occured! please Try again!')
                 pass
 
@@ -295,10 +296,23 @@ def offer_promo(request):
 def suspend_customer(request):
     context = {}
     if request.method == 'POST':
-        customers = request.POST.get('customers')
-        customers = customers.split(',')
-        print(customers)
-        messages.info(request, 'Work is being done in backend!!!')
+        try:
+
+            customers = request.POST.get('customers')
+            customers = customers.split(',')
+            print(customers)
+            cursor = sql.create_cursor()
+            for customer_id in customers:
+                cursor.callproc('SUSPEND_CUSTOMER', [customer_id])
+            messages.info(request, 'Succesfully deleted all customer')
+        except Exception as e:
+            print(e)
+            messages.info(request, 'Some error occured')
+        finally:
+            try:
+                cursor.close()
+            except:
+                pass
     context['customers'] = fetch_all.customer_all()
     return render(request, 'adminApp/suspend_customer.html', context)
 
@@ -306,11 +320,21 @@ def suspend_customer(request):
 def suspend_foodman(request):
     context = {}
     if request.method == 'POST':
-        foodmans = request.POST.get('foodmans')
-        foodmans = foodmans.split(',')
-        print(foodmans)
-        messages.info(request, 'Work is being done in backend!!!')
-        pass
+        try:
+            foodmans = request.POST.get('foodmans')
+            foodmans = foodmans.split(',')
+            cursor = sql.create_cursor()
+            for foodman_id in foodmans:
+                cursor.callproc('SUSPEND_FOODMAN', [foodman_id])
+            messages.info(request, 'Successfully deleted foodmans')
+        except:
+            messages.info(request, 'Some error occured')
+            pass
+        finally:
+            try:
+                cursor.close()
+            except:
+                pass
     context['foodmans'] = fetch_all.foodman_all()
     return render(request, 'adminApp/suspend_foodman.html', context)
 
