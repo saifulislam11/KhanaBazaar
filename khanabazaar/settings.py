@@ -140,3 +140,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 if not os.path.exists(IMAGE_PATH):
     os.mkdir(IMAGE_PATH)
+    os.mkdir(IMAGE_PATH + os.path.sep + 'img/')
