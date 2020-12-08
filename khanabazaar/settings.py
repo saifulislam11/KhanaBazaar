@@ -137,3 +137,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if not os.path.exists(IMAGE_PATH):
+    os.mkdir(IMAGE_PATH)
