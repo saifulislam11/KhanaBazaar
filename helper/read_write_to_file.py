@@ -7,7 +7,7 @@ def handle_uploaded_file(f, file_name, location):
     :return: Boolean
     """
     name = location + file_name
-    print(name)
+    #print(name)
     try:
         with open(name, 'wb+') as destination:
             for chunk in f.chunks():
