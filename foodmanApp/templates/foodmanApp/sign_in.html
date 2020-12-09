@@ -21,12 +21,15 @@
 </head>
 <body>
 <div class="container d-flex justify-content-center">
-    <h1 class="row row-content">FOODMAN !!!</h1>
-    {% for message in messages %}
-        <p>
-            {{ message }}
-        </p>
-    {% endfor %}
+    <h1 class="row row-content">Please Log in</h1>
+    <script>
+        var m = '';
+        {% for message in messages %}
+            m = m + '{{ message }}';
+        {% endfor %}
+        if (m != '')
+            alert(m);
+    </script>
 </div>
 
 <div class="container  align-items-center">

@@ -174,13 +174,14 @@
         </script>
 
     </div>
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    </div>
+    <script>
+        var m = '';
+        {% for message in messages %}
+            m = m + '{{ message }}';
+        {% endfor %}
+        if (m != '')
+            alert(m);
+    </script>
 
     <!--restaurant 1st row-->
 

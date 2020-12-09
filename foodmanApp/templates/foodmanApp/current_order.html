@@ -122,13 +122,14 @@
         <div class="bg-info col-12"> Restaurant location {{ restaurant.location }}</div>
     </div>
 
-    <div class="container bg-info">
-        <div class="d-flex justify-content-center">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    </div>
+    <script>
+        var m = '';
+        {% for message in messages %}
+            m = m + '{{ message }}';
+        {% endfor %}
+        if (m != '')
+            alert(m);
+    </script>
 
 </div>
 <script>
