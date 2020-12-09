@@ -9,7 +9,7 @@ def valid_location(location):
     '''
     try:
         arr = location.split(',')
-        if arr.size() != 2:
+        if len(arr) != 2:
             raise Exception
         a = float(arr[0])
         b = float(arr[1])
