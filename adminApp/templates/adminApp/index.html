@@ -105,15 +105,18 @@
         FoodMan</a>
     <a class="btn btn-block  btn-sm" role="button" id="remove_foodman" href="{% url 'adminApp:suspend_foodman' %}">Suspend
         FoodMan</a>
+    <script>
+        var m = '';
+        {% for message in messages %}
+            m = m + '{{ message }}';
+        {% endfor %}
+        if (m != '')
+            alert(m);
+    </script>
 
 </div>
 
-<div class="row restaurant-search-row-header">
-    <div> request element incoming</div>
-    {#                {% for i in  request.session %}#}
-    {#                    <div> {{ i }}</div>#}
-    {#                {% endfor %}#}
-</div>
+
 <!--restaurant 1st row-->
 
 
