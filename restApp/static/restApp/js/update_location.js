@@ -6,10 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
         return [a, b]
     }
 
-    console.log('location is loading');
+    console.log('location is loading...');
     const latlng_buet = [23.7265768, 90.3926623];
     var location = document.getElementById('location')
+    //console.log(location.value)
     var latlng_rest = splitter(location.value);
+    //console.log(latlng_buet);
+    //console.log(latlng_rest);
     //console.log(' restaurant location is ' + latlng_rest);
     var map = L.map('map',
         {
@@ -17,8 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
             zoom: 18,
             enableHighAccuracy: true
         });
-    if (latlng_rest == undefined) {
+
+    if (latlng_rest === undefined) {
         latlng_rest = latlng_buet;
+    } else {
+        map.flyTo(latlng_rest);
     }
     //var cur_loc_marker = L.marker(latlng_buet).addTo(map);
     var cur_loc_marker = L.marker(latlng_rest).addTo(map);

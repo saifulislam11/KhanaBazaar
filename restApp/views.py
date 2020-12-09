@@ -70,20 +70,21 @@ def add_food(request):
         messages.info(request, 'Please log in')
         return redirect('/rest')
     if request.method == 'POST':
-        name = request.POST.get('name')
-        image = request.FILES['food_image']
-        price = request.POST.get('price')
-        description = request.POST.get('description')
-        food_id = sql.get_next_id()
-        rest_id = request.session.get('id')
-        Type = request.POST.get('type')
-        image_id = 0
-        # this are default
-        available = 'N'
-        offer = 0
-        food_image_path = None
 
         try:
+            name = request.POST.get('name')
+            image = request.FILES['food_image']
+            price = request.POST.get('price')
+            description = request.POST.get('description')
+            food_id = sql.get_next_id()
+            rest_id = request.session.get('id')
+            Type = request.POST.get('type')
+            image_id = 0
+            # this are default
+            available = 'N'
+            offer = 0
+            food_image_path = None
+
             conn = sql.open_connection()
             cursor = conn.cursor()
             # first add to fooditem table
@@ -99,7 +100,7 @@ def add_food(request):
                 description=wrap_with_in_single_quote(description),
                 type=wrap_with_in_single_quote(Type)
             )
-            print(to_execute)
+            # print(to_execute)
             cursor.execute(to_execute)
 
             # now add to food item path
@@ -125,9 +126,16 @@ def add_food(request):
             print(e)
             print("something is wrong in adding food")
             print(e)
-            conn.rollback()
+            messages.info(request, 'some error occured!')
+            try:
+                conn.rollback()
+            except:
+                pass
         finally:
-            conn.close()
+            try:
+                conn.close()
+            except:
+                pass
 
     return render(request, 'restApp/add_food.html', context)
 
@@ -164,33 +172,38 @@ def edit_particular_food(request):
             return redirect('/rest/edit_food')
     if request.method == 'POST':
         # print(request.POST)
-        food_id = request.POST.get('food_id')
-        name = request.POST.get('name')
-        price = request.POST.get('price')
-        offer = request.POST.get('offer')
-        availibility = request.POST.get('availibility')
-        description = request.POST.get('description')
-        Type = request.POST.get('type')
+        try:
+            food_id = request.POST.get('food_id')
+            name = request.POST.get('name')
+            price = request.POST.get('price')
+            offer = request.POST.get('offer')
+            availibility = request.POST.get('availibility')
+            description = request.POST.get('description')
+            Type = request.POST.get('type')
 
-        to_execute = "UPDATE FOOD_ITEM SET NAME={name},PRICE={price},OFFER={offer},AVAILIBILITY = {availibility}, DESCRIPTION={description},TYPE={type} " \
-                     "WHERE ID = {id} and RESTAURANT_ID ={rest_id}"
-        to_execute = to_execute.format(
-            name=wrap_with_in_single_quote(name),
-            price=price,
-            offer=offer,
-            availibility=wrap_with_in_single_quote(availibility),
-            description=wrap_with_in_single_quote(description),
-            type=wrap_with_in_single_quote(Type),
-            id=wrap_with_in_single_quote(food_id),
-            rest_id=wrap_with_in_single_quote(rest_id)
-        )
-        # print(to_execute)
-        sql.execute(to_execute)
+            to_execute = "UPDATE FOOD_ITEM SET NAME={name},PRICE={price},OFFER={offer},AVAILIBILITY = {availibility}, DESCRIPTION={description},TYPE={type} " \
+                         "WHERE ID = {id} and RESTAURANT_ID ={rest_id}"
+            to_execute = to_execute.format(
+                name=wrap_with_in_single_quote(name),
+                price=price,
+                offer=offer,
+                availibility=wrap_with_in_single_quote(availibility),
+                description=wrap_with_in_single_quote(description),
+                type=wrap_with_in_single_quote(Type),
+                id=wrap_with_in_single_quote(food_id),
+                rest_id=wrap_with_in_single_quote(rest_id)
+            )
+            # print(to_execute)
+            sql.execute(to_execute)
 
-        rest = fetch_all.food_item(food_id, rest_id)
-        context.update(rest)
-        messages.info(request, "Successfully Updated")
-        return render(request, "restApp/edit_particular_food.html", context)
+            rest = fetch_all.food_item(food_id, rest_id)
+            context.update(rest)
+            messages.info(request, "Successfully Updated")
+            return render(request, "restApp/edit_particular_food.html", context)
+        except Exception as e:
+            print(e)
+            messages.info(request, 'some error occured', )
+            return redirect('/rest/edit_food')
 
 
 def update_time(request):
@@ -235,16 +248,20 @@ def update_logo(request):
         context.update(rest)
         return render(request, 'restApp/update_logo.html', context)
     elif request.method == 'POST':
-        logo = request.FILES.get('restaurantLogo')
-        if logo is not None:
-            logo_path = 'rest' + rest_id + '.' + 'jpg'
-            handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
-            handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
-        rest = fetch_all.restaurant(rest_id)
-        print(rest)
-        context.update(rest)
-        messages.info(request, 'Succcessfully updated LOGO !!!')
-        return render(request, 'restApp/update_logo.html', context)
+        try:
+            logo = request.FILES.get('restaurantLogo')
+            if logo is not None:
+                logo_path = 'rest' + rest_id + '.' + 'jpg'
+                handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
+                handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
+            rest = fetch_all.restaurant(rest_id)
+            # print(rest)
+            context.update(rest)
+            messages.info(request, 'Succcessfully updated LOGO !!!')
+        except:
+            messages.info(request, 'some error occured')
+        finally:
+            return render(request, 'restApp/update_logo.html', context)
 
 
 def update_location(request):
@@ -264,7 +281,7 @@ def update_location(request):
                     location=wrap_with_in_single_quote(location),
                     id=wrap_with_in_single_quote(rest_id)
                 )
-                # print(to_execute)
+                print(to_execute)
                 sql.execute(to_execute)
                 messages.info(request, "Successfully updated location to " + location)
             except Exception as e:
