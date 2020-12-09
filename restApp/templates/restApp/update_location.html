@@ -112,11 +112,16 @@
         </div>
     </form>
 
-    <div class="d-flex justify-content-center">
-        {% for message in messages %}
-            <h1>{{ message }}</h1>
-        {% endfor %}
-    </div>
+    <script>
+        {% if messages %}
+            var m = '';
+            {% for message in messages %}
+                m = m + '{{ message }}';
+            {% endfor %}
+            if (m != '')
+                alert(m);
+        {% endif %}
+    </script>
 </div>
 {#</div>#}
 <!--restaurant 1st row-->
@@ -179,7 +184,7 @@
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
-<script src="{% static 'restApp/js/scripts.js' %}"></script>
+{#<script src="{% static 'restApp/js/scripts.js' %}"></script>#}
 <script src="{% static 'restApp/js/update_location.js' %}"></script>
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->

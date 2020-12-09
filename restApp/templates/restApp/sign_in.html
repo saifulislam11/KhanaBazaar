@@ -22,11 +22,16 @@
 <body>
 <div class="container d-flex justify-content-center">
     <h1 class="row row-content">Please log In !!!</h1>
-    {% for message in messages %}
-        <p>
-            {{ message }}
-        </p>
-    {% endfor %}
+    <script>
+        {% if messages %}
+            var m = '';
+            {% for message in messages %}
+                m = m + '{{ message }}';
+            {% endfor %}
+            if (m != '')
+                alert(m);
+        {% endif %}
+    </script>
 </div>
 
 <div class="container align-items-center ">

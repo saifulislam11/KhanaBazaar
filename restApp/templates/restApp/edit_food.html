@@ -112,16 +112,19 @@
         {% endfor %}
     </div>
 
-{#    {% for food in foods %}#}
-{#        <div>#}
-{#            {{ food.name }} + {{ food.description }}#}
-{#        </div>#}
-{#    {% endfor %}#}
-    <div class="d-flex justify-content-center">
+    {#    {% for food in foods %}#}
+    {#        <div>#}
+    {#            {{ food.name }} + {{ food.description }}#}
+    {#        </div>#}
+    {#    {% endfor %}#}
+    <script>
+        var m = '';
         {% for message in messages %}
-            {{ message }}
+            m = m + '{{ message }}';
         {% endfor %}
-    </div>
+        if (m != '')
+            alert(m);
+    </script>
 </div>
 
 <div class="row restaurant-search-row-header">

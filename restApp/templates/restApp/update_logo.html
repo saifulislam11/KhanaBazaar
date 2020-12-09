@@ -87,7 +87,7 @@
         Wanna Edit Logo !!!
     </h1>
     <img class="img-fluid" src="{{ baseURL }}/{{ logo_path }}" alt="{{ id }}">
-{#    <h1>{{ baseURL }}/{{ logo_path }}</h1>#}
+    {#    <h1>{{ baseURL }}/{{ logo_path }}</h1>#}
     <form action="." method="POST" class="offset-1" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -107,14 +107,19 @@
 
             </div>
         </div>
+    </form>
 </div>
-</form>
-<div class="d-flex justify-content-center">
-    {% for message in messages %}
-        <h1>{{ message }}</h1>
-    {% endfor %}
-</div>
-</div>
+
+<script>
+    {% if messages %}
+        var m = '';
+        {% for message in messages %}
+            m = m + '{{ message }}';
+        {% endfor %}
+        if (m != '')
+            alert(m);
+    {% endif %}
+</script>
 {#</div>#}
 <!--restaurant 1st row-->
 
@@ -172,8 +177,8 @@
 <script src="{% static 'restApp/modules/jquery/dist/jquery.slim.min.js' %}"></script>
 <script src="{% static 'restApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
 <script src="{% static 'restApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'restApp/js/scripts.js' %}"></script>
-<script src="{% static 'restApp/js/form.js' %}"></script>
+{#<script src="{% static 'restApp/js/scripts.js' %}"></script>#}
+{#<script src="{% static 'restApp/js/form.js' %}"></script>#}
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <!--endbuild-->
 

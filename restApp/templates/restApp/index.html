@@ -104,12 +104,15 @@
 
 </div>
 
-<div class="row restaurant-search-row-header">
-    <div> request element incoming</div>
-    {#                {% for i in  request.session %}#}
-    {#                    <div> {{ i }}</div>#}
-    {#                {% endfor %}#}
-</div>
+<script>
+
+    var m = '';
+    {% for message in messages %}
+        m = m + '{{ message }}';
+    {% endfor %}
+    if (m != '')
+        alert(m);
+</script>
 <!--restaurant 1st row-->
 
 

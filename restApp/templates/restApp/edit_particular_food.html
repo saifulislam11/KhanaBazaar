@@ -208,11 +208,14 @@
 
 
     </form>
-    <div class="d-flex justify-content-center">
+    <script>
+        var m = '';
         {% for message in messages %}
-            {{ message }}
+            m = m + '{{ message }}';
         {% endfor %}
-    </div>
+        if (m != '')
+            alert(m);
+    </script>
 </div>
 
 <!--restaurant 1st row-->
