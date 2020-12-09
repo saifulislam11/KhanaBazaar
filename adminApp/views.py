@@ -95,8 +95,8 @@ def add_restaurant(request):
             password2 = request.POST.get('password2')
             id = get_next_id()
             logo_path = 'rest' + id + '.' + 'jpg'
-            print(type(logo))
-            print(logo)
+            # print(type(logo))
+            # print(logo)
             if logo is not None:
                 handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
                 handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
@@ -181,12 +181,17 @@ def add_food_man(request):
             profile_img = request.FILES.get('profile_img')
             profile_img_path = None
             foodman_id = get_next_id()
+            profile_img_path = 'foodman' + foodman_id + '.' + 'jpg'
             if profile_img is not None:
-                profile_img_path = 'foodman' + foodman_id + '.' + 'jpg'
                 handle_uploaded_file(profile_img, profile_img_path, IMAGE_PATH + '/img/')
                 handle_uploaded_file(profile_img, profile_img_path, STATIC_ROOT + '/img/')
             else:
-                profile_img_path = 'foodman0.jpg'
+                try:
+                    image_path = DEFAULT_IMAGE_PATH + 'foodman0.jpg'
+                    copyfile(image_path, IMAGE_PATH + '/img/' + profile_img_path)
+                    copyfile(image_path, STATIC_ROOT + '/img/' + profile_img_path)
+                except:
+                    pass
 
             cursor = sql.create_cursor()
             admin_id = request.session.get('id')
