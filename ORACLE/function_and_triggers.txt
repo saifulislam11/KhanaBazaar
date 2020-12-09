@@ -84,9 +84,6 @@ BEGIN
     RETURN ID;
 end;
 /
-BEGIN
-    DBMS_OUTPUT.PUT_LINE(GET_NEXT_ID());
-end;
 
 --------- PROCEDURE TO ADD FOODMAN -----------
 
