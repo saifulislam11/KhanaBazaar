@@ -8,7 +8,8 @@ from helper.read_write_to_file import handle_uploaded_file
 from helper.session import not_this_season
 from helper.sql import get_next_id
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
-from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT
+from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT, DEFAULT_IMAGE_PATH
+from shutil import copyfile
 
 
 # app_name = 'homeApp'
@@ -92,15 +93,27 @@ def add_restaurant(request):
             password1 = request.POST.get('password1')
             password1 = get_hashed_value(password1)
             password2 = request.POST.get('password2')
-            logo_path = None
             id = get_next_id()
+            logo_path = 'rest' + id + '.' + 'jpg'
+            print(type(logo))
+            print(logo)
             if logo is not None:
-                logo_path = 'rest' + id + '.' + 'jpg'
                 handle_uploaded_file(logo, logo_path, IMAGE_PATH + '/img/')
                 handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
                 # collectstatic()
             else:
-                logo_path = 'rest0.jpg'  # we will use rest0 as a default restaurant pic
+                try:         # we will use rest0 as a default restaurant pic
+                    image_path = DEFAULT_IMAGE_PATH + 'rest0.jpg'
+                    copyfile(image_path,  IMAGE_PATH + '/img/' + logo_path)
+                    copyfile(image_path,  STATIC_ROOT + '/img/' + logo_path)
+                except Exception as e :
+                    print(e)
+                    pass
+                finally:
+                    pass
+
+
+
             to_execute = "INSERT INTO RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH)" \
                          "VALUES({id}, {name}, {location}, {logo_path}, {rating}, {open_time}, {close_time}, {email}, " \
                          "{password_hash}) "
