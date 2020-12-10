@@ -222,11 +222,11 @@ close.addEventListener("click",function(){
     </div>
     <label for="cname">Name on Card</label>
     <div class="form-group">
-    <input type="text" id="cname" name="cardname" placeholder="John More Doe" required>
+    <input type="text" id="cname" name="cardname" placeholder="Enter Card Name" required>
     </div>
     <label for="ccnum">Credit card number</label>
     <div class="form-group">
-    <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444" required>
+    <input type="password" id="ccnum" name="cardnumber" placeholder="XXXX-XXXX-XXXX-XXXX" required>
     </div>
     
     <label for="expmonth">Exp Month</label>
@@ -240,7 +240,7 @@ close.addEventListener("click",function(){
     </div>
     <label for="cvv">CVV</label>
     <div class="form-group">
-        <input type="text" id="cvv" name="cvv" placeholder="352" required>
+        <input type="password" id="cvv" name="cvv" placeholder="XXX" required>
     </div>`
 
     //div for Bkash
@@ -253,7 +253,7 @@ close.addEventListener("click",function(){
     </div>
     <label for="pin">PIN</label>
     <div class="form-group">
-        <input type="text" id="pin" name="pin" placeholder="XXX-XXX" required>
+        <input type="password" id="pin" name="pin" placeholder="XXX-XXX" required>
     </div>`
     div3.innerHTML = `<div class="form-group">
     <div class="form-group">
@@ -264,7 +264,7 @@ close.addEventListener("click",function(){
     </div>
     <label for="pin">PIN</label>
     <div class="form-group">
-        <input type="text" id="pin" name="pin" placeholder="XXX-XXX" required>
+        <input type="password" id="pin" name="pin" placeholder="XXX-XXX" required>
     </div>`
     div4.innerHTML = `<div class="form-group">
     <div class="form-group">

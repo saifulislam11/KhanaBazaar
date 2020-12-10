@@ -56,14 +56,27 @@ document.addEventListener('DOMContentLoaded',function(){
 
     /*--------------RESTAURANT OPEN?--------------*/
     var curr_date = new Date().toLocaleTimeString();
+    let today = new Date().toLocaleDateString()
     const open_time = document.querySelector('.open-time');
     const close_time = document.querySelector('.close-time');
     const status = document.querySelector('.status');
     const orderButton = document.querySelector('.order');
-    console.log(open_time.innerHTML);
-    console.log(close_time.innerHTML);
+    var open = today.concat(" ",open_time.innerHTML);
+    var close = today.concat(" ",close_time.innerHTML);
+    today = today.concat(" ",curr_date);
+    console.log(typeof today);
+    console.log(typeof open);
+    console.log(typeof close);
+    var date_today = new Date(today);
+    var date_open = new Date(open);
+    var date_close = new Date(close);
+    console.log(typeof date_today);
+    console.log(typeof date_open);
+    console.log(typeof date_close);
+    console.log(date_open < date_today);
+    console.log(date_close < date_today);
 
-    if(curr_date >= open_time.innerHTML && curr_date <= close_time.innerHTML)
+    if(date_today >= date_open && date_today <= date_close)
     {
         console.log("OPEN");
         status.innerHTML = "OPEN NOW"
