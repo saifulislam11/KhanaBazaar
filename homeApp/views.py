@@ -1171,6 +1171,7 @@ def confirm_foodman(request):
             c.execute(to_execute)
             delivers_tbl = c.fetchall()
             foodman_dic = None
+            statusVerify = 0
             for r in delivers_tbl:
                 foodman_id = r[1]
                 #---------getting foodman---------#
@@ -1213,13 +1214,23 @@ def confirm_foodman(request):
                 for row in foodmanPhn_tbl:
                     foodman_phn = {'foodman_phone':row[1]}
                 for row in foodman_tbl:
-                    foodman_dic = {'name':row[1],'rating':row[4],'image':row[5],'foodman_location':row[6]}
+                    foodman_dic = {'name':row[1],'rating':row[4],'image':row[5],'foodman_location':row[6],'status':row[7]}
                     foodman_dic.update(foodman_phn)
                     foodman_dic.update(foodman_vehicle_type)
+                    if row[7] =="C":
+                        statusVerify = 1
+                    elif row[7] == "F":
+                        statusVerify = 2
+
             print(foodman_dic)
             verifyFOODman = 0
             if foodman_dic != None:
-                verifyFOODman = 1
+                if statusVerify ==1:
+                    verifyFOODman = 1       #foodment to customer
+                elif statusVerify == 2:
+                    verifyFOODman = 2       #foodman finished order
+                else:
+                    verifyFOODman = 3       #foodman to restaurant
 
             #-----------end location------------------#
             print(to_execute)
@@ -1228,6 +1239,7 @@ def confirm_foodman(request):
                 
             #----------------end of selected------------#
         return render(request, 'homeApp/confirm_foodman.html', {'customer_name': first_name,'foodman':foodman_dic,'order_id':order_id,'verify':verifyFOODman})
+    return redirect('/homepage')
     
 
 

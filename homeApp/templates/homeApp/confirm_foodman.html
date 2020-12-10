@@ -50,6 +50,7 @@
                     <a href="{% url 'homeApp:homepage' %}" class="redirect btn btn-danger" id="redirect" role="button" class="btn">Go back to homepage</a>
                     
                     <h2 class="place-name"></h2>
+                    <h2 class="place-distance"></h2>
                 </div>
 
             </div>
@@ -126,6 +127,9 @@
         <input name="foodman_location" id="foodman_location" value={{foodman.foodman_location}} hidden>
         <input name="foodman_location2" id="foodman_location2" value={{foodman.foodman_location}} hidden>
         <input name="foodman_phn" id="foodman_phn" value={{foodman.foodman_phone}} hidden>
+        <input name="foodman_status" id="foodman_status" value={{foodman.status}} hidden>
+        <input name="distance" id="distance" hidden>
+        <input name="vehicle" id="vehicle" value="{{foodman.vehicleType}}" hidden>
         <button type="submit" id="submit_pop" class="btn" hidden>Confirm Checkout & Continue</button>
 
 
@@ -146,6 +150,7 @@
      <script src="{% static 'homeApp/modules/popper.js/dist/umd/popper.min.js' %}"></script>
      <script src="{% static 'homeApp/modules/bootstrap/dist/js/bootstrap.min.js' %}"></script>
      <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+     <script type="text/javascript" src="{% static 'homeApp/js/haversine.js' %}"></script>
      <!--endbuild-->
 </body>
 </html>
