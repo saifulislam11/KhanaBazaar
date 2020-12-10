@@ -126,7 +126,7 @@ def current_order(request):
                     if status == 'F':
                         order_id = fetch_all.current_order_by_foodman(foodman_id)['id']
                         print(order_id)
-                        cursor.callproc('ORDER_DELIVERED', [order_id])
+                        cursor.callproc('d', [order_id])
                         messages.info(request, 'You have succefully completed the order!!!')
                         return redirect('/foodman')
 
@@ -157,11 +157,25 @@ def current_order(request):
         else:
             print('why location is not being updated')
     context.update(request.session)
-    context['vehicle'] = fetch_all.foodman_vehicle(foodman_id)
-    context['order'] = fetch_all.current_order_by_foodman(foodman_id)
-    order_id = context['order']['id']
-    rest_id = fetch_all.restaurant_ID_by_order_ID(order_id)
-    context['restaurant'] = fetch_all.restaurant(rest_id)
+    try:
+        context['vehicle'] = fetch_all.foodman_vehicle(foodman_id)
+        context['order'] = fetch_all.current_order_by_foodman(foodman_id)
+        order_id = context['order']['id']
+        rest_id = fetch_all.restaurant_ID_by_order_ID(order_id)
+        context['restaurant'] = fetch_all.restaurant(rest_id)
+    except Exception as e:
+        print(e)
+        order_id = fetch_all.current_order_by_foodman(foodman_id)['id']
+        print(order_id)
+        cursor = sql.create_cursor()
+        cursor.callproc('CHANGE_FOODMAN_STATUS', [foodman_id, 'F'])
+        cursor.callproc('ORDER_DELIVERED', [order_id])
+        messages.info(request, "some unknown error occured!!! the order is automaticlly delivered")
+    finally:
+        try:
+            cursor.close()
+        except:
+            pass
     return render(request, 'foodmanApp/current_order.html', context)
 
 
