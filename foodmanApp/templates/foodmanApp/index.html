@@ -208,11 +208,13 @@
        href="{% url 'foodmanApp:current_order' %}">Current Order</a>
     <a class="btn btn-block  btn-sm" role="button" id="accept_order" name="accept_order"
        href="{% url 'foodmanApp:accept_order' %}">Accept Order</a>
+    <a class="btn btn-block  btn-sm" role="button" id="phone" name="phone"
+       href="{% url 'foodmanApp:add_phone' %}">Update Phone no</a>
 
     <script>
         var m = ''
         {% for message in messages %}
-            m= m + '{{ message }}'
+            m = m + '{{ message }}'
             //console.log(m);
         {% endfor %}
         //console.log(m);

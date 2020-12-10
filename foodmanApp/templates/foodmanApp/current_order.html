@@ -116,12 +116,48 @@
         <div class="border-dark" id="map" style="height: 400px; width: 100%;">
 
         </div>
-        <div class="bg-info col-12"> Your current location {{ location }}</div>
-        <br>
-        <div class="bg-info col-12"> delivery location {{ order.location }}</div>
-        <div class="bg-info col-12"> Restaurant location {{ restaurant.location }}</div>
+{#        <div class="bg-info col-12"> Your current location {{ location }}</div>#}
+{#        <br>#}
+{#        <div class="bg-info col-12"> delivery location {{ order.location }}</div>#}
+{#        <div class="bg-info col-12"> Restaurant location {{ restaurant.location }}</div>#}
     </div>
+    <div class="row ">
+        <table class="table table-striped table-bordered  table-sm table-active table-hover bg-secondary"
+        "
+        id="order_table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Order ID</th>
 
+            <th scope="col">Order Location</th>
+
+            <th scope="col">Rest Location</th>
+            <th scope="col">distance(km)</th>
+            <th scope="col">Est. time(hour)</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+
+        <tr class="" id="order{{ forloop.counter }}" name="{{ order.id }}" scope="row"
+            value="">
+            <td>{{ order.id }}</td>
+            <td>{{ order.location }}</td>
+            <td>{{ restaurant.location }}</td>
+            <td id="distance{{ order.id }}">distance</td>
+            <td id="time{{ order.id }}">time</td>
+
+
+        </tr>
+
+
+        </tbody>
+
+        </table>
+
+
+    </div>
     <script>
         var m = '';
         {% for message in messages %}
@@ -193,23 +229,27 @@
         var order_loc_marker = L.marker(splitter(order_location.value)).addTo(map);
         var restaurant_loc_marker = L.marker(splitter(restaurant_location.value)).addTo(map);
         //loction.value = ""
-
+        {#cur_loc_marker.bindPopup("Your current Location").openPopup();#}
+        {#order_loc_marker.bindPopup("Delivery here").openPopup();#}
+        {#restaurant_loc_marker.bindPopup("Restaurant Here").openPopup();#}
         if (status.value === 'R') {
+            order_loc_marker.remove();
             L.Routing.control({
                 waypoints: [
                     cur_loc_marker.getLatLng(),
                     restaurant_loc_marker.getLatLng()
                 ]
             }).addTo(map);
-            console.log('kajj kore nah vai ')
+            //console.log('kajj kore nah vai ')
         } else if (status.value === 'C') {
+            restaurant_loc_marker.remove();
             L.Routing.control({
                 waypoints: [
                     cur_loc_marker.getLatLng(),
                     order_loc_marker.getLatLng()
                 ]
             }).addTo(map);
-            console.log('kajj kore nah vai ')
+            //console.log('kajj kore nah vai ')
         }
         cur_loc_marker.bindPopup("Your current Location").openPopup();
         order_loc_marker.bindPopup("Delivery here").openPopup();
@@ -249,6 +289,41 @@
         }
 
         map.on('locationfound', onLocationFound);
+
+        // table data calculation
+        function distance_calculator() {
+            var distance = 0;
+            var speed = 8;
+            if ('{{ vehicle.type }}' === 'cycle')
+                speed = 5000;
+            else if ('{{ vehicle.type }}' === 'cycle')
+                speed = 10000;
+            if (status.value === 'R') {
+                var dist = haversine(cur_loc_marker.getLatLng(), restaurant_loc_marker.getLatLng(), {
+                    format: '{lat,lng}',
+                    'unit': 'meter'
+                });
+                distance += dist;
+                dist = haversine(order_loc_marker.getLatLng(), restaurant_loc_marker.getLatLng(), {
+                    format: '{lat,lng}',
+                    'unit': 'meter'
+                });
+                distance += dist;
+                console.log(distance);
+            } else if (status.value == 'C') {
+                var dist = haversine(cur_loc_marker.getLatLng(), order_loc_marker.getLatLng(), {
+                    format: '{lat,lng}',
+                    'unit': 'meter'
+                });
+                distance += dist;
+                console.log(distance);
+            }
+            document.getElementById('distance{{ order.id }}').innerText = (distance / 1000).toFixed(2);
+            document.getElementById('time{{ order.id }}').innerText = (distance / speed).toFixed(2);
+        }
+
+        distance_calculator();
+
     });
 </script>
 <div class="row restaurant-search-row-header">

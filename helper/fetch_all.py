@@ -231,6 +231,19 @@ def foodman_phone(id):
     return numbers
 
 
+def foodman_vehicle(f_id):
+    cursor = sql.create_cursor()
+    to_execute = "SELECT V.ID, V.REG_NO, V.TYPE FROM VEHICLE V, DELIVERS_BY D WHERE D.VEHICLE_ID = V.ID AND D.FOODMAN_ID = {f_id}"
+    to_execute = to_execute.format(
+        f_id=wrap_with_in_single_quote(f_id)
+    )
+    cursor.execute(to_execute)
+    row = cursor.fetchone()
+    cursor.close()
+    if row is not None:
+        return {'id': row[0], 'reg_no': row[1], 'type': row[2]}
+
+
 def promo(promo_id):
     '''
     returns a dictionary promo(id,name,percent,fixed_amount,promo_limit,min_order_value,max_discount_amount)

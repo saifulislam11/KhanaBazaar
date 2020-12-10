@@ -139,3 +139,44 @@ BEGIN
     COMMIT;
 end;
 /
+
+
+
+------------- FOODMAN PHONE --------------
+
+create or replace trigger FOODMAN_PHONE_LIMIT_EXCEEDS
+    before insert
+    on FOODMAN_PHONE
+    for each row
+DECLARE
+    FID           CHAR(10);
+    COUNTER      NUMBER;
+    LOOP_COUNTER NUMBER;
+BEGIN
+    --DBMS_OUTPUT.PUT_LINE('HELLO');
+    FID := :NEW.ID;
+    SELECT COUNT(*) INTO COUNTER FROM FOODMAN_PHONE WHERE ID = FID;
+    LOOP_COUNTER := 1;
+
+    IF COUNTER >= 2 THEN
+        FOR RECORD IN (SELECT * FROM FOODMAN_PHONE WHERE ID = FID )
+            LOOP
+                --DBMS_OUTPUT.PUT_LINE(RECORD.PHONE_NO);
+                IF LOOP_COUNTER <> COUNTER THEN
+                    DELETE FROM FOODMAN_PHONE WHERE ID = FID AND PHONE_NO = RECORD.PHONE_NO;
+                END IF;
+                LOOP_COUNTER := LOOP_COUNTER + 1;
+
+            end loop;
+    end if;
+END;
+/
+
+
+--------- ADD FOODMAN PHONE -----------
+CREATE OR REPLACE PROCEDURE FOODMAN_ADD_PHONE_NO(FID IN CHAR, PH_NO IN VARCHAR2) IS
+BEGIN
+    INSERT INTO FOODMAN_PHONE(ID, PHONE_NO) VALUES (FID, PH_NO);
+    COMMIT ;
+end;
+/

@@ -90,7 +90,8 @@ def index(request):
                 print(e)
                 pass
         else:
-            print('why location is not being updated')
+            # print('why location is not being updated')
+            pass
 
         if not request.session.is_empty():
             context.update(request.session)
@@ -156,7 +157,7 @@ def current_order(request):
         else:
             print('why location is not being updated')
     context.update(request.session)
-
+    context['vehicle'] = fetch_all.foodman_vehicle(foodman_id)
     context['order'] = fetch_all.current_order_by_foodman(foodman_id)
     order_id = context['order']['id']
     rest_id = fetch_all.restaurant_ID_by_order_ID(order_id)
@@ -200,3 +201,29 @@ def accept_order(request):
     context['orders'] = currently_available_orders()
     print(currently_available_orders())
     return render(request, 'foodmanApp/accept_order.html', context)
+
+
+def add_phone(request):
+    context = {}
+    if session.not_this_season(request, app_name):
+        messages.info(request, 'Please Sign in first')
+        return redirect('/foodman')
+    foodman_id = request.session.get('id')
+    if request.method == 'POST':
+        try:
+            phone_no = request.POST.get('phone_no')
+            cursor = sql.create_cursor()
+            cursor.callproc('FOODMAN_ADD_PHONE_NO', [foodman_id, phone_no])
+            messages.info(request, 'successfully updated phone no ')
+        except Exception as e:
+            print(e)
+            messages.info(request, "some error occurred")
+        finally:
+            try:
+                cursor.close()
+            except:
+                pass
+
+        pass
+    context = fetch_all.foodman(foodman_id)
+    return render(request, 'foodmanApp/add_phone.html', context)
