@@ -44,12 +44,12 @@
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
+                <li class="nav-item active" hidden><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
                 </li>
 
                 {#                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>#}
@@ -130,7 +130,7 @@
             <th scope="col">Order ID</th>
 
             <th scope="col">Order Location</th>
-
+            <th scope="col"">Rest Name</th>
             <th scope="col">Rest Location</th>
             <th scope="col">distance(km)</th>
             <th scope="col">Est. time(hour)</th>
@@ -144,6 +144,7 @@
             value="">
             <td>{{ order.id }}</td>
             <td>{{ order.location }}</td>
+            <td>{{ restaurant.name }}</td>
             <td>{{ restaurant.location }}</td>
             <td id="distance{{ order.id }}">distance</td>
             <td id="time{{ order.id }}">time</td>
@@ -375,7 +376,7 @@
         </div>
         <div class="row">
             <div class="col-auto">
-                <p>© Copyright 2018 Ristorante Con Fusion</p>
+                <p>© Copyright 2020 KHANABAZAAR</p>
             </div>
         </div>
     </div>
