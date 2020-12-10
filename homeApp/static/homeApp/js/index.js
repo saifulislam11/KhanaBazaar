@@ -13,6 +13,42 @@ var confirmpassword = document.getElementById("confirmpassword");
 
 password.onchange = validatePassword;
 confirmpassword.onkeyup = validatePassword;*/
+
+//invalid log check
+const invalid = document.querySelector('#invalid_log');
+const register = document.querySelector('#register_log');
+console.log(invalid.value);
+//------------all alert context-------------//
+if(invalid.value === "Incorrect password or email!!!")
+{
+    swal({
+        title:invalid.value ,
+        text: "Try Again",
+        icon: "error",
+        button: "Ok",
+      });
+}
+if(register.value === "registered successfully")
+{
+    swal({
+        title:register.value ,
+        text: "Welcome to KhanaBazaar",
+        icon: "info",
+        button: "continue",
+      });
+}
+else if(register.value === "something went wrong.try again")
+{
+    swal({
+        title:"There exists an ID using this mail" ,
+        text: "Try with another mail",
+        icon: "error",
+        button: "Ok",
+      });
+
+}
+
+//-----------------end of alert-----------//
     
        //default submit button disabled
     document.querySelector('#submit').disabled = true;
@@ -32,12 +68,35 @@ confirmpassword.onkeyup = validatePassword;*/
     //onkeyup handler
     document.querySelector('#address').onkeyup = () =>{
         console.log('pressed');
+        console.log()
         //checking if password is typed or not 
-        if (document.querySelector('#password1').value == document.querySelector('#confirmpassword').value){
+        if(document.querySelector('#password1').value=='' || document.querySelector('#password1').value != document.querySelector('#confirmpassword').value ){
+            document.querySelector('#register').disabled = true;
+        }
+        else if (document.querySelector('#password1').value == document.querySelector('#confirmpassword').value){
             document.querySelector('#register').disabled = false;
         } 
+        
         else{
             document.querySelector('#register').disabled = true;
+
+        }
+       
+    }
+    document.querySelector('#confirmpassword').onkeyup = () =>{
+        console.log('pressed');
+        console.log()
+        //checking if password is typed or not 
+        if(document.querySelector('#password1').value=='' || document.querySelector('#password1').value != document.querySelector('#confirmpassword').value ){
+            document.querySelector('#register').disabled = true;
+        }
+        else if (document.querySelector('#password1').value == document.querySelector('#confirmpassword').value){
+            document.querySelector('#register').disabled = false;
+        } 
+        
+        else{
+            document.querySelector('#register').disabled = true;
+
         }
        
     }

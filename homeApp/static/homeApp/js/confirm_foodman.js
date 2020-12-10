@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded',function(){
             foodman_contact.innerHTML = "CONTACT:".concat(foodman_phone.value);
             place_name.innerHTML = "Foodman:".concat(foodman_name.value).concat(" Has picked your Order");
             foodman_location.value = foodman_location2.value;
+            swal({
+                title:"Hey,Your order has been picked" ,
+                text: "Food'll be delivered soon",
+                icon: "info",
+                button: "ok",
+              });
 
 
         }

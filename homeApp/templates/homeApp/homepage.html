@@ -20,6 +20,7 @@
      <link rel="stylesheet" href="{% static 'homeApp/css/wrapper.css' %}">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/css/all.min.css">
      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="utf-8"></script>
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
      <!--flickity-->
      <link rel="stylesheet" type="text/css" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--endbuild-->
@@ -162,7 +163,7 @@
                     <button class="review-button btn btn-white btn-animate" >
                         <i class="fa fa-comments">Review Us</i></button>
                     <div class="dropdown-list">
-                        <ul class=" active scrollable-menu" role="menu" style="height: auto;max-height: 160px; overflow-x: hidden;">
+                        <ul class=" active scrollable-menu review-list" role="menu" style="height: auto;max-height: 160px; overflow-x: hidden;">
                             {% for order in orders %}
                                 <li><a data-target="#reserve{{order.order_id}}" data-toggle="modal" role="button">Order ID: {{order.order_id}}</a></li>
 
@@ -174,7 +175,24 @@
                         $('.review-button').click(function(){
                             $('.dropdown-list').toggleClass('active');
                         });
-                    });
+                        });
+                        document.addEventListener('DOMContentLoaded',function(){
+                            const review_list = document.querySelector('.review-list');
+                            const reviewBTN = document.querySelector('.review-button');
+                            reviewBTN.addEventListener('click',function(event){
+                                if(review_list.children.length == 0){
+                                    swal({
+                                        title:"You currently have no order" ,
+                                        text: "Order Food",
+                                        icon: "warning",
+                                        button: "Ok",
+                                      });
+
+                                }
+
+
+                            });
+                        });
                         </script>
                     
                 </div>

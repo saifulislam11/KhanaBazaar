@@ -234,13 +234,16 @@ def homepage(request):
                 connect.execute(to_execute)
                 customer = connect.fetchone()
                 connect.close()
-                customer = list(customer)
+                print(customer)
+                #customer = list(customer)
                 print(customer)
 
                 if customer is None:
+                    mssg = "Incorrect password or email!!!"
+                    print(mssg)
                     print('no customer found')
                     return render(request, 'homeApp/index.html',
-                                {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None'})
+                                {'list1': list1, 'list2': list2, 'list3': list3, 'contex': 'None','mssg':mssg})
                 else:
                     cprime = con.cursor()
                     print('We need to do something')
@@ -577,7 +580,7 @@ def payment(request):
 
         return render(request, 'homeApp/payment.html',
                     {'price': price, 'items': len(cart_dic), 'restaurant': rest_dic, 'cart': cart_dic,
-                    'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods,'promos':promo})
+                    'customer_name': first_name, 'last_name': last_name, 'email': email,'foods':foods,'promos':promo,'location':"25,68"})
 
 
 def restaurant(request):
@@ -701,9 +704,11 @@ def restaurant(request):
 
                 if customer is None:
                     print('no customer found')
+                    mssg = "Incorrect password or email!!!"
+                    print(mssg)
                     return render(request, 'homeApp/restaurant_log_in.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                                   'all_types': unique_types, 'customer_name': 'none'})
+                                   'all_types': unique_types, 'customer_name': 'none','mssg':mssg})
                 else:
                     print('We need to do something')
                     id = customer[0]
@@ -855,9 +860,11 @@ def restaurant(request):
 
                 if customer is None:
                     print('no customer found')
+                    mssg = "Incorrect password or email!!!"
+                    print(mssg)
                     return render(request, 'homeApp/restaurant_log_in.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                                   'all_types': unique_types, 'customer_name': 'none'})
+                                   'all_types': unique_types, 'customer_name': 'none','mssg':mssg})
                 else:
                     print('We need to do something')
                     id = customer[0]

@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
     ///---------------location--------------///
     const latlng_buet = {'lat': 23.7265768, 'lng': 90.3926623};
-    var loction = document.getElementById('location');
+    const loction = document.querySelector('#location');
+    var lat = "";
+    var lng ="";
 
     function splitter(ss) {
         var arr = ss.split(',');
@@ -61,8 +63,12 @@ document.addEventListener('DOMContentLoaded',function(){
 
         cur_loc_marker.setLatLng(e.latlng);
         map.flyTo(e.latlng);
-        console.log(e.latlng);
+        console.log(e.latlng.lat);
         console.log('map created with current location');
+        lat = e.latlng.lat;
+        lng = e.latlng.lng;
+        location.value = String(lat).concat(",",String(lng));
+        console.log(location.value);
     }
 
     map.on('locationfound', onLocationFound);
@@ -133,6 +139,7 @@ close.addEventListener("click",function(){
     const orderBTN = document.querySelector('#confirm_order');
     const promo_used = document.querySelector('#promo_used');
     const final_price = document.querySelector('#final_price');
+    const location2 = document.querySelector('#location');
     const sel = document.querySelector('.payment-method');
     const promo = document.querySelector('.promo-selected');
     const promo_table_row = document.getElementsByClassName('promo-table-row');
@@ -186,7 +193,7 @@ close.addEventListener("click",function(){
             swal({
                 title:selected_promo.innerHTML.concat(" Selected!!") ,
                 text: "Thanks for using the promo!",
-                icon: "success",
+                icon: "info",
                 button: "OK!",
               });
         }
@@ -270,6 +277,12 @@ close.addEventListener("click",function(){
        
     // get selected option in sel (reference obtained above)
     orderBTN.addEventListener("click",function(){
+        //update location
+        location.value = String(lat).concat(",",String(lng));
+        console.log(location.value);
+        var temp = String(lat).concat(",",String(lng));
+        location2.value = temp;
+        console.log(location2.value);
         //initialize final_price
         final_price.value = save_price;
         order_type.value = selected_method.innerHTML;

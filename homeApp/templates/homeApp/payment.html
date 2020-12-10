@@ -72,13 +72,13 @@
                     <label for="final_price">Final Toal</label>
                     <div class="form-group">
                         <input type="text" id="final_price" name="order_price" value="{{price}}" readonly>
+                        <input type="text" id="location" name="location" value="{{location}}" hidden readonly>
                     </div>
                     <button type="submit" id="submit_pop" class="btn">Confirm Checkout & Continue</button>
                     <input class="form-control" type="text" id="delivery_type" name="delivery_type" hidden>
                     <input class="form-control" type="text" id="delivery_address" name="delivery_address" hidden>
                     <input class="form-control" type="text" id="ordered_foods" name="ordered_foods" value="{{foods}}" hidden>
                     <input class="form-control" type="text" id="restaurant_name" name="restaurant_name" value="{{restaurant.id}}" hidden>
-                    <input id="location" name="location" class="d-none" value="25,88" hidden>
                  </form>
              </div>
         </div>

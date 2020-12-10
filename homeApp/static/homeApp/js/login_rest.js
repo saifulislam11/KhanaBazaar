@@ -25,6 +25,21 @@ document.addEventListener('DOMContentLoaded',function(){
         }
        
     }
+
+    //--------------invalid log check----------//
+    const invalid = document.querySelector('#invalid_log');
+    console.log(invalid.value);
+    //------------all alert context-------------//
+    if(invalid.value === "Incorrect password or email!!!")
+    {
+        swal({
+            title:invalid.value ,
+            text: "Try Again",
+            icon: "error",
+            button: "Ok",
+        });
+    }
+    //------------end of invalid log --------------//
     //----------------------------login popup----------------------
     const loginPopup = document.querySelector(".login-popup");
     const close = document.querySelector(".close");
