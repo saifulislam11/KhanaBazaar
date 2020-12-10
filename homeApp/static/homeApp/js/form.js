@@ -28,6 +28,59 @@ document.addEventListener('DOMContentLoaded',function(){
         totalElement.innerText = total;
         console.log(total);
     }
+    /*---------food availability------------*/
+    const food_availability = document.getElementsByClassName('food-availability');
+    const addBTN = document.getElementsByClassName('add_cart');
+    for(let i=0;i<food_availability.length;i++){
+        console.log(food_availability[i].innerHTML);
+        let button = addBTN[i];
+        if(food_availability[i].innerHTML === 'N')
+        {
+            //button.disabled = true;
+            button.addEventListener('click',function(event){
+                swal({
+                    title:"Sorry,This food is currently unavailable" ,
+                    text: "Choose Others",
+                    icon: "error",
+                    button: "Ok",
+                  });
+            });
+
+
+        }
+
+    }
+
+    /*---------------end of availability---------*/
+
+
+    /*--------------RESTAURANT OPEN?--------------*/
+    var curr_date = new Date().toLocaleTimeString();
+    const open_time = document.querySelector('.open-time');
+    const close_time = document.querySelector('.close-time');
+    const status = document.querySelector('.status');
+    const orderButton = document.querySelector('.order');
+    console.log(open_time.innerHTML);
+    console.log(close_time.innerHTML);
+
+    if(curr_date >= open_time.innerHTML && curr_date <= close_time.innerHTML)
+    {
+        console.log("OPEN");
+        status.innerHTML = "OPEN NOW"
+    }
+    else{
+        console.log('close');
+        status.innerHTML = "CLOSE NOW";
+        swal({
+            title:"Sorry,We are close now" ,
+            text: "See you Later",
+            icon: "error",
+            button: "Ok",
+          });
+        orderButton.disabled = true;
+
+    }
+    /*--------------END OF CHECK---------------*/
     
    
    
@@ -101,6 +154,12 @@ document.addEventListener('DOMContentLoaded',function(){
     var counts="";
     var prices="";
 
+    //if cart item is null disable order button 
+    if(cartContent.children.length==0)
+    {
+        orderBTN.disabled = true;
+    }
+
 
     //carts
     var map = new Map();
@@ -148,6 +207,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
 
         }
+
+        //disable order button
+        orderBTN.disabled = true;
 
     }
     ///find char for payment
@@ -221,6 +283,14 @@ document.addEventListener('DOMContentLoaded',function(){
                         button.disabled=false;
                     }
                     
+                }
+                //--------------checking length of cart content------------//
+                if(cartContent.children.length<=0)
+                {
+                    orderBTN.disabled = true;
+                }
+                else{
+                    orderBTN.disabled = false;
                 }
                 //totalAmount=totalAmount-parseInt()
             }
@@ -325,6 +395,13 @@ document.addEventListener('DOMContentLoaded',function(){
             // formFood.value=foodname;
             //console.log(formFood.value);
             cartContent.appendChild(div);
+            if(cartContent.children.length==0)
+            {
+                orderBTN.disabled = true;
+            }
+            else{
+                orderBTN.disabled = false;
+            }
             console.log(cartContent);
             //step 5--------show cart-------//
             cartOverlay.classList.add('transparentBcg');

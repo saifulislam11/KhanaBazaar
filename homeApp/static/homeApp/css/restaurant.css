@@ -563,6 +563,26 @@
 }
 /*-------------end of sweet styles-----------*/
 
+
+/*----------status-------------*/
+.status{
+  margin-top: 60px;
+  margin-left: 60px;
+  font-size: 28px;
+  font-weight: 700;
+  border-radius: 50%;
+  border-width: 8px;
+  border-style: solid;
+  border-color: #ff0000;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f1f1;
+  color: rgb(0, 0, 0);
+  position: absolute;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  letter-spacing: 0.2px;
+}
+
  
 
     

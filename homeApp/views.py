@@ -609,6 +609,8 @@ def restaurant(request):
                 REST_id = row[0]
                 test = 1
                 id = row[0]
+                open_time = row[5]
+                close_time = row[6]
                 break
 
                 # print(row[3])
@@ -637,9 +639,11 @@ def restaurant(request):
                 name = row[2]
                 price = row[3]
                 food_type = row[7]
+                availability = row[5]
                 print(id + ' ' + name + ' ' + food_type + ' ' + path)
                 types.append(food_type)
-                dic = {'id': id, 'name': name, 'price': price, 'type': food_type, 'path': path}
+                dic = {'id': id, 'name': name, 'price': price, 'type': food_type, 'path': path,'availability':availability}
+                print(dic)
                 dict_result.append(dic)
             types_set = set(types)
             unique_types = list(types_set)
@@ -679,7 +683,7 @@ def restaurant(request):
 
                 return render(request, 'homeApp/restaurant.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict,'promos':promo})
+                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict,'promos':promo,'open_time':open_time,'close_time':close_time})
             elif email == "None" or password == "None":
                 return render(request, 'homeApp/restaurant_log_in.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
@@ -748,7 +752,7 @@ def restaurant(request):
                     return render(request, 'homeApp/restaurant.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                    'all_types': unique_types, 'customer_name': first_name,
-                                   'customer_dic': customer_dict,'promos':promo})
+                                   'customer_dic': customer_dict,'promos':promo,'open_time':open_time,'close_time':close_time})
                 # return render(request,'homeApp/restaurant_log_in.html',{'path':results,'ID':REST_id,'title':title,'foods':dict_result,'all_types':unique_types,'customer_name':'none'})
                 '''return render(request, 'homeApp/restaurant.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
@@ -771,6 +775,8 @@ def restaurant(request):
                 REST_id = r[0]
                 title = r[1]
                 results = r[3]
+                open_time = r[5]
+                close_time = r[6]
                 print(REST_id)
             command = "select * from FOOD_ITEM WHERE RESTAURANT_ID = %s" % REST_id
             c.execute(command)
@@ -790,10 +796,12 @@ def restaurant(request):
                 name = row[2]
                 price = row[3]
                 food_type = row[7]
+                availability = row[5]
                 print(id + ' ' + name + ' ' + food_type + ' ' + path)
                 types.append(food_type)
-                dic = {'id': id, 'name': name, 'price': price, 'type': food_type, 'path': path}
+                dic = {'id': id, 'name': name, 'price': price, 'type': food_type, 'path': path,'availability':availability}
                 dict_result.append(dic)
+                print(dic)
             types_set = set(types)
             unique_types = list(types_set)
             c.close()
@@ -835,7 +843,7 @@ def restaurant(request):
                 c.close()
                 return render(request, 'homeApp/restaurant.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
-                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict,'promos':promo})
+                               'all_types': unique_types, 'customer_name': first_name, 'customer_dic': customer_dict,'promos':promo,'open_time':open_time,'close_time':close_time})
             elif email == None or password == None:
                 return render(request, 'homeApp/restaurant_log_in.html',
                               {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
@@ -904,7 +912,7 @@ def restaurant(request):
                     return render(request, 'homeApp/restaurant.html',
                                   {'path': results, 'ID': REST_id, 'title': title, 'foods': dict_result,
                                    'all_types': unique_types, 'customer_name': first_name,
-                                   'customer_dic': customer_dict,'promos':promo})
+                                   'customer_dic': customer_dict,'promos':promo,'open_time':open_time,'close_time':close_time})
             #return render(request, 'homeApp/restaurant.html')
 
 

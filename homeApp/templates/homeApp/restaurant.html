@@ -20,6 +20,7 @@
      <!--flickity-->
      <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
      <!--<script src="{% static 'homeApp/js/scripts.js' %}" async></script>-->
+     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
      <script  type = "text/javascript" src="{% static 'homeApp/js/form.js' %}" async></script>
      <!--endbuild-->
 </head>
@@ -75,6 +76,14 @@
     <a href="{% url 'homeApp:index' %}" style="background-color: rgb(10, 10, 10); color:cornsilk;font-size:30px">Back to Home Page</a>
     {% endif %}
     {% if path is not None %}
+
+
+        <!--check open status-->
+        <h4 class="open-time" hidden>{{open_time}}</h4>
+        <h4 class="close-time" hidden>{{close_time}}</h4>
+        <!--end of check-->
+
+
         <nav class="navbar navbar-dark bg-dark navbar-expand-sm fixed-top">
             <div class="container">
                 <!--responsive navbar-->
@@ -107,6 +116,7 @@
 
         </nav>
         
+        
         <div class="landing">
             <div class="home-wrap">
                 <div style="background-image: url('{{baseURL}}/{{path}}');" class="top">
@@ -114,6 +124,7 @@
                     <span class="welcome">Welcome to</span>
                     <span class="title">{{title}}</span>
                     <span hidden class="id">{{ID}}</span>
+                    <span class="status"></span>
                     
                     
                 </div>
@@ -132,6 +143,7 @@
                     <div>
                         {% if food.type == type %}
                             <!--cart modal-->
+                            {% if food.availability == 'Y' %}
                             <div id="reserve{{food.id}}" class="modal fade" role="dialog">
                                 <div class="modal-dialog modal-lg" role="content">
                                     <div class="modal-content">
@@ -184,6 +196,7 @@
                                 </div>
 
                             </div>
+                            {% endif %}
                             
                             <!--end of cart modal-->
                             <div class="fig-container food-item">
@@ -192,6 +205,7 @@
                                     <span class="food-name">{{food.name}}<br>
                                     {{food.price}}tk
                                     </span>
+                                    <h4 class="food-availability" hidden>{{food.availability}}</h4>
                                     <button class="button add_cart" data-target="#reserve{{food.id}}" data-toggle="modal" role="button">
                                     </button>
                                     <!--script for modal-->
