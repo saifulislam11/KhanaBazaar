@@ -157,7 +157,7 @@ def current_order(request):
         else:
             print('why location is not being updated')
     context.update(request.session)
-
+    context['vehicle'] = fetch_all.foodman_vehicle(foodman_id)
     context['order'] = fetch_all.current_order_by_foodman(foodman_id)
     order_id = context['order']['id']
     rest_id = fetch_all.restaurant_ID_by_order_ID(order_id)
