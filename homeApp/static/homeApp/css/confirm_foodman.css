@@ -88,7 +88,7 @@ h2{
 	font-family: cursive;
 	color: rgb(247, 100, 247);
 	font-size:23px;
-	margin-left: 160px;
+	margin-left: 130px;
 }
 .container2{
 	position: relative;
@@ -138,7 +138,7 @@ h2{
 	align-items: center;
 	flex-direction: column;
 	transition: 0.5s;
-	background-color: rgb(231, 8, 164);
+	background-color: rgb(37, 62, 63);
 	transform: scale(0);
 	transition-delay: 0s;
   

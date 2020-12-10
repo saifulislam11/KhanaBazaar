@@ -47,7 +47,7 @@
                     <h1>Thanks for the Order</h1>
                     <i class="fa fa-check-circle fa-5x tick" aria-hidden="true"></i>
                     <h2 class="status">PENDING!Please wait for a moment!! </h2>
-                    <a href="{% url 'homeApp:homepage' %}" class="redirect" role="button" class="btn">Go back to homepage</a>
+                    <a href="{% url 'homeApp:homepage' %}" class="redirect btn btn-danger" id="redirect" role="button" class="btn">Go back to homepage</a>
                     
                     <h2 class="place-name"></h2>
                 </div>
@@ -58,7 +58,7 @@
             <div class="col-12 col-sm-6 container2">
                 <div class="box2">
                     <div class="imgbox">
-                        <img src="{% static 'homeApp/img/phone.png' %}">
+                        <img src="{% static 'homeApp/img/phone2.jpg' %}">
                     </div>
                     <div class="content">
                         <div class="icon">
@@ -76,7 +76,7 @@
 
                 <div class="box2">
                     <div class="imgbox">
-                        <img src="{% static 'homeApp/img/location2.jpg' %}" style="height: 300;width:300;">
+                        <img src="{% static 'homeApp/img/location4.jpg' %}" style="height: 650;width:600;">
                     </div>
                     <div class="content">
                         <div class="border-dark location-map" id="map" style="height: 520px; width: 100%;color:black"></div>

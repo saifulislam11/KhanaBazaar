@@ -1,5 +1,6 @@
 //loading the DOM
 document.addEventListener('DOMContentLoaded',function(){
+    document.querySelector('#redirect').disabled = true;
 
     const loginPopup = document.querySelector(".login-popup");
     const status = document.querySelector(".status");
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded',function(){
     
     //--------------end of location vars-------------//
     ///init state
-    redirect.disabled = true;
+    document.querySelector('#redirect').disabled = true;
     window.addEventListener("load",function(){
         console.log(order_id);
         var check = verify.value;
