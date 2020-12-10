@@ -126,7 +126,7 @@ def current_order(request):
                     if status == 'F':
                         order_id = fetch_all.current_order_by_foodman(foodman_id)['id']
                         print(order_id)
-                        cursor.callproc('d', [order_id])
+                        cursor.callproc('ORDER_DELIVERED', [order_id])
                         messages.info(request, 'You have succefully completed the order!!!')
                         return redirect('/foodman')
 
