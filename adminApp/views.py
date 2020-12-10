@@ -161,7 +161,7 @@ def add_food_man(request):
     context = {}
     if not_this_season(request, app_name):
         messages.info(request, 'Please sign in first')
-        return redirect(request, '/admin', context)
+        return redirect(request, '/admin')
     if request.method == 'POST':
         try:
             name = request.POST.get('name')
