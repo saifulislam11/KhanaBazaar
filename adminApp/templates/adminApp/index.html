@@ -34,12 +34,12 @@
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
+                <li class="nav-item active" hidden><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
                 </li>
 
                 {#                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>#}
@@ -88,22 +88,22 @@
 
 <div class="container  text-light bg-dark background">
     <!--adding carousel-->
-    <a class="btn btn-block  btn-sm" role="button" id="add_restaurant" href="{% url 'adminApp:add_restaurant' %} ">Add
+    <a class="btn btn-block  btn-sm bg-white" role="button" id="add_restaurant" href="{% url 'adminApp:add_restaurant' %} ">Add
         Restaurant</a>
     <a class="btn btn-block  btn-sm d-none" role="button" id="edit_restaurant"
        href="{% url 'adminApp:edit_restaurant' %}">Edit Restaurant</a>
     <div>
-        <a class="btn btn-block  btn-sm" role="button" id="create_promo" href="{% url 'adminApp:create_promo' %}">Create
+        <a class="btn btn-block  btn-sm bg-white" role="button" id="create_promo" href="{% url 'adminApp:create_promo' %}">Create
             Promo</a>
     </div>
 
-    <a class="btn btn-block  btn-sm" role="button" id="offerPromo" href="{% url 'adminApp:offer_promo' %}">Offer Promo
+    <a class="btn btn-block  btn-sm bg-white" role="button" id="offerPromo" href="{% url 'adminApp:offer_promo' %}">Offer Promo
         to Customer</a>
-    <a class="btn btn-block  btn-sm" role="button" id="suspendCustomer" href="{% url 'adminApp:suspend_customer' %}">Suspend
+    <a class="btn btn-block  btn-sm bg-white" role="button" id="suspendCustomer" href="{% url 'adminApp:suspend_customer' %}">Suspend
         Customer</a>
-    <a class="btn btn-block  btn-sm" role="button" id="addFoodMan" href="{% url 'adminApp:add_foodman' %}">Add
+    <a class="btn btn-block  btn-sm bg-white" role="button" id="addFoodMan" href="{% url 'adminApp:add_foodman' %}">Add
         FoodMan</a>
-    <a class="btn btn-block  btn-sm" role="button" id="remove_foodman" href="{% url 'adminApp:suspend_foodman' %}">Suspend
+    <a class="btn btn-block  btn-sm bg-white" role="button" id="remove_foodman" href="{% url 'adminApp:suspend_foodman' %}">Suspend
         FoodMan</a>
     <script>
         var m = '';
@@ -163,7 +163,7 @@
         </div>
         <div class="row">
             <div class="col-auto">
-                <p>© Copyright 2018 Ristorante Con Fusion</p>
+                <p>© Copyright 2020 KHANABAZAAR</p>
             </div>
         </div>
     </div>

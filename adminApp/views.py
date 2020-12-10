@@ -1,3 +1,5 @@
+from shutil import copyfile
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
@@ -9,7 +11,6 @@ from helper.session import not_this_season
 from helper.sql import get_next_id
 from helper.wrap_and_encode import wrap_with_in_single_quote, get_hashed_value
 from khanabazaar.settings import IMAGE_PATH, STATIC_ROOT, DEFAULT_IMAGE_PATH
-from shutil import copyfile
 
 
 # app_name = 'homeApp'
@@ -46,6 +47,7 @@ def index(request):
                 request.session['first_name'] = first_name
                 request.session['email'] = email
                 request.session['app_name'] = app_name
+                request.session['user_name'] = last_name
                 context['user_name'] = last_name
                 return render(request, 'adminApp/index.html', context)
         except Exception as e:
@@ -102,17 +104,15 @@ def add_restaurant(request):
                 handle_uploaded_file(logo, logo_path, STATIC_ROOT + '/img/')
                 # collectstatic()
             else:
-                try:         # we will use rest0 as a default restaurant pic
+                try:  # we will use rest0 as a default restaurant pic
                     image_path = DEFAULT_IMAGE_PATH + 'rest0.jpg'
-                    copyfile(image_path,  IMAGE_PATH + '/img/' + logo_path)
-                    copyfile(image_path,  STATIC_ROOT + '/img/' + logo_path)
-                except Exception as e :
+                    copyfile(image_path, IMAGE_PATH + '/img/' + logo_path)
+                    copyfile(image_path, STATIC_ROOT + '/img/' + logo_path)
+                except Exception as e:
                     print(e)
                     pass
                 finally:
                     pass
-
-
 
             to_execute = "INSERT INTO RESTAURANT(ID,NAME,LOCATION,LOGO_PATH,RATING,OPEN_TIME,CLOSE_TIME,EMAIL,PASSWORD_HASH)" \
                          "VALUES({id}, {name}, {location}, {logo_path}, {rating}, {open_time}, {close_time}, {email}, " \
@@ -148,7 +148,7 @@ def add_restaurant(request):
             return redirect('/admin/add_restaurant')
         finally:
             pass
-
+    context.update(request.session)
     return render(request, 'adminApp/add_restaurant.html', context)
 
 
@@ -209,7 +209,7 @@ def add_food_man(request):
                 cursor.close()
             except:
                 pass
-
+    context.update(request.session)
     return render(request, 'adminApp/add_foodman.html', context)
 
 
@@ -258,6 +258,7 @@ def create_promo(request):
                 messages.info(request, 'Promo was not created')
             finally:
                 pass
+    context.update(request.session)
     return render(request, 'adminApp/create_promo.html', context)
 
 
@@ -269,7 +270,9 @@ def edit_restaurant(request):
 
 def offer_promo(request):
     context = {}
-
+    if not_this_season(request, app_name):
+        messages.info(request, "Something went wrong. Please Log in again")
+        return redirect('/admin')
     if request.method == 'POST':
         customers = request.POST.get('customers')
         customers = customers.split(',')  # data was send via comma separated strings
@@ -296,15 +299,15 @@ def offer_promo(request):
                         sql.execute(to_execute)
                     except Exception as e:
                         print(e)
-                        #print('the customer already has this promo')
+                        # print('the customer already has this promo')
                         pass
                     messages.info(request, 'Successfully distributed Promos')
             except Exception as e:
-                #print('Error happen in writing in offer table ')
+                # print('Error happen in writing in offer table ')
                 print(e)
                 messages.info(request, 'Some error occured! please Try again!')
                 pass
-
+    context.update(request.session)
     context['customers'] = fetch_all.customer_all()
     context['promos'] = fetch_all.promo_all()
 
@@ -313,6 +316,9 @@ def offer_promo(request):
 
 def suspend_customer(request):
     context = {}
+    if not_this_season(request, app_name):
+        messages.info(request, "Something went wrong. Please Log in again")
+        return redirect('/admin')
     if request.method == 'POST':
         try:
 
@@ -331,12 +337,16 @@ def suspend_customer(request):
                 cursor.close()
             except:
                 pass
+    context.update(request.session)
     context['customers'] = fetch_all.customer_all()
     return render(request, 'adminApp/suspend_customer.html', context)
 
 
 def suspend_foodman(request):
     context = {}
+    if not_this_season(request, app_name):
+        messages.info(request, "Something went wrong. Please Log in again")
+        return redirect('/admin')
     if request.method == 'POST':
         try:
             foodmans = request.POST.get('foodmans')
@@ -353,6 +363,7 @@ def suspend_foodman(request):
                 cursor.close()
             except:
                 pass
+    context.update(request.session)
     context['foodmans'] = fetch_all.foodman_all()
     return render(request, 'adminApp/suspend_foodman.html', context)
 
