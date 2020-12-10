@@ -200,3 +200,29 @@ def accept_order(request):
     context['orders'] = currently_available_orders()
     print(currently_available_orders())
     return render(request, 'foodmanApp/accept_order.html', context)
+
+
+def add_phone(request):
+    context = {}
+    if session.not_this_season(request, app_name):
+        messages.info(request, 'Please Sign in first')
+        return redirect('/foodman')
+    foodman_id = request.session.get('id')
+    if request.method == 'POST':
+        try:
+            phone_no = request.POST.get('phone_no')
+            cursor = sql.create_cursor()
+            cursor.callproc('FOODMAN_ADD_PHONE_NO', [foodman_id, phone_no])
+            messages.info(request, 'successfully updated phone no ')
+        except Exception as e:
+            print(e)
+            messages.info(request, "some error occurred")
+        finally:
+            try:
+                cursor.close()
+            except:
+                pass
+
+        pass
+    context = fetch_all.foodman(foodman_id)
+    return render(request, 'foodmanApp/add_phone.html', context)
