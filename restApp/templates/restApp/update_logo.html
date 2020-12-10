@@ -34,15 +34,22 @@
             <span>KHANABAZAAR</span></a>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
+                <li class="nav-item active" hidden><a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-info fa-lg"></span> AboutUs</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
-                <li class="nav-item"><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-list fa-lg"></span> Menu</a></li>
+                <li class="nav-item" hidden><a class="nav-link" href="#"><span class="fa fa-address-card fa-lg"></span> Contact</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span>
-                    Sign In</a></li>
+
+                {#                    <li class="nav-item"><a class="nav-link" role="button" id="login"><span class="fa fa-sign-in"></span> Sign In</a></li>#}
+{#                <li class="nav-item"><a class="nav-link" id="user_name"><i class="fa fa-user"></i> {{ user_name }}</a>#}
+{#                </li>#}
+
+                <li class="nav-item"><a class="nav-link" role="button" id="logout" type="submit"
+                                        href="{% url 'restApp:index' %}?action=logout"><span
+                        class="fa fa-sign-out"></span> Log out </a></li>
+
             </ul>
             <!--modal button-->
         </div>
@@ -166,7 +173,7 @@
         </div>
         <div class="row">
             <div class="col-auto">
-                <p>© Copyright 2018 Ristorante Con Fusion</p>
+                <p>© Copyright 2020 KHANABAZAAR</p>
             </div>
         </div>
     </div>
