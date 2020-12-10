@@ -90,7 +90,8 @@ def index(request):
                 print(e)
                 pass
         else:
-            print('why location is not being updated')
+            # print('why location is not being updated')
+            pass
 
         if not request.session.is_empty():
             context.update(request.session)
