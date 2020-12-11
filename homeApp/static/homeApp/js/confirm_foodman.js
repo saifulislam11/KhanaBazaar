@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
             // distance calculating
             function distance_calculator() {
+                console.log(foodman_loc_marker.getLatLng());
+                console.log(cur_loc_marker.getLatLng());
                 var distance = 0;
                 var speed = 8000;
                 if (vehicle.value === 'cycle')
@@ -103,7 +105,7 @@ document.addEventListener('DOMContentLoaded',function(){
                     icon: "warning",
                     button: "wait",
                   });
-                setInterval("window.location.reload()",60000);
+                setInterval("window.location.reload()",20000);
     
             }
             if(delivery_status.value === "C"){
@@ -113,7 +115,7 @@ document.addEventListener('DOMContentLoaded',function(){
                     icon: "info",
                     button: "ok",
                   });
-                setInterval("window.location.reload()",60000);
+                setInterval("window.location.reload()",20000);
     
             }
             if(delivery_status.value === "F"){
